@@ -6,8 +6,8 @@ import Filter from '../components/filters/Filter';
 const App = () => {
   return (
     <div>
-      <Filter />
       <Navbar />
+      <Filter />
     </div>
   );
 }
