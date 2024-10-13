@@ -1,3 +1,14 @@
+.nav-menu {
+    display: flex; /* Alinear horizontalmente */
+    align-items: center;
+    justify-content: center;
+    color: white;
+    list-style: none;
+    gap: 50px;
+    font-size: 20px;
+    font-weight: 500;
+    transition: all 0.3s ease; /* Suavizar la transición */
+}
 
 .left1 h2{
     font-weight: 400;
@@ -7,93 +18,40 @@
     }
 }
 
-.nav-menu{
-    width: 100%;
-    max-width: 768px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    list-style: none;
-    gap: 50px;
-    font-size: 20px;
-    font-weight: 500
-}
-
-.nav-menu li{
-    display: flex;
-    flex-direction: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
+.nav-menu li {
     cursor: pointer;
 }
 
-.nav-menu hr{
-    border: none;
-    width: 80%;
-    height: 3px;
-    border-radius: 10px;
-    background: #ff4141;
+/* Estilos para la navegación responsiva */
+@media (max-width: 768px) {
+    .nav-menu {
+        display: none; /* Ocultar el menú por defecto */
+        flex-direction: column; /* Alinear los elementos verticalmente */
+        position: absolute;
+        top: 60px; /* Ajustar según el diseño */
+        left: 0;
+        right: 0;
+        background-color: #333; /* Fondo del menú */
+        padding: 10px 0; /* Espaciado */
+    }
+
+    .nav-menu.active {
+        display: flex; /* Mostrar el menú cuando está activo */
+    }
+
+    .nav-menu hr {
+        display: block; /* Mostrar la línea debajo del elemento activo */
+    }
 }
 
-.navbar{
+.navbar {
     padding: 16px;
     background-color: #333;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between; /* Alinear espacio entre elementos */
 }
 
-.nav-menu a{
-    color: white;
-    text-decoration: none;
-    margin-right: 1rem;
-}
-
-.nav-menu .links{
-    position: absolute;
-    top: -700px;
-    left: -2000px;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    transition: all .5s ease;
-    a{
-        color: white;
-        font-size: 2rem;
-        display: block;
-    }
-    @media(min-width: 768px) {
-        position: initial;
-        margin: 0;
-        a{
-            font-size: 20px;
-            color: white;
-            display: inline;
-        }
-        display: block;
-    }
-}
-
-.nav-menu .links.active{
-    width: 100%;
-    display: block;
-    position: absolute;
-    margin-left: auto;
-    margin-right: auto;
-    top: 30%;
-    left: 0;
-    right: 0;
-    text-align: center;
-}
-
-.nav-menu .links.active a{
-    font-size: 2rem;
-    margin-top: 1rem;
-    color: white;
-}
 
 .navbar .burger {
     display: inline-block; /* Mostrar en pantallas pequeñas */

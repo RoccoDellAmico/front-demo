@@ -1,5 +1,5 @@
 import React, { useState , useContext } from 'react'
-import '../Navbar/Navbar3.css'
+import '../Navbar/Navbar.css'
 import BurgerButtom from '../BurgerButtom/BurgerButtom'
 import search from '../../assets/search.svg'
 import cart from '../../assets/cart.svg'
@@ -25,14 +25,17 @@ const Navbar = () => {
             <div className="left1">
                 <h2>Navbar <span>Responsive</span></h2>
             </div>
-
-            <ul className={`nav-menu ${clicked ? 'active' : ''}`}>
-                <li onClick={ () => {setMenu("home")} } > <Link to='/'>Home</Link> {menu === "home" && <hr />} </li>
-                <li onClick={ () => {setMenu("men")} } > <Link to='/men'>Men</Link> {menu === "men" && <hr />} </li>
-                <li onClick={ () => {setMenu("women")} } > <Link to='/women'>Women</Link> {menu === "women" && <hr />} </li>
-                <li onClick={ () => {setMenu("kids")} } > <Link to='/kids'>Kids</Link> {menu === "kids" && <hr />} </li>
-                <li onClick={ () => {setMenu("aboutUs")} } > <Link to='/aboutUs'>About us</Link> {menu === "aboutUs" && <hr />} </li>
-            </ul>
+            <div>
+                <ul className='nav-menu'>
+                    <div className={`links ${clicked ? 'active' : ''}`}>
+                        <li onClick={ () => {setMenu("home")} } > <Link to='/'>Home</Link> {menu === "home" && <hr />} </li>
+                        <li onClick={ () => {setMenu("men")} } > <Link to='/men'>Men</Link> {menu === "men" && <hr />} </li>
+                        <li onClick={ () => {setMenu("women")} } > <Link to='/women'>Women</Link> {menu === "women" && <hr />} </li>
+                        <li onClick={ () => {setMenu("kids")} } > <Link to='/kids'>Kids</Link> {menu === "kids" && <hr />} </li>
+                        <li onClick={ () => {setMenu("aboutUs")} } > <Link to='/aboutUs'>About us</Link> {menu === "aboutUs" && <hr />} </li>
+                    </div>
+                </ul>
+            </div>
 
             <div className="right1">
 
