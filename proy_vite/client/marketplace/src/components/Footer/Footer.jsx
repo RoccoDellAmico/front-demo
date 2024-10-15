@@ -10,7 +10,7 @@ const Footer = () => {
     return (
         <div className='footer'>
             <div className="footer-logo">
-                <h2>Navbar <span>Responsive</span></h2>
+                {/*<h2>Navbar <span>Responsive</span></h2> Comento esto del footer*/}
             </div>
             <div className="footer-links">
                 <Link to='/aboutUs'>About us</Link>

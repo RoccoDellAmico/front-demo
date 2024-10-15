@@ -9,6 +9,16 @@ const ProductDisplay = (props) => {
 
     const {product} = props;
     const {addToCart} = useContext(ShopContext)
+    /*const [showPopup, setShowPopup] = useState(false);
+
+    const handleAddToCart = (productId) => {
+        addToCart(product._id, () => {
+            setShowPopup(true);
+            setTimeout(() => {
+                setShowPopup(false);
+            }, 3000); // 3 segundos
+        });
+    };*/
 
     return (
         <div className="productdisplay">
@@ -50,6 +60,13 @@ const ProductDisplay = (props) => {
                     </div>
                 </div>
                 <button onClick={ () => {addToCart(product._id)} } >ADD TO CART</button>
+                {/*<button onClick={() => handleAddToCart(productId)}>ADD TO CART</button>
+                {showPopup && (
+                    <div className="popup">
+                        <p>Producto añadido al carrito</p>
+                        <span className="checkmark">✔</span>
+                    </div>
+                )}*/}
                 <p className="productsiplay-right-category"><span>Category: </span> Women, T-shirt, Crop Top </p>
                 <p className="productsiplay-right-category"><span>Tags: </span> Modern, Latest</p>
 

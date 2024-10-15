@@ -14,11 +14,11 @@ import Footer from './components/Footer/Footer';
 import men_banner from './assets/banner_mens.png';
 import women_banner from './assets/banner_women.png';
 import kid_banner from './assets/banner_kids.png';
-
+import './App.css';
 
 const App = () => {
   return (
-    <div>
+    <div className='main'>
       <Navbar/>
       <Routes>
         <Route path="/" element={<Home/>} />

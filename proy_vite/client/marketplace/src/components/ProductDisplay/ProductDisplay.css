@@ -98,3 +98,27 @@
     font-weight: 600;
     
 }
+.popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 2px solid #4CAF50;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.popup p {
+    margin: 0;
+    color: #4CAF50;
+}
+
+.checkmark {
+    font-size: 24px;
+    color: #4CAF50;
+}
