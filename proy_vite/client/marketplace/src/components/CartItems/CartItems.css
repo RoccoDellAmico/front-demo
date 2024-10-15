@@ -88,6 +88,8 @@
     padding-left: 20px;
     height: 58px;
     background: #eaeaea ;
+    display: flex;
+    flex-direction: row;
 }
 
 .cartitems-promobox input{

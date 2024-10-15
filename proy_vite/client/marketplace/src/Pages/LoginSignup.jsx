@@ -15,9 +15,7 @@ const LoginSignup =() => {
                 
                 <Link to='/'> <button>Continue</button> </Link>
                 <p className="loginsignup-login">Already have an account?
-                    <div className="login-link">
-                        <Link to='/logIn'> <span>Login here</span> </Link> 
-                    </div>
+                    <Link to='/logIn'> <span>Login here</span> </Link> 
                 </p>
                 <div className="loginsignup-agree">
                     <input type="checkbox" name='' id='' />

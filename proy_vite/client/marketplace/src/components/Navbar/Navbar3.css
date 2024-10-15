@@ -1,9 +1,15 @@
+.left1{
+    margin-left: 20px;
+}
+
+
 .left1 h2 {
     font-weight: 400;
     color: white;
-    span{
-        font-weight: bold;
-    }
+}
+
+.left1 h2 span {
+    font-weight: bold;
 }
 
 .nav-menu {
@@ -44,6 +50,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between; /* Cambiado para mejorar el espaciado */
+    height: 100px;
 }
 
 /* Estilos para mostrar/ocultar en pantallas pequeñas */
@@ -92,6 +99,7 @@
     align-items: center;
     gap: 1rem;
     cursor: pointer;
+    margin-right: 20px;
 }
 
 .nav-cart-count {

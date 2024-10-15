@@ -23,7 +23,7 @@ const Navbar = () => {
     return(
         <div className='navbar'>
             <div className="left1">
-                <h2>Navbar <span>Responsive</span></h2>
+                <h2>Football <span>Kits</span></h2>
             </div>
 
             <ul className={`nav-menu ${clicked ? 'active' : ''}`}>
