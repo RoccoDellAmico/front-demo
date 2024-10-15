@@ -52,9 +52,10 @@ const ShopContextProvider = (props) =>{
         console.log(cartItems);
     };*/
 
-    const addToCart = (itemId) => {
+    const addToCart = (itemId, callback) => {
         setCartItems((prev) => {
             const newCart = { ...prev, [itemId]: (prev[itemId] || 0) + 1 };
+            if (callback) callback();
             return newCart;
         });
     };

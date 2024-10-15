@@ -23,7 +23,7 @@ const Navbar = () => {
     return(
         <div className='navbar'>
             <div className="left1">
-                <h2>Navbar <span>Responsive</span></h2>
+                <h2>Football <span>Kits</span></h2>
             </div>
 
             <ul className={`nav-menu ${clicked ? 'active' : ''}`}>
@@ -41,7 +41,7 @@ const Navbar = () => {
                     <Link to='/cart'><img src={cart} alt="cart"/></Link>
                 </div>
                 <div className='nav-cart-count'> {getTotalCartItems()} </div>
-                <Link to='/login'> <button>Login</button> </Link>
+                <Link to='/signUp'> <button>Login</button> </Link>
             </div>
 
             <div className='burger'>

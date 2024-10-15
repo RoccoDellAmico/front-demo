@@ -1,6 +1,6 @@
 .loginsignup{
     width: 100%;
-    height: 80vh;
+    height: auto;
     background: #fce3fe;
     padding-top: 100px;
     padding-bottom: 150px;
@@ -8,7 +8,7 @@
 
 .loginsignup-container{
     width: 580px;
-    height: 600px;
+    height: auto;
     background: white;
     margin: auto;
     padding: 40px 60px;
@@ -36,7 +36,7 @@
 }
 
 .loginsignup-container button {
-    width: 600px;
+    width: 100%;
     height: 71px;
     color: white;
     background: #ff4141;
@@ -52,12 +52,15 @@
     color: #5c5c5c;
     font-size: 18px;
     font-weight: 500;
+    display: flex;
+    gap: 10px;
 }
 
 .loginsignup-login span{
     color: #ff4141;
     font-weight: 600;
     cursor: pointer;
+    list-style: none;
 }
 
 .loginsignup-agree{

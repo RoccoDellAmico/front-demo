@@ -4,12 +4,12 @@
     align-items: center;
     gap: 5px 15px;
 }
-  
+
 .checkbox-container label {
     display: flex;
     align-items: center;
 }
-  
+
 .checkbox-container input[type="checkbox"] {
     grid-column: 1;
 }

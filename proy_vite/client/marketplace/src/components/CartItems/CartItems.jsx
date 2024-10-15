@@ -2,6 +2,7 @@ import React , { useContext } from "react";
 import './CartItems.css';
 import { ShopContext } from "../../Context/ShopContext";
 import remove_icon from '../../assets/close.svg'
+import { Link } from 'react-router-dom'
 
 const CartItems = () => {
 
@@ -42,7 +43,7 @@ const CartItems = () => {
                     <div>
                         <div className="cartitems-total-item">
                             <p>Subtotal</p>
-                            <p> ${getTotalCartAmount()} </p>
+                            <p> ${getTotalCartAmount().toFixed(2)} </p>
                         </div>
                         <hr />
                         <div className="cartitems-total-item">
@@ -52,10 +53,10 @@ const CartItems = () => {
                         <hr />
                         <div className="cartitems-total-item">
                             <h3>Total</h3>
-                            <h3> ${getTotalCartAmount()} </h3>
+                            <h3> ${getTotalCartAmount().toFixed(2)} </h3>
                         </div>
                     </div>
-                    <button>PROCEED TO CHECKOUT</button>
+                    <Link to='/checkout'> <button>PROCEED TO CHECKOUT</button> </Link>
                 </div>
                 <div className="cartitems-promocode">
                     <p>If you have a promo code,Enter it here</p>
