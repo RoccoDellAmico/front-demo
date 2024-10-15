@@ -14,6 +14,7 @@ import Footer from './components/Footer/Footer';
 import men_banner from './assets/banner_mens.png';
 import women_banner from './assets/banner_women.png';
 import kid_banner from './assets/banner_kids.png';
+import AdminPanel from './Pages/AdminPanel';
 
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
         <Route path="/cart" element={<Cart/>} />
         <Route path="/login" element={<LoginSignup/>} />
         <Route path="/product/:productId" element={<Product/>} />
+        <Route path='/admin' element={<AdminPanel/>}/>
       </Routes>
       <Footer/>
     </div>
