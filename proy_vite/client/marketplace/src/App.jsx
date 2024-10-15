@@ -14,7 +14,10 @@ import Footer from './components/Footer/Footer';
 import men_banner from './assets/banner_mens.png';
 import women_banner from './assets/banner_women.png';
 import kid_banner from './assets/banner_kids.png';
-import './App.css';
+import './App.css';import Login from './Pages/Login';
+import CheckOut from './Pages/CheckOut';
+import Payment from './Pages/Payment';
+
 
 const App = () => {
   return (
@@ -27,7 +30,10 @@ const App = () => {
         <Route path="/kids" element={<ShopCategory banner={kid_banner} category="kids"/>} />
         <Route path="/aboutUs" element={<AboutUs/>} />
         <Route path="/cart" element={<Cart/>} />
-        <Route path="/login" element={<LoginSignup/>} />
+        <Route path="/signUp" element={<LoginSignup/>} />
+        <Route path="/logIn" element={<Login/>} />
+        <Route path="/checkout" element={<CheckOut/>} />
+        <Route path="/payment" element={<Payment/>} />
         <Route path="/product/:productId" element={<Product/>} />
       </Routes>
       <Footer/>
