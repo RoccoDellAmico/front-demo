@@ -36,17 +36,17 @@ const ProductDisplay = (props) => {
         <div className="productdisplay">
             <div className="productsiplay-left">
                 <div className="productdisplay-img-list">
-                    <img src={product.image} alt="" />
-                    <img src={product.image} alt="" />
-                    <img src={product.image} alt="" />
-                    <img src={product.image} alt="" />
+                    <img src={product.photos[0]} alt="" />
+                    <img src={product.photos[0]} alt="" />
+                    <img src={product.photos[0]} alt="" />
+                    <img src={product.photos[0]} alt="" />
                 </div>
                 <div className="productdisplay-img">
-                    <img className="productdisplay-main-img" src={product.image} alt="imagen" />
+                    <img className="productdisplay-main-img" src={product.photos[0]} alt="imagen" />
                 </div>
             </div>
             <div className="productsiplay-right">
-                <h1>{product.title}</h1>
+                <h1>{product.description}</h1>
                 <div className="productdisplay-right-stars">
                     <img src={star_icon} alt="" />
                     <img src={star_icon} alt="" />
@@ -74,7 +74,7 @@ const ProductDisplay = (props) => {
                         ))}
                     </div>
                 </div>
-                <button onClick={() => handleAddToCart(product._id)}>ADD TO CART</button>
+                <button onClick={() => handleAddToCart(product.id)}>ADD TO CART</button>
                 {showError && <p className="error-message">Please select a size</p>}
                 {showPopup && (
                     <div className="popup">

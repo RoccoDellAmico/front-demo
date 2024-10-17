@@ -26,9 +26,9 @@ const App = () => {
       <Navbar/>
       <Routes>
         <Route path="/" element={<Home/>} />
-        <Route path="/men" element={<ShopCategory banner={men_banner} category="men"/>} />
-        <Route path="/women" element={<ShopCategory banner={women_banner} category="women"/>} />
-        <Route path="/kids" element={<ShopCategory banner={kid_banner} category="kids"/>} />
+        <Route path="/men" element={<ShopCategory banner={men_banner} category="MEN"/>} />
+        <Route path="/women" element={<ShopCategory banner={women_banner} category="WOMEN"/>} />
+        <Route path="/kids" element={<ShopCategory banner={kid_banner} category="KIDS"/>} />
         <Route path="/aboutUs" element={<AboutUs/>} />
         <Route path="/cart" element={<Cart/>} />
         <Route path="/signUp" element={<LoginSignup/>} />

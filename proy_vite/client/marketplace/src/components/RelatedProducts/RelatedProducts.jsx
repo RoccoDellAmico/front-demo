@@ -1,12 +1,15 @@
-import React, { useContext } from 'react'
+import React, { useContext , useState , useEffect } from 'react'
 import "./RelatedProducts.css";
 import Item from "../Item/Item";
 import { ShopContext } from '../../Context/ShopContext';
+import ProductService from '../../services/ProductService'
 
 
 const RelatedProducts = (props) => {
 
-    const {all_product} = useContext(ShopContext);
+    const {products} = useContext(ShopContext);
+
+
     const {product} = props;
 
     return (
@@ -14,9 +17,9 @@ const RelatedProducts = (props) => {
             <h1>Related Products</h1>
             <hr/>
             <div className="relatedproducts-item">
-                {all_product.filter((element) => element.category === product.category && element._id !== product._id ).slice(0,4)
+                {products.filter((element) => element.category === product.category && element.id !== product.id ).slice(0,4)
                     .map( (item,i) => {
-                        return <Item key={i} _id={item._id} title={item.title} img={item.image} price={item.price}  />
+                        return <Item key={i} id={item.id} description={item.description} photos={item.photos[0]} price={item.price}  />
                 } )}
             </div>
         </div>

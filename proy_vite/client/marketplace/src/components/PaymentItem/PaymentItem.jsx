@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import {Dropdown , DropdownItem, DropdownMenu, DropdownToggle} from 'reactstrap'
 import visa from '../../assets/tarjetas/visa.svg'
 import amex from '../../assets/tarjetas/amex.svg'
 import maestro from '../../assets/tarjetas/maestro.svg'

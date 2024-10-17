@@ -1,10 +1,22 @@
-import React , { useContext } from "react";
+import React , { useContext , useState , useEffect } from "react";
 import './CartItems.css';
 import { ShopContext } from "../../Context/ShopContext";
 import remove_icon from '../../assets/close.svg'
 import { Link } from 'react-router-dom'
+import ProductService from "../../services/ProductService";
 
 const CartItems = () => {
+
+    const [products, setProducts] = useState([]);
+
+    useEffect( () => {
+        ProductService.getAllProducts().then(response => {
+            setProducts(response.data);
+            console.log(response.data);
+        }).catch(error => {
+            console.log(error);
+        })
+    },[])
 
     const {getTotalCartAmount,all_product,cartItems,removeFromCart} = useContext(ShopContext);
 
@@ -19,17 +31,17 @@ const CartItems = () => {
                 <p>Remove</p>
             </div>
             <hr/>
-            {all_product.map( (e) => {
-                if(cartItems[e._id] > 0) {
+            {products.map( (e) => {
+                if(cartItems[e.id] > 0) {
                     return (
-                        <div key={e._id}>
+                        <div key={e.id}>
                             <div className="cartitems-format cartitems-format-main">
-                                <img src={e.image} alt="" className="carticon-product-icon" />
-                                <p>{e.title}</p>
+                                <img src={e.photos[0]} alt="" className="carticon-product-icon" />
+                                <p>{e.description}</p>
                                 <p>${e.price}</p>
-                                <button className="cartitems-quantity"> {cartItems[e._id]} </button>
-                                <p> ${ e.price * cartItems[e._id] } </p>
-                                <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {removeFromCart(e._id)} } alt="" />
+                                <button className="cartitems-quantity"> {cartItems[e.id]} </button>
+                                <p> ${ e.price * cartItems[e.id] } </p>
+                                <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {removeFromCart(e.id)} } alt="" />
                             </div>
                             <hr />
                         </div>

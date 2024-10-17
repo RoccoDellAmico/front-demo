@@ -1,5 +1,6 @@
 import React, { createContext } from 'react';
 import { useState, useEffect } from 'react';
+import ProductService from '../services/ProductService';
 
 
 export const ShopContext = createContext(null);
@@ -16,6 +17,19 @@ const ShopContextProvider = (props) =>{
     const [all_product, setAllProduct] = useState([]);
     const [loading, setLoading] = useState(true);
     const [cartItems, setCartItems] = useState({});                    // CUANDO USEMOS LA BD SE SACA ESTA PARTE DEL CODIGO
+
+
+    const [products, setProducts] = useState([]);
+
+    useEffect( () => {
+        ProductService.getAllProducts().then(response => {
+            setProducts(response.data);
+            console.log(response.data);
+        }).catch(error => {
+            console.log(error);
+        })
+    },[])
+
 
     useEffect(()=>{
         //fetch('https://dummyjson.com/products') //localhost:8080/products API backend
@@ -85,7 +99,7 @@ const ShopContextProvider = (props) =>{
         return totalItem;
     }
 
-    const contextValue = { getTotalCartItems, getTotalCartAmount, all_product, cartItems, addToCart, removeFromCart };
+    const contextValue = { getTotalCartItems, getTotalCartAmount, products, cartItems, addToCart, removeFromCart };
 
     return (
         <ShopContext.Provider value={contextValue}>
