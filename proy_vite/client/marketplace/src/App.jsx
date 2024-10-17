@@ -18,6 +18,7 @@ import './App.css';
 import Login from './Pages/Login';
 import CheckOut from './Pages/CheckOut';
 import Payment from './Pages/Payment';
+import AdminPanel from './Pages/AdminPanel';
 
 
 const App = () => {
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/checkout" element={<CheckOut/>} />
         <Route path="/payment" element={<Payment/>} />
         <Route path="/product/:productId" element={<Product/>} />
+        <Route path='/admin' element={<AdminPanel/>}/>
       </Routes>
       <Footer/>
     </div>
