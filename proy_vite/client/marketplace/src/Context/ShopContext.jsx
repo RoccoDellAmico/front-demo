@@ -16,10 +16,13 @@ const getDefaultCart = (length) => {
 const ShopContextProvider = (props) =>{
     const [all_product, setAllProduct] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [cartItems, setCartItems] = useState({});                    // CUANDO USEMOS LA BD SE SACA ESTA PARTE DEL CODIGO
-
-
-    const [products, setProducts] = useState([]);
+    const [cartItems, setCartItems] = useState({}); 
+    const [products, setProducts] = useState([]);   
+    
+    const [logeado, setLoguedo] = useState(true);                // CUANDO USEMOS LA BD SE SACA ESTA PARTE DEL CODIGO
+    const changeLogeado = () => {                                    // CUANDO USEMOS LA BD SE SACA ESTA PARTE DEL CODIG{
+        setLoguedo(!logeado);
+    }
 
     useEffect( () => {
         ProductService.getAllProducts().then(response => {
@@ -101,7 +104,7 @@ const ShopContextProvider = (props) =>{
         return totalItem;
     }
 
-    const contextValue = { getTotalCartItems, getTotalCartAmount, products, cartItems, addToCart, removeFromCart };
+    const contextValue = { getTotalCartItems, getTotalCartAmount, products, cartItems, addToCart, removeFromCart, logeado, changeLogeado }; 
 
     return (
         <ShopContext.Provider value={contextValue}>

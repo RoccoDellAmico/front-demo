@@ -19,6 +19,7 @@ import Login from './Pages/Login';
 import CheckOut from './Pages/CheckOut';
 import Payment from './Pages/Payment';
 import AdminPanel from './Pages/AdminPanel';
+import Profile from './Pages/Profile';
 
 
 const App = () => {
@@ -38,6 +39,7 @@ const App = () => {
         <Route path="/payment" element={<Payment/>} />
         <Route path="/product/:productId" element={<Product/>} />
         <Route path='/admin' element={<AdminPanel/>}/>
+        <Route path='/profile' element={<Profile/>}/>
       </Routes>
       <Footer/>
     </div>
