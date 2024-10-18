@@ -1,19 +1,49 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './CSS/LoginSignup.css'
-import {Link} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import AuthService from '../services/AuthService'
 
 const LoginSignup =() => {
+
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try{
+            console.log(firstName);
+            console.log(lastName);
+            await AuthService.signup(firstName, lastName, email, password);
+            console.log('Succesful');
+            navigate('/');
+        } catch(error) {
+            console.error('Error');
+            setErrorMessage('Signup failed');
+        }
+    }
+
     return (
         <div className='loginsignup'>
             <div className="loginsignup-container">
                 <h1>Sign Up</h1>
                 <div className="loginsignup-fields">
-                    <input type="text" placeholder='Your Name' />
-                    <input type="email" placeholder='Email Address' />
-                    <input type="password" placeholder='Password' />
+                    <input type="text" placeholder='Your First Name' value={firstName} 
+                        onChange={(e) => setFirstName(e.target.value)}/>
+                    <input type="text" placeholder='Your Last Name' value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}/>
+                    <input type="email" placeholder='Email Address' value={email}
+                        onChange={(e) => setEmail(e.target.value)}/>
+                    <input type="password" placeholder='Password' value={password}
+                        onChange={(e) => setPassword(e.target.value)}/>
                 </div>
-                
-                <Link to='/'> <button>Continue</button> </Link>
+
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+                <button type='submit' onClick={handleSubmit}>Continue</button>
                 <p className="loginsignup-login">Already have an account?
                     <Link to='/logIn'> <span>Login here</span> </Link> 
                 </p>
