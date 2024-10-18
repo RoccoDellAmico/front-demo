@@ -20,6 +20,13 @@ const Navbar = () => {
 
     const {getTotalCartItems} = useContext(ShopContext);
 
+    const handleCartClick = (e) => {
+        if (getTotalCartItems() === 0) {
+            e.preventDefault();
+            alert('El carrito está vacío');
+        }
+    };
+
     return(
         <div className='navbar'>
             <div className="left1">
@@ -38,10 +45,10 @@ const Navbar = () => {
 
                 <div className='search'> <img src= {search} alt="search"/> </div>
                 <div className='cart'> 
-                    <Link to='/cart'><img src={cart} alt="cart"/></Link>
+                    <Link to='/cart' onClick={handleCartClick}><img src={cart} alt="cart"/></Link>
                 </div>
                 <div className='nav-cart-count'> {getTotalCartItems()} </div>
-                <Link to='/signUp'> <button>Login</button> </Link>
+                <Link to='/login'> <button>Login</button> </Link>
             </div>
 
             <div className='burger'>

@@ -1,4 +1,3 @@
-// si no aclaro la ruta, por default va a public
 import Navbar from './components/Navbar/Navbar';
 import Navbar1 from './components/Navbar/Navbar1';
 
@@ -15,7 +14,7 @@ import men_banner from './assets/banner_mens.png';
 import women_banner from './assets/banner_women.png';
 import kid_banner from './assets/banner_kids.png';
 import './App.css';
-import Login from './Pages/Login';
+import Login from './Pages/LogIn';
 import CheckOut from './Pages/CheckOut';
 import Payment from './Pages/Payment';
 import AdminPanel from './Pages/AdminPanel';
