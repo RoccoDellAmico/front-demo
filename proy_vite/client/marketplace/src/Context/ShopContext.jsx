@@ -1,6 +1,7 @@
 import React, { createContext } from 'react';
 import { useState, useEffect } from 'react';
 import ProductService from '../services/ProductService';
+import AuthService from '../services/AuthService';
 
 
 export const ShopContext = createContext(null);
@@ -21,10 +22,9 @@ const ShopContextProvider = (props) =>{
 
     const [products, setProducts] = useState([]);
 
-    const changeLogueado = () => {
+    const changeLogueado = () =>{
         setLogueado(!logueado);
     }
-
 
     useEffect( () => {
         ProductService.getAllProducts().then(response => {
@@ -107,8 +107,7 @@ const ShopContextProvider = (props) =>{
     }
 
     const contextValue = { getTotalCartItems, getTotalCartAmount, products, cartItems, addToCart, removeFromCart,
-        logueado, changeLogueado
-     };
+        logueado, changeLogueado};
 
     return (
         <ShopContext.Provider value={contextValue}>

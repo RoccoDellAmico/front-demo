@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { useContext } from 'react'
+import { ShopContext } from '../Context/ShopContext'
 
 const AUTH_BASE_URL = "http://localhost:4002/api/v1/auth"
 
@@ -13,8 +14,7 @@ class AuthService {
                 localStorage.setItem('token', response.data.token)
                 console.log('token creado ' + response.data.token);
             }*/
-                localStorage.setItem('token', response.data.access_token)
-                console.log('token creado ' + response.data.access_token);
+            localStorage.setItem('token', response.data.access_token);                
             return response.data
         } catch (error) {
             throw new Error('Login failed')
@@ -24,8 +24,8 @@ class AuthService {
     async signup(firstname, lastname, email, password){
         try{
             const response = await axios.post(AUTH_BASE_URL + "/register", { firstname, lastname, email, password })
-            if(response.data.token){
-                localStorage.setItem('token', response.data.token)
+            if(response.data.access_token){
+                localStorage.setItem('token', response.data.access_token)
             }
             return response.data
         } catch (error) {
@@ -34,21 +34,15 @@ class AuthService {
     }
 
     logout(){
-        /*axios.post("http://localhost:4002/api/user/logout", {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })*/
         let token = localStorage.getItem('token');
         axios.post("http://localhost:4002/api/user/logout/2", { token: token }, {
             headers: {
-              Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token}`
             }
         });
-        console.log('token eliminado ' + token);
         localStorage.removeItem('token');
-        console.log('token despues de eliminar ' + localStorage.getItem('token'))
     }
 }
 
-export default new AuthService()
+
+export default new AuthService();
