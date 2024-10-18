@@ -1,12 +1,16 @@
-import React, { useState , useContext } from 'react'
+import React, { useState , useContext, useEffect } from 'react'
 import '../Navbar/Navbar3.css'
 import BurgerButtom from '../BurgerButtom/BurgerButtom'
 import search from '../../assets/search.svg'
 import cart from '../../assets/cart.svg'
 import {Link} from 'react-router-dom'
 import { ShopContext } from '../../Context/ShopContext'
+import profile from '../../assets/profile.svg'
+import AuthService from '../../services/AuthService'
 
 const Navbar = () => {
+
+    const {logueado} = useContext(ShopContext)    
 
     const [clicked, setClicked] = useState(false)
     const [menu, setMenu] = useState("home");
@@ -43,12 +47,19 @@ const Navbar = () => {
 
             <div className="right1">
 
+
+
                 <div className='search'> <img src= {search} alt="search"/> </div>
                 <div className='cart'> 
-                    <Link to='/cart' onClick={handleCartClick}><img src={cart} alt="cart"/></Link>
+                    {logueado ? <Link to='/cart'><img src={cart} alt="cart"/></Link> : <Link to='/signUp'><img src={cart} alt="cart"/></Link>}
                 </div>
                 <div className='nav-cart-count'> {getTotalCartItems()} </div>
-                <Link to='/login'> <button>Login</button> </Link>
+                <div className="profile"> 
+                    {logueado ? <Link to='/profile'> <img src={profile} alt="profile" /> </Link> : <></>}
+                </div>
+                <div className="boton-login">
+                    {logueado ? <Link to='/signUp'> <button>Logout</button> </Link> : <Link to='/signUp'> <button>Login</button> </Link>} 
+                </div>
             </div>
 
             <div className='burger'>

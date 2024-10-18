@@ -1,7 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import LogoutButton from '../components/Logout Button/LogoutButton'
+import { ShopContext } from '../Context/ShopContext'
 
-const AboutUs =() => (
+
+
+const AboutUs =() => {
+    
+    const{logueado} = useContext(ShopContext)
+
+    return(
     <div>
         <h1>AboutUs</h1>
         <p>
@@ -14,7 +23,9 @@ const AboutUs =() => (
         Insertar foto aca 
         </p>
         <Link to='/admin'><button> continuar</button> </Link>
+        <LogoutButton/>
     </div>
-)
+    )
+}
 
 export default AboutUs

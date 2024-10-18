@@ -1,43 +1,49 @@
 import React, { useState } from 'react'
 import './CSS/LoginSignup.css'
-import {Link} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import AuthService from '../services/AuthService'
 
 const LoginSignup =() => {
-    const [name, setName] = useState('');
+
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isChecked, setIsChecked] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
-        if (name === '' || email === '' || password === '' || !isChecked) {
-            e.preventDefault();
-            setErrorMessage('Please, complete all fields and agree to the terms');
-            setTimeout(() => {
-                setErrorMessage('');
-            }, 2000); 
-        } else {
-            setErrorMessage('');
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try{
+            console.log(firstName);
+            console.log(lastName);
+            await AuthService.signup(firstName, lastName, email, password);
+            console.log('Succesful');
+            navigate('/');
+        } catch(error) {
+            console.error('Error');
+            setErrorMessage('Signup failed');
         }
-    };
+    }
 
     return (
         <div className='loginsignup'>
             <div className="loginsignup-container">
                 <h1>Sign Up</h1>
                 <div className="loginsignup-fields">
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder='Your Name' />
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email Address' />
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
+                    <input type="text" placeholder='Your First Name' value={firstName} 
+                        onChange={(e) => setFirstName(e.target.value)}/>
+                    <input type="text" placeholder='Your Last Name' value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}/>
+                    <input type="email" placeholder='Email Address' value={email}
+                        onChange={(e) => setEmail(e.target.value)}/>
+                    <input type="password" placeholder='Password' value={password}
+                        onChange={(e) => setPassword(e.target.value)}/>
                 </div>
-                <div className="loginsignup-agree">
-                    <input type="checkbox" checked={isChecked} onChange={(e) => setIsChecked(e.target.checked)} />
-                    <p>By continuing, I agree to use the terms of use & privacy policy</p>
-                </div>
-                <Link to='/' onClick={handleSubmit}>
-                    <button>Continue</button>
-                </Link>
-                {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+                <button type='submit' onClick={handleSubmit}>Continue</button>
                 <p className="loginsignup-login">Already have an account?
                     <Link to='/logIn'> <span>Login here</span> </Link> 
                 </p>

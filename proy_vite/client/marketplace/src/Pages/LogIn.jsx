@@ -1,24 +1,26 @@
-import React, {useState , useEffect} from "react";
+import React, { useState , useEffect } from "react";
 import './CSS/Login.css'
-import {Link} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import AuthService from "../services/AuthService";
 
 const Login = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
-        if (email === '' || password === '') {
-            e.preventDefault();
-            setErrorMessage('Please, complete all fields');
-            setTimeout(() => {
-                setErrorMessage('');
-            }, 2000);
-        } else {
-            setErrorMessage('');
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try{
+            await AuthService.login(email, password);
+            console.log('Succesful login')
+            navigate('/');
+        } catch(error) {
+            console.error('Failed login');
+            setErrorMessage('The email address or password is incorrect.');
         }
-    };
+    }
 
     return (
         <div className="login">
@@ -28,12 +30,9 @@ const Login = () => {
                     <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email Address' />
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
                 </div>
-                <Link to='/' onClick={handleSubmit}>
-                    <button type="submit">Continue</button>
-                </Link>
-                {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-                <p className="login-forgot-pw">Forgot your password? <span>Click here</span> </p>
-                <p className="login-forgot-pw">Don't have an account? <Link to='/signUp'> <span>Sign Up</span></Link> </p>
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
+                <button type={"submit"} onClick={handleSubmit} >Continue</button>
+                <p className="login-forgot-pw">¿Olvidaste tu contraseña? <span>Click aqui</span> </p>
             </div>
         </div>
     )
