@@ -27,11 +27,11 @@ const Navbar = () => {
             </div>
 
             <ul className={`nav-menu ${clicked ? 'active' : ''}`}>
-                <li onClick={ () => {setMenu("home")} } > <Link to='/'>Home</Link> {menu === "home" && <hr />} </li>
-                <li onClick={ () => {setMenu("men")} } > <Link to='/men'>Men</Link> {menu === "men" && <hr />} </li>
-                <li onClick={ () => {setMenu("women")} } > <Link to='/women'>Women</Link> {menu === "women" && <hr />} </li>
-                <li onClick={ () => {setMenu("kids")} } > <Link to='/kids'>Kids</Link> {menu === "kids" && <hr />} </li>
-                <li onClick={ () => {setMenu("aboutUs")} } > <Link to='/aboutUs'>About us</Link> {menu === "aboutUs" && <hr />} </li>
+                <li > <Link to='/'>Home</Link> </li>
+                <li > <Link to='/men'>Men</Link>  </li>
+                <li > <Link to='/women'>Women</Link> </li>
+                <li > <Link to='/kids'>Kids</Link> </li>
+                <li > <Link to='/aboutUs'>About us</Link> </li>
             </ul>
 
             <div className="right1">

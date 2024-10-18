@@ -1,0 +1,127 @@
+.product-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+}
+
+.product-panel .description{
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: #333;
+    display: flex;
+}
+
+.product-panel textarea{
+    margin-left: 10px;
+    width: 100%;
+    height: auto;
+}
+
+.product-panel .price{
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.product-panel input{
+    margin-left: 10px;
+    width: 100%;
+}
+
+.product-panel .size-stock{
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 0.75fr 0.5fr 0.5fr 0.25fr;
+    margin-bottom: 10px;
+}
+
+.product-panel .size-stock label{
+    margin-right: 10px;
+}
+
+.size-item{
+    margin-left: 10px;
+    display: inline;
+    span{
+        margin-right: 10px;
+    }
+}
+
+.product-panel .club{
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.product-panel .club input{
+    margin-left: 10px;
+    width: 100%;
+}
+
+.product-panel .league{
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.photo{
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 0.20fr 0.70fr 0.10fr;
+    margin-bottom: 10px;
+}
+
+.photo .photo-item{
+    display:flexbox;
+}
+
+.photo .photo-item img{
+    width: 10px;
+    height: 10px;
+}
+
+.product-panel .category{
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 0.40fr 0.80fr;
+    gap: 10px;
+}
+
+.product-panel .category select{
+    width: 100%;
+}
+
+.product-panel .type{
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 0.6fr 1fr;
+    gap: 10px;
+}
+
+.product-panel .year{
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 0.05fr 0.95fr;
+    gap: 10px;
+}
+
