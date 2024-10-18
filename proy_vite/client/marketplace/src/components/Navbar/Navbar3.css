@@ -132,3 +132,8 @@
 .right1 button:hover {
     background: #f5f5f5;
 }
+
+.right1 img{
+    height: 35px;
+    width: 35px;
+}

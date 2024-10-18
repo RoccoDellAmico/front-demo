@@ -53,8 +53,8 @@ const ShopContextProvider = (props) =>{
 
     // Establecer el carrito por defecto una vez que all_product se haya actualizado
     useEffect(() => {
-        if (all_product.length) {
-            setCartItems(getDefaultCart(all_product.length)); // Configura carrito
+        if (products.length) {
+            setCartItems(getDefaultCart(products.length)); // Configura carrito
         }
     }, [all_product]); // Se activa cuando all_product cambia
 
@@ -75,7 +75,9 @@ const ShopContextProvider = (props) =>{
         setCartItems((prev) => {
             const newCart = { ...prev, [itemId]: (prev[itemId] || 0) + 1 };
             if (callback) callback();
+            console.log(newCart)
             return newCart;
+
         });
     };
 

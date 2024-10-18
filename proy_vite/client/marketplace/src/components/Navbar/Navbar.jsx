@@ -5,8 +5,12 @@ import search from '../../assets/search.svg'
 import cart from '../../assets/cart.svg'
 import {Link} from 'react-router-dom'
 import { ShopContext } from '../../Context/ShopContext'
+import profile from '../../assets/profile.svg'
 
 const Navbar = () => {
+
+
+    const {logeado} = useContext(ShopContext)
 
     const [clicked, setClicked] = useState(false)
     const [menu, setMenu] = useState("home");
@@ -27,21 +31,28 @@ const Navbar = () => {
             </div>
 
             <ul className={`nav-menu ${clicked ? 'active' : ''}`}>
-                <li onClick={ () => {setMenu("home")} } > <Link to='/'>Home</Link> {menu === "home" && <hr />} </li>
-                <li onClick={ () => {setMenu("men")} } > <Link to='/men'>Men</Link> {menu === "men" && <hr />} </li>
-                <li onClick={ () => {setMenu("women")} } > <Link to='/women'>Women</Link> {menu === "women" && <hr />} </li>
-                <li onClick={ () => {setMenu("kids")} } > <Link to='/kids'>Kids</Link> {menu === "kids" && <hr />} </li>
-                <li onClick={ () => {setMenu("aboutUs")} } > <Link to='/aboutUs'>About us</Link> {menu === "aboutUs" && <hr />} </li>
+                <li > <Link to='/'>Home</Link> </li>
+                <li > <Link to='/men'>Men</Link>  </li>
+                <li > <Link to='/women'>Women</Link> </li>
+                <li > <Link to='/kids'>Kids</Link> </li>
+                <li > <Link to='/aboutUs'>About us</Link> </li>
             </ul>
 
             <div className="right1">
 
+
+
                 <div className='search'> <img src= {search} alt="search"/> </div>
                 <div className='cart'> 
-                    <Link to='/cart'><img src={cart} alt="cart"/></Link>
+                    {logeado ? <Link to='/cart'><img src={cart} alt="cart"/></Link> : <Link to='/signUp'><img src={cart} alt="cart"/></Link>}
                 </div>
                 <div className='nav-cart-count'> {getTotalCartItems()} </div>
-                <Link to='/signUp'> <button>Login</button> </Link>
+                <div className="profile"> 
+                    {logeado ? <Link to='/profile'> <img src={profile} alt="profile" /> </Link> : <></>}
+                </div>
+                <div className="boton-login">
+                    {logeado ? <Link to='/signUp'> <button>Logout</button> </Link> : <Link to='/signUp'> <button>Login</button> </Link>} 
+                </div>
             </div>
 
             <div className='burger'>
