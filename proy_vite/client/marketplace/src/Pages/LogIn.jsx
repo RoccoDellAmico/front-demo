@@ -18,7 +18,7 @@ const Login = () => {
             navigate('/');
         } catch(error) {
             console.error('Failed login');
-            setErrorMessage('Failed login');
+            setErrorMessage('The email address or password is incorrect.');
         }
     }
 
@@ -30,6 +30,7 @@ const Login = () => {
                     <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email Address' />
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
                 </div>
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
                 <button type={"submit"} onClick={handleSubmit} >Continue</button>
                 <p className="login-forgot-pw">¿Olvidaste tu contraseña? <span>Click aqui</span> </p>
             </div>

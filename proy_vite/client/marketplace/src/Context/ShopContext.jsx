@@ -17,9 +17,14 @@ const ShopContextProvider = (props) =>{
     const [all_product, setAllProduct] = useState([]);
     const [loading, setLoading] = useState(true);
     const [cartItems, setCartItems] = useState({});                    // CUANDO USEMOS LA BD SE SACA ESTA PARTE DEL CODIGO
-
+    const [logueado, setLogueado] = useState(false);
 
     const [products, setProducts] = useState([]);
+
+    const changeLogueado = () => {
+        setLogueado(!logueado);
+    }
+
 
     useEffect( () => {
         ProductService.getAllProducts().then(response => {
@@ -99,7 +104,9 @@ const ShopContextProvider = (props) =>{
         return totalItem;
     }
 
-    const contextValue = { getTotalCartItems, getTotalCartAmount, products, cartItems, addToCart, removeFromCart };
+    const contextValue = { getTotalCartItems, getTotalCartAmount, products, cartItems, addToCart, removeFromCart,
+        logueado, changeLogueado
+     };
 
     return (
         <ShopContext.Provider value={contextValue}>
