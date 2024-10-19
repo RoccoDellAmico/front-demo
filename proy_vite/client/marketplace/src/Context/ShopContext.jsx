@@ -21,7 +21,6 @@ const ShopContextProvider = (props) =>{
     const [logueado, setLogueado] = useState(false);
 
     const [products, setProducts] = useState([]);
-
     const changeLogueado = () =>{
         setLogueado(!logueado);
     }

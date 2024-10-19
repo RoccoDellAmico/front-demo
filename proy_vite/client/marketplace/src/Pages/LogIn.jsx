@@ -28,14 +28,15 @@ const Login = () => {
     return (
         <div className="login">
             <div className="login-container">
-                <h1>LogIn</h1>
+                <h1>Login</h1>
                 <div className="login-fields">
                     <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email Address' />
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
                 </div>
                 {errorMessage && <p className="error-message">{errorMessage}</p>}
                 <button type={"submit"} onClick={handleSubmit} >Continue</button>
-                <p className="login-forgot-pw">¿Olvidaste tu contraseña? <span>Click aqui</span> </p>
+                <p className="login-forgot-pw">Forgot your password? <span>Click here</span> </p>
+                <p className="login-forgot-pw">Don't have an account? <Link to='/signup'><span>Sign up</span></Link> </p>
             </div>
         </div>
     )

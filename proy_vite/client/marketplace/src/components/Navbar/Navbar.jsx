@@ -25,13 +25,6 @@ const Navbar = () => {
 
     const {getTotalCartItems} = useContext(ShopContext);
 
-    const handleCartClick = (e) => {
-        if (getTotalCartItems() === 0) {
-            e.preventDefault();
-            alert('El carrito está vacío');
-        }
-    };
-
     return(
         <div className='navbar'>
             <div className="left1">
@@ -52,14 +45,15 @@ const Navbar = () => {
 
                 <div className='search'> <img src= {search} alt="search"/> </div>
                 <div className='cart'> 
-                    {logueado ? <Link to='/cart'><img src={cart} alt="cart"/></Link> : <Link to='/signUp'><img src={cart} alt="cart"/></Link>}
+                    {logueado ? <Link to='/cart'><img src={cart} alt="cart"/></Link> : <Link to='/login'><img src={cart} alt="cart"/></Link>}
                 </div>
                 <div className='nav-cart-count'> {getTotalCartItems()} </div>
                 <div className="profile"> 
                     {logueado ? <Link to='/profile'> <img src={profile} alt="profile" /> </Link> : <></>}
                 </div>
                 <div className="boton-login">
-                    {logueado ? <LogoutButton/> : <Link to='/signUp'> <button>Login</button> </Link>} 
+                    {/*logueado ? <LogoutButton/> : <Link to='/signUp'> <button>Login</button> </Link>*/} 
+                    {logueado ? <LogoutButton/> : <Link to='/login'> <button>Login</button> </Link>} 
                 </div>
             </div>
 
@@ -72,9 +66,3 @@ const Navbar = () => {
 }
 
 export default Navbar
-
-/*
-<Link to='/men'>Men</Link>
-                        <Link to='/women'>Women</Link>
-                        <Link to='/kids'>Kids</Link>
-                        <Link to='/aboutUs'>About us</Link>*/

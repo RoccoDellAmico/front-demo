@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react"
 import './ProductPanel.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ProductPanel = ()=>{
     const[products, setProducts] = useState([]);
@@ -238,7 +239,7 @@ const ProductPanel = ()=>{
                             required/>
                         </div>
                     </div>
-                    <button type="submit">{editingProduct ? 'Update product' : 'Add product'}</button>
+                    <button type="submit" className= "btn btn-outline-primary btn-sm">{editingProduct ? 'Update product' : 'Add product'}</button>
                 </form>
                 <div className="product-list">
                     <h2>Product List</h2>

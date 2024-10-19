@@ -16,6 +16,7 @@
 
 .productdisplay-img-list img{
     height: 163px;
+    cursor: pointer;
 }
 
 .productdisplay-main-img{
@@ -69,13 +70,7 @@
     gap: 20px;
 }
 
-/*.productsiplay-right-sizes div{
-    padding: 18px 24px;
-    background: #fbfbfb;
-    border: 1px solid #ebebeb;
-    border-radius: 3px;
-    cursor: pointer;
-}*/
+
 
 .productsiplay-right-sizes div {
     cursor: pointer;

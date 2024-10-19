@@ -12,7 +12,7 @@ const ProductDisplay = (props) => {
     const [selectedSize, setSelectedSize] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const [showError, setShowError] = useState(false);
-
+    const [mainImage, setMainImage] = useState(product.photos[0]);
     const handleSizeSelect = (size) => {
         setSelectedSize(size);
         setShowError(false);
@@ -32,16 +32,25 @@ const ProductDisplay = (props) => {
         }
     };
 
+    const handleImageClick = (photo) => {
+        setMainImage(photo);
+    };
+
     return (
         <div className="productdisplay">
             <div className="productsiplay-left">
                 <div className="productdisplay-img-list">
                     {product.photos.map((photo, index) => (
-                        <img key={index} src={photo} />
+                        <img
+                            key={index}
+                            src={photo}
+                            onClick={() => handleImageClick(photo)}
+                            className="productdisplay-thumbnail"
+                        />
                     ))}
                 </div>
                 <div className="productdisplay-img">
-                    <img className="productdisplay-main-img" src={product.photos[0]} alt="imagen" />
+                    <img className="productdisplay-main-img" src={mainImage} alt="imagen principal" />
                 </div>
             </div>
             <div className="productsiplay-right">
@@ -90,4 +99,3 @@ const ProductDisplay = (props) => {
 }
 
 export default ProductDisplay
-
