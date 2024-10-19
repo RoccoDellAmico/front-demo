@@ -1,7 +1,8 @@
-import React, { useState , useEffect } from "react";
+import React, { useState , useEffect , useContext } from "react";
 import './CSS/Login.css'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthService from "../services/AuthService";
+import { ShopContext } from  '../Context/ShopContext'
 
 const Login = () => {
 
@@ -9,12 +10,14 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
+    const {changeLogueado} = useContext(ShopContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try{
             await AuthService.login(email, password);
             console.log('Succesful login')
+            changeLogueado();
             navigate('/');
         } catch(error) {
             console.error('Failed login');

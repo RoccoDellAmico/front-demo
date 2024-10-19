@@ -1,12 +1,17 @@
-import { Navigate, useNavigate } from "react-router-dom"
+import { Navigate, useNavigate} from "react-router-dom"
 import AuthService from "../../services/AuthService"
+import { ShopContext } from '../../Context/ShopContext'
+import React, {useContext} from "react"
+import './LogoutButton.css'
 
 
 const LogoutButton = ()=> {
     const navigate = useNavigate();
+    const {changeLogueado} = useContext(ShopContext);
 
     const handleClick = () => {
         AuthService.logout()
+        changeLogueado();
         navigate('/')
         console.log('logout');
     }
@@ -35,8 +40,8 @@ const LogoutButton = ()=> {
           }*/
 
     return(
-        <div>
-            <button type="button" onClick={handleClick}>logout</button>
+        <div className="logout-button">
+            <button type="button" onClick={handleClick}>Logout</button>
         </div>
     )
 }

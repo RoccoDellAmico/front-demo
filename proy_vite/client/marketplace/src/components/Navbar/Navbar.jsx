@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom'
 import { ShopContext } from '../../Context/ShopContext'
 import profile from '../../assets/profile.svg'
 import AuthService from '../../services/AuthService'
+import LogoutButton from '../Logout Button/LogoutButton'
 
 const Navbar = () => {
 
@@ -51,7 +52,7 @@ const Navbar = () => {
                     {logueado ? <Link to='/profile'> <img src={profile} alt="profile" /> </Link> : <></>}
                 </div>
                 <div className="boton-login">
-                    {logueado ? <Link to='/signUp'> <button>Logout</button> </Link> : <Link to='/signUp'> <button>Login</button> </Link>} 
+                    {logueado ? <LogoutButton/> : <Link to='/signUp'> <button>Login</button> </Link>} 
                 </div>
             </div>
 

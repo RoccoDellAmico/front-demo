@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState , useContext } from 'react'
 import './CSS/LoginSignup.css'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthService from '../services/AuthService'
+import { ShopContext } from '../Context/ShopContext'
 
 const LoginSignup =() => {
 
@@ -11,6 +12,7 @@ const LoginSignup =() => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
+    const {changeLogueado} = useContext(ShopContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,6 +21,7 @@ const LoginSignup =() => {
             console.log(lastName);
             await AuthService.signup(firstName, lastName, email, password);
             console.log('Succesful');
+            changeLogueado();
             navigate('/');
         } catch(error) {
             console.error('Error');
