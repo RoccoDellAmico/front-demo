@@ -1,10 +1,35 @@
 import React from "react";
-import { useState } from "react"
+import { useState , useEffect } from "react"
 import './ProductPanel.css'
+import ProductService from '../../services/ProductService'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ProductPanel = ()=>{
-    const[products, setProducts] = useState([]);
+
+    const[products, setProducts] = useState([]);const [loading, setLoading] = useState(true); // Add loading state
+    const [error, setError] = useState(null); // Add error state
+
+    {/*useEffect( () => {
+        ProductService.getProductsAdmin()
+        .then(response => {
+            setProducts(response.data || []);
+            console.log(response.data);
+            setLoading(false);
+        }).catch(error => {
+            console.log(error);
+            setError('Failed to fetch products');
+            setLoading(false);
+        })
+    },[])
+
+    if (loading) {
+        return <p>Loading products...</p>; // Display loading message while fetching
+    }
+
+    if (error) {
+        return <p>{error}</p>; // Display error message if fetching fails
+    }*/}
+
     const[newProduct, setNewProduct] = useState({
         description : '', 
         price : 0, 
@@ -56,20 +81,20 @@ const ProductPanel = ()=>{
         if(newSize.size === '')
             return
         if (editingProduct) {
-          setEditingProduct({
-            ...editingProduct,
-            sizes: [...editingProduct.sizes, newSize]
-          })
+            setEditingProduct({
+                ...editingProduct,
+                sizes: [...editingProduct.sizes, newSize]
+            })
         } else {
-          setNewProduct({
-            ...newProduct,
-            sizes: [...newProduct.sizes, newSize]
-          })
+            setNewProduct({
+                ...newProduct,
+                sizes: [...newProduct.sizes, newSize]
+            })
         }
         setNewSize({ size: "", stock: 0 })
-      }
+    }
 
-      const addPhoto = () => {
+    const addPhoto = () => {
         console.log("foto added", newPhoto);
         if(editingProduct){
             setEditingProduct({
@@ -83,23 +108,23 @@ const ProductPanel = ()=>{
             })
         }
         setNewPhoto('')
-      }
+    }
     
-      const removeSize = (index) => {
+    const removeSize = (index) => {
         if (editingProduct) {
-          setEditingProduct({
-            ...editingProduct,
-            sizes: editingProduct.sizes.filter((_, i) => i !== index)
-          })
+            setEditingProduct({
+                ...editingProduct,
+                sizes: editingProduct.sizes.filter((_, i) => i !== index)
+            })
         } else {
-          setNewProduct({
-            ...newProduct,
-            sizes: newProduct.sizes.filter((_, i) => i !== index)
-          })
+            setNewProduct({
+                ...newProduct,
+                sizes: newProduct.sizes.filter((_, i) => i !== index)
+            })
         }
-      }
+    }
 
-      const removePhoto = (index) => {
+    const removePhoto = (index) => {
         if(editingProduct){
             setEditingProduct({
                 ...editingProduct,
@@ -111,7 +136,7 @@ const ProductPanel = ()=>{
                 photos : newProduct.photos.filter((_, i) => i !== index)
             })
         }
-      }
+    }
 
     return(
         <>

@@ -15,10 +15,14 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try{
-            await AuthService.login(email, password);
+            const response = await AuthService.login(email, password);
             console.log('Succesful login')
             changeLogueado();
-            navigate('/');
+            if(response.role == 'ADMIN'){
+                navigate('/admin')
+            } else {
+                navigate('/')
+            }
         } catch(error) {
             console.error('Failed login');
             setErrorMessage('The email address or password is incorrect.');
