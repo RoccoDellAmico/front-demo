@@ -1,11 +1,11 @@
-import axios from 'axios';
+import axios from "axios";
+import React from "react";
 
+const PAYMENT_BASE_URL = "http://localhost:4002/api"
 
-const PRODUCTO_BASE_URL = "http://localhost:4002/api";
+class PaymentService {
 
-class ProductService{
-
-    async getProductsAdmin() {
+    async getPaymentAdmin() {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -16,18 +16,13 @@ class ProductService{
                   Authorization: `Bearer ${token}`,  // Añadir el token en el encabezado
                 }
             };
-            const response = await axios.get(`${PRODUCTO_BASE_URL}/admin/products/get`, config);
+            const response = await axios.get(`${PAYMENT_BASE_URL}/admin/payments`, config);
             return response;  
         }catch(error){
-            console.error("Error fetching users", error);
+            console.error("Error fetching payment", error);
             throw error;
         }
     }
-
-    getAllProducts(){
-        return axios.get(PRODUCTO_BASE_URL + "/public/products/get");
-    }
-
 }
 
-export default new ProductService();
+export default new PaymentService();

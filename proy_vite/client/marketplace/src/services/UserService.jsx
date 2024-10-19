@@ -1,11 +1,11 @@
-import axios from 'axios';
+import axios from "axios";
+import React from "react";
 
+const USER_BASE_URL = "http://localhost:4002/api"
 
-const PRODUCTO_BASE_URL = "http://localhost:4002/api";
+class UserService {
 
-class ProductService{
-
-    async getProductsAdmin() {
+    async getUsers() {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -16,18 +16,13 @@ class ProductService{
                   Authorization: `Bearer ${token}`,  // Añadir el token en el encabezado
                 }
             };
-            const response = await axios.get(`${PRODUCTO_BASE_URL}/admin/products/get`, config);
+            const response = await axios.get(`${USER_BASE_URL}/admin/users`, config);
             return response;  
         }catch(error){
             console.error("Error fetching users", error);
             throw error;
         }
     }
-
-    getAllProducts(){
-        return axios.get(PRODUCTO_BASE_URL + "/public/products/get");
-    }
-
 }
 
-export default new ProductService();
+export default new UserService();
