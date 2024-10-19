@@ -1,4 +1,3 @@
-// si no aclaro la ruta, por default va a public
 import Navbar from './components/Navbar/Navbar';
 import Navbar1 from './components/Navbar/Navbar1';
 

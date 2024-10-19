@@ -36,10 +36,9 @@ const ProductDisplay = (props) => {
         <div className="productdisplay">
             <div className="productsiplay-left">
                 <div className="productdisplay-img-list">
-                    <img src={product.photos[0]} alt="" />
-                    <img src={product.photos[0]} alt="" />
-                    <img src={product.photos[0]} alt="" />
-                    <img src={product.photos[0]} alt="" />
+                    {product.photos.map((photo, index) => (
+                        <img key={index} src={photo} />
+                    ))}
                 </div>
                 <div className="productdisplay-img">
                     <img className="productdisplay-main-img" src={product.photos[0]} alt="imagen" />
@@ -63,7 +62,7 @@ const ProductDisplay = (props) => {
                 <div className="productsiplay-right-size">
                     <h1>Select Size</h1>
                     <div className="productsiplay-right-sizes">
-                        {['S', 'M', 'L', 'XL', 'XXL'].map(size => (
+                        {['XS','S', 'M', 'L', 'XL', 'XXL', 'XXXL'].map(size => (
                             <div
                                 key={size}
                                 onClick={() => handleSizeSelect(size)}

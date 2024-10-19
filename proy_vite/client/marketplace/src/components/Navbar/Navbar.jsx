@@ -25,6 +25,13 @@ const Navbar = () => {
 
     const {getTotalCartItems} = useContext(ShopContext);
 
+    const handleCartClick = (e) => {
+        if (getTotalCartItems() === 0) {
+            e.preventDefault();
+            alert('El carrito está vacío');
+        }
+    };
+
     return(
         <div className='navbar'>
             <div className="left1">
