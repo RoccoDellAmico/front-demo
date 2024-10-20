@@ -31,7 +31,7 @@ const CartPanel = () => {
 
     return (
         <div className="cartpanel">
-            <h1>Users</h1>
+            <h1>Carts</h1>
             <div className="cartpanel-format-main">
                 <p>Id</p>
                 <p>Email</p>

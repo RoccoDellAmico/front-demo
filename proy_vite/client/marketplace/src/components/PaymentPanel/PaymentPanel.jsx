@@ -32,7 +32,7 @@ const PayemntPanel = () => {
 
     return (
         <div className="paymentpanel">
-            <h1>Users</h1>
+            <h1>Payments</h1>
             <div className="paymentpanel-format-main">
                 <p>Id</p>
                 <p>Date</p>

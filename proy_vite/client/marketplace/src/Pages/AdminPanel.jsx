@@ -4,6 +4,7 @@ import PaymentPanel from "../components/PaymentPanel/PaymentPanel"
 import UserPanel from '../components/UserPanel/UserPanel'
 import React, {useState} from "react"
 import './CSS/AdminPanel.css'
+import DiscountPanel from "../components/DiscountPanel/DiscountPanel"
 
 const AdminPanel = ()=>{
 
@@ -25,6 +26,9 @@ const AdminPanel = ()=>{
                 <button className={`tab ${activeTab === "payments" ? "active" : ""}`} onClick={() => setActiveTab("payments")}>
                     Payments
                 </button>
+                <button className={`tab ${activeTab === "discounts" ? "active" : ""}`} onClick={() => setActiveTab("discounts")}>
+                    Discounts
+                </button>
             </div>
 
             <div className="tab-content">
@@ -32,6 +36,7 @@ const AdminPanel = ()=>{
                 {activeTab === "users" && (<UserPanel/>)}
                 {activeTab === "carts" && (<CartPanel/>)}
                 {activeTab === "payments" && (<PaymentPanel/>)}
+                {activeTab === "discounts" && (<DiscountPanel/>)}
             </div>
         </div>
     )

@@ -52,7 +52,7 @@ const ProductPanel = ()=>{
             sizes : [], 
             club : '', 
             league : '', 
-            photos : [],
+            photos: [],
             clientCategory : '', 
             typeOfProduct : '',
             year : 0
