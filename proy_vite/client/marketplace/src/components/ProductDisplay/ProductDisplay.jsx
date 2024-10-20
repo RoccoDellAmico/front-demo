@@ -4,15 +4,18 @@ import star_icon_dull from '../../assets/star_dull_icon.png';
 import ShopCategory from "../../Pages/ShopCategory";
 import { ShopContext } from "../../Context/ShopContext";
 import './ProductDisplay.css';
+import { useNavigate } from "react-router-dom";
 
 const ProductDisplay = (props) => {
     const {product} = props;
-    const {addToCart} = useContext(ShopContext)
+    const {addToCart, logueado} = useContext(ShopContext)
 
     const [selectedSize, setSelectedSize] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const [showError, setShowError] = useState(false);
     const [mainImage, setMainImage] = useState(product.photos[0]);
+    const navigate = useNavigate();
+
     const handleSizeSelect = (size) => {
         setSelectedSize(size);
         setShowError(false);
@@ -20,6 +23,10 @@ const ProductDisplay = (props) => {
     
 
     const handleAddToCart = (productId) => {
+        if(!logueado){
+            navigate('/logIn')
+            return;
+        }
         if (selectedSize) {
             addToCart(productId, () => {
                 setShowPopup(true);
