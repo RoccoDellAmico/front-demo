@@ -84,6 +84,10 @@ const ShopContextProvider = (props) =>{
         setCartItems((prev) => ( { ...prev, [itemId]: Math.max(0, (prev[itemId] || 0) - 1)}));
     };
 
+    const clearCart = () => {
+        setCartItems({});
+    };
+    
     const getTotalCartAmount = () => {
         let totalAmount = 0;
         for(const item in cartItems) {
@@ -106,7 +110,7 @@ const ShopContextProvider = (props) =>{
     }
 
     const contextValue = { getTotalCartItems, getTotalCartAmount, products, cartItems, addToCart, removeFromCart,
-        logueado, changeLogueado};
+        logueado, changeLogueado, clearCart};
 
     return (
         <ShopContext.Provider value={contextValue}>
