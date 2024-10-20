@@ -2,8 +2,6 @@ import React from "react";
 import { useState , useEffect } from "react"
 import './ProductPanel.css'
 import ProductService from '../../services/ProductService'
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 const ProductPanel = ()=>{
 
     const[products, setProducts] = useState([]);const [loading, setLoading] = useState(true); // Add loading state

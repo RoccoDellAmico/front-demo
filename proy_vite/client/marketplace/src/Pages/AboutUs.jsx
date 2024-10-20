@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 import LogoutButton from '../components/Logout Button/LogoutButton'
 import { ShopContext } from '../Context/ShopContext'
+import Payment from './Payment'
 
 
 
@@ -24,6 +25,7 @@ const AboutUs =() => {
         </p>
         <Link to='/admin'><button> continuar</button> </Link>
         <LogoutButton/>
+        <Link to='/payment'><Payment/>Payment</Link>
     </div>
     )
 }

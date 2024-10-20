@@ -18,41 +18,53 @@ import './PaymentItem.css'
 
 const PaymentItem = () => {
 
-    const [dropdown,setDropdown] = useState(false);
-
-    const opencloseDropdown = () => {
-        setDropdown(!dropdown);
-    }
+    const [cuotas, setCuotas] = useState('')
 
     return (
         <div className='payment'>
             <div className="payment-container">
                 <h1>Medio de pago</h1>
                 <div className="payment-fields">
-                    <input type="text" placeholder='Número de tarjeta' />
-                    <div className="payment-fields-data">
-                        <input type="text" placeholder='Titular de tarjeta' />
-                        <input type="text" placeholder='Vencimiento (MM/DD)' />
-                        <input type="text" placeholder='CVV' />
+                    <div class="input-container">
+                        <input type="text" id='numero_tarjeta' required />
+                        <label for="numero_tarjeta">Número de tarjeta</label>
                     </div>
-                    <div className="dropdown">
-                        <Dropdown isOpen={dropdown} toggle={opencloseDropdown}>
-                            <DropdownToggle caret>
-                                Cuotas
-                            </DropdownToggle>
-                            
-                            <DropdownMenu>
-                                <DropdownItem header>Seleccione cuotas</DropdownItem>
-                                <DropdownItem>1 cuota</DropdownItem>
-                                <DropdownItem>3 cuota</DropdownItem>
-                                <DropdownItem>6 cuota</DropdownItem>
-                                <DropdownItem>9 cuota</DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
+                    <div className="payment-fields-data">
+                        <div class="input-container">
+                            <input type="text" id='titular' required />
+                            <label for="titular">Titular de tarjeta</label>
+                        </div>
+                        <div class="input-container">
+                            <input type="text" id='vencimiento' required />
+                            <label for="vencimiento">Vencimiento (MM/DD)</label>
+                        </div>
+                        <div class="input-container">
+                            <input type="text" id='CVV' required />
+                            <label for="CVV">CVV</label>
+                        </div>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="nombre" required/>
+                        <label for="nombre">Nombre</label>
+                    </div>
+                    <div className="cuotas">
+                        <select name="cuotas" id="cuotas" onChange={(e) => setCuotas(e.target.value)}>
+                            <option value="" disabled selected>Seleccione cantidad de cuotas</option>
+                            <option value="1 cuota">1 cuota</option>
+                            <option value="3 cuotas">3 cuotas</option>
+                            <option value="6 cuotas">6 cuotas</option>
+                            <option value="9 cuotas">9 cuotas</option>
+                        </select>
                     </div>
                     <div className="datos-titular">
-                        <input type="text" placeholder='DNI' />
-                        <input type="text" placeholder='Telefono'/>
+                        <div class="input-container">
+                            <input type="text" id="DNI" required/>
+                            <label for="DNI">DNI</label>
+                        </div>
+                        <div class="input-container">
+                            <input type="text" id="Telefono" required/>
+                            <label for="Telefono">Telefono</label>
+                        </div>
                     </div>
                 </div>
 
