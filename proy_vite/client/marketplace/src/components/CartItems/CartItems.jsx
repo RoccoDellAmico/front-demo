@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import ProductService from "../../services/ProductService";
 
 const CartItems = () => {
+    const {getTotalCartAmount,all_product,cartItems,removeFromCart} = useContext(ShopContext);
 
     const [products, setProducts] = useState([]);
 
@@ -18,7 +19,11 @@ const CartItems = () => {
         })
     },[])
 
-    const {getTotalCartAmount,all_product,cartItems,removeFromCart} = useContext(ShopContext);
+    const handleQuantityChange = (productId, size, newQuantity) => {
+        if (newQuantity >= 0) {
+            updateProductQuantity(cartId, productId, size, newQuantity);
+        }
+    };
 
     return (
         <div className="cartitems">
@@ -40,7 +45,7 @@ const CartItems = () => {
                                 <p>{e.description}</p>
                                 <p>${e.price}</p>
                                 {/*<button className="cartitems-quantity"> {cartItems[e.id]} </button>*/}
-                                <input type="number" step="1" min='0' defaultValue={cartItems[e.id]} />
+                                <input type="number" step="1" min='0' defaultValue={cartItems[e.id]} onChange={(e) => handleQuantityChange(e.id, selectedSize, e.target.value)} />
                                 <p> ${ e.price * cartItems[e.id] } </p>
                                 <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {removeFromCart(e.id)} } alt="" />
                             </div>

@@ -2,119 +2,144 @@ import React, { createContext } from 'react';
 import { useState, useEffect } from 'react';
 import ProductService from '../services/ProductService';
 import AuthService from '../services/AuthService';
+import CartService from '../services/CartService';
 
 
 export const ShopContext = createContext(null);
 
-const getDefaultCart = (length) => {
-    let cart = {};
-    for (let index = 0; index < length + 1; index++) {
-        cart[index] = 0;
-    }
-    return cart;
-};
 
 const ShopContextProvider = (props) =>{
-    const [all_product, setAllProduct] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [cartItems, setCartItems] = useState({});                    // CUANDO USEMOS LA BD SE SACA ESTA PARTE DEL CODIGO
-    const [logueado, setLogueado] = useState(false);
+    const [userId, setUserId] = useState(null);
 
-    const [products, setProducts] = useState([]);
+    const [logueado, setLogueado] = useState(false);
     const changeLogueado = () =>{
         setLogueado(!logueado);
     }
 
+    const [products, setProducts] = useState([]);
     useEffect( () => {
         ProductService.getAllProducts().then(response => {
             setProducts(response.data);
             console.log(response.data);
+            setLoading(false);
         }).catch(error => {
             console.log(error);
+            setLoading(false);
         })
     },[])
 
-
-    useEffect(()=>{
-        //fetch('https://dummyjson.com/products') //localhost:8080/products API backend
-        //fetch('https://fakestoreapi.com/products')
-        fetch('https://fakestoreapiserver.reactbd.com/products')
-        .then((response) => response.json())
-        .then((data) => {
-            setAllProduct(data); //Actualizamos el estado con los datos obtenidos
-            setLoading(false); //Cambiamos el estado de loading
-        })
-        .catch((error) => {
-            console.error('Error al obtener los datos:', error);
-            setLoading(false);
-        })
-    }, [])
-
-    // Establecer el carrito por defecto una vez que all_product se haya actualizado
-    useEffect(() => {
-        if (products.length) {
-            setCartItems(getDefaultCart(products.length)); // Configura carrito
+    const [cartId, setCartId] = useState(null);
+    const [cartItems, setCartItems] = useState([]);
+    const createCart = async (userId) => {
+        try {
+            const response = await CartService.createCart(userId);
+            const newCartId = response.data.cartId;
+            setCartId(newCartId);
+            console.log("Carrito creado, ID: ", newCartId);
+        }catch (error){
+            console.error("Error crando el carrito: ", error)
         }
-    }, [all_product]); // Se activa cuando all_product cambia
-
-    if(loading){
-        return <p>Loading...</p>
     }
 
-    //const [cartItems,setcartItems] = useState(getDefaultCart()); // CUANDO USEMOS LA BD SE PONE ESTA PARTE DEL CODIGO
-
-    /*const addToCart = (itemId) => {
-        setCartItems((prev) => ( {...prev, [itemId]: (prev[itemId] || 0) + 1}));
-        console.log(itemId)
-        console.log(cartItems[itemId]);
-        console.log(cartItems);
-    };*/
-
-    const addToCart = (itemId, callback) => {
-        setCartItems((prev) => {
-            const newCart = { ...prev, [itemId]: (prev[itemId] || 0) + 1 };
-            if (callback) callback();
-            console.log(newCart)
-            return newCart;
-
-        });
+    const getCartByID = async () => {
+        try {
+            const response = await CartService.getCartById(userId);
+            if (response.data && response.data.products) {
+                setCartItems(response.data.products);
+                setCartId(response.data.cartId); // Asegúrate de que también guardas el ID del carrito si se encuentra
+            } else {
+                console.log("No se encontró un carrito existente, creando uno nuevo...");
+                await createCart(userId);  // Si no hay carrito, lo creamos
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                // Si el error es que no se encontró el carrito (404), creamos uno
+                console.log("Carrito no encontrado, creando uno nuevo...");
+                await createCart(userId);
+            } else {
+                console.error("Error obteniendo el carrito: ", error);
+            }
+        }
     };
 
-    const removeFromCart = (itemId) => {
-        setCartItems((prev) => ( { ...prev, [itemId]: Math.max(0, (prev[itemId] || 0) - 1)}));
+    const addToCart = async (productId, size, quantity) => {
+        if (!cartId){
+            console.log("Todavia no se creo el carrito");
+            return;
+        }
+        try {
+            const response = await CartService.addProductToCart(cartId, productId, size, quantity);
+            await getCartByID(userId);
+        }catch (error){
+            console.error("Error agregando producto al carrito: ", error);
+        }
     };
 
-    const clearCart = () => {
-        setCartItems({});
+    const removeFromCart = async (productId,size) => {
+        if (!cartId){
+            console.log("Todavia no se creo el carrito");
+            return;
+        }
+        try {
+            const response = await CartService.removeProduct(cartId, productId, size);
+            await getCartByID(userId);
+        }catch (error){
+            console.error("Error eliminando producto del carrito: ", error);
+        }
+        
+    };
+
+    const clearCart = async() => {
+        if (!cartId){
+            console.log("Todavia no se creo el carrito");
+            return;
+        }
+        try {
+            const response = await CartService.clearCart(cartId);
+            await getCartByID(userId);
+        }catch (error){
+            console.error("Error limpiando el carrito: ", error);
+        }
+        
     };
     
-    const getTotalCartAmount = () => {
-        let totalAmount = 0;
-        for(const item in cartItems) {
-            if(cartItems[item] > 0) {
-                let itemInfo = all_product.find( (product) => product._id === Number(item))
-                totalAmount += itemInfo.price * cartItems[item];
-            }
+    const getTotalCartAmount = async () => {
+        try {
+            const response = await CartService.getTotal(cartId);
+            return response.data.total;
+        }catch (error){
+            console.error("Error obteniendo el total del carrito: ", error);
+            return 0;
         }
-        return totalAmount;
     }
 
-    const getTotalCartItems = () => {
-        let totalItem = 0;
-        for ( const item in cartItems) {
-            if(cartItems[item] > 0) {
-                totalItem += cartItems[item];
-            }
+    const getTotalCartItems = async (cartId) => {
+        try {
+            const response = await CartService.getItemCount(cartId);
+            return response.data.itemCount;
+        }catch (error){
+            console.error("Error obteniendo la cantidad de items del carrito: ", error);
+            return 0;
         }
-        return totalItem;
+        
     }
 
-    const contextValue = { getTotalCartItems, getTotalCartAmount, products, cartItems, addToCart, removeFromCart,
-        logueado, changeLogueado, clearCart};
+    const contextValue = { 
+        getTotalCartItems, 
+        getTotalCartAmount, 
+        products, 
+        cartItems, 
+        addToCart, 
+        removeFromCart,
+        logueado, 
+        changeLogueado, 
+        clearCart
+    };
 
     return (
         <ShopContext.Provider value={contextValue}>
-            {props.children}
+            {loading ? <p>Loading...</p> : props.children}
         </ShopContext.Provider>
     )
 }

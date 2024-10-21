@@ -28,7 +28,8 @@ const ProductDisplay = (props) => {
             return;
         }
         if (selectedSize) {
-            addToCart(productId, () => {
+            addToCart(productId, selectedSize, 1)
+            .then( () => {
                 setShowPopup(true);
                 setTimeout(() => {
                     setShowPopup(false);

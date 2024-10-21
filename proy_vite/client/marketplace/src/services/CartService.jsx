@@ -5,7 +5,7 @@ const CART_BASE_URL = "http://localhost:4002/api"
 
 class CartService {
 
-    async createCart(email) {
+    async createCart(userId) {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -16,7 +16,8 @@ class CartService {
                     Authorization: `Bearer ${token}`,
                 }
             };
-            const response = await axios.post(`${CART_BASE_URL}/user/carts/${email}`, null, config);
+            const body = {userId}
+            const response = await axios.post(`${CART_BASE_URL}/user/carts/create`, body, config);
             return response;
         } catch (error) {
             console.error("Error creating cart", error);
@@ -62,7 +63,7 @@ class CartService {
         }
     }
 
-    async addProductToCart(){
+    async addProductToCart(cartId, productId, size, quantity) {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -74,12 +75,7 @@ class CartService {
                 }
             };
 
-            const body = {
-                cartId: cartId,
-                productId: productId,
-                size: size,
-                quantity: quantity
-            }
+            const body = { cartId, productId, size, quantity };
 
             const response = await axios.put(`${CART_BASE_URL}/user/carts`, body, config);
             return response;
@@ -127,6 +123,48 @@ class CartService {
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
             console.error("Error subtracting one product to cart", error);
+            throw error;
+        }
+    }
+
+    async updateProductQuantity(cartId, productId, size, quantity){
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No token found. Please login again.');
+            }
+    
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+    
+            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/size/${size}/quantity/${quantity}`, null, config);
+            return response.data; // Devuelve los datos de la respuesta
+        } catch (error) {
+            console.error("Error updating product quantity", error);
+            throw error;
+        }
+    }
+
+    async removeProduct(cartId, productId, size){
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No token found. Please login again.');
+            }
+    
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+    
+            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/remove`, null, config);
+            return response.data; // Devuelve los datos de la respuesta
+        } catch (error) {
+            console.error("Error removing one product to cart", error);
             throw error;
         }
     }
@@ -207,7 +245,7 @@ class CartService {
                 }
             };
     
-            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/cartProducts`, null, config);
+            const response = await axios.get(`${CART_BASE_URL}/user/carts/${cartId}/cartProducts`, null, config);
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
             console.error("Error getting cart products", error);

@@ -11,10 +11,10 @@ import LogoutButton from '../Logout Button/LogoutButton'
 
 const Navbar = () => {
 
-    const {logueado} = useContext(ShopContext)    
+    const {logueado, getTotalCartItems} = useContext(ShopContext)    
 
     const [clicked, setClicked] = useState(false)
-    const [menu, setMenu] = useState("home");
+    const [totalCartItems, setTotalCartItems] = useState(0); // Estado para almacenar la cantidad de items
 
     const handleClick = () => {
         if (clicked) {
@@ -23,7 +23,19 @@ const Navbar = () => {
         setClicked(!clicked)
     }
 
-    const {getTotalCartItems} = useContext(ShopContext);
+    useEffect(() => {
+        const fetchTotalCartItems = async () => {
+            if (logueado) {
+                const itemCount = await getTotalCartItems(2);
+                setTotalCartItems(itemCount);
+            } else {
+                setTotalCartItems(0);
+            }
+        };
+        
+        fetchTotalCartItems();
+    }, [logueado, getTotalCartItems]); // Dependencias para que se ejecute cuando logueado cambie
+
 
     return(
         <div className='navbar'>
@@ -47,7 +59,7 @@ const Navbar = () => {
                 <div className='cart'> 
                     {logueado ? <Link to='/cart'><img src={cart} alt="cart"/></Link> : <Link to='/login'><img src={cart} alt="cart"/></Link>}
                 </div>
-                <div className='nav-cart-count'> {getTotalCartItems()} </div>
+                <div className='nav-cart-count'> {totalCartItems} </div>
                 <div className="profile"> 
                     {logueado ? <Link to='/profile'> <img src={profile} alt="profile" /> </Link> : <></>}
                 </div>
