@@ -11,6 +11,11 @@ export const ShopContext = createContext(null);
 const ShopContextProvider = (props) =>{
     const [loading, setLoading] = useState(true);
     const [userId, setUserId] = useState(null);
+    const [cart, setCart] = useState([]);
+    const [totalCartAmount, setTotalCartAmount] = useState(0);
+    const [totalCartItems, setTotalCartItems] = useState(0);
+
+
     const [logueado, setLogueado] = useState(false);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const changeLogueado = () =>{
@@ -21,9 +26,11 @@ const ShopContextProvider = (props) =>{
         try {
             const response = await AuthService.signup(firstname, lastname, email, password);
             console.log('Signup successful');
-            setUserId(response.userId);
+            setUserId(response.id);
+            localStorage.setItem('userId', response.id);
+            const carrito = await createCart(response.id);
+            setCart(carrito);
             setLogueado(true);
-            await createCart(response.userId);
             return response;
         }catch (error){
             console.error('Failed signup: ', error);
@@ -35,9 +42,13 @@ const ShopContextProvider = (props) =>{
         try {
             const response = await AuthService.login(email, password);
             console.log('Succesful login')
-            setUserId(response.userId);
+            setUserId(response.id);
+            localStorage.setItem('userId', response.id);
+            const respuesta = await getCartByID();
+            if (!respuesta){
+                await createCart(response.id);
+            }
             setLogueado(true);
-            await getCartByID();
             return response;
         }catch (error){
             console.error('Failed login: ', error);
@@ -49,8 +60,9 @@ const ShopContextProvider = (props) =>{
         try {
             AuthService.logout();
             setUserId(null);
+            localStorage.removeItem('userId');
             setLogueado(false);
-            clearCart();
+            setCart([])
             console.log('Logout successful');
         }catch (error) {
             console.error('Failed logout: ', error);
@@ -70,13 +82,13 @@ const ShopContextProvider = (props) =>{
         })
     },[])
 
-    const [cartId, setCartId] = useState(null);
-    const [cartItems, setCartItems] = useState([]);
+    const [cartId, setCartId] = useState(0);
     const createCart = async (userId) => {
         try {
             const response = await CartService.createCart(userId);
-            const newCartId = response.data.cartId;
+            const newCartId = response.cartId;
             setCartId(newCartId);
+            localStorage.setItem('cartid', newCartId);
             console.log("Carrito creado, ID: ", newCartId);
         }catch (error){
             console.error("Error crando el carrito: ", error)
@@ -85,10 +97,13 @@ const ShopContextProvider = (props) =>{
 
     const getCartByID = async () => {
         try {
-            const response = await CartService.getCartById(userId);
-            if (response.data && response.data.products) {
-                setCartItems(response.data.products);
-                setCartId(response.data.cartId); // Asegúrate de que también guardas el ID del carrito si se encuentra
+            const id = localStorage.getItem('userId');
+            const response = await CartService.getCartById(id);
+            if (response && response.cartProducts) {
+                setCart(response.cartProducts);
+                console.log("Carrito encontrado: ", response);
+                setCartId(response.cartId); // Asegúrate de que también guardas el ID del carrito si se encuentra
+                return response;
             } else {
                 console.log("No se encontró un carrito existente, creando uno nuevo...");
                 await createCart(userId);  // Si no hay carrito, lo creamos
@@ -105,25 +120,29 @@ const ShopContextProvider = (props) =>{
     };
 
     const addToCart = async (productId, size, quantity) => {
-        if (!cartId || !userId) {
+        const cartid = localStorage.getItem('cartid');
+        const id = localStorage.getItem('userId');
+        if (!cartid || !userId) {
             console.log("Carrito no creado o usuario no logueado");
             return;
         }
         try {
-            const response = await CartService.addProductToCart(cartId, productId, size, quantity);
-            await getCartByID(userId);
+            const response = await CartService.addProductToCart(cartid, productId, size, quantity);
+            setCart(response)
         }catch (error){
             console.error("Error agregando producto al carrito: ", error);
         }
     };
 
-    const removeFromCart = async (productId,size) => {
-        if (!cartId || !userId) {
+    const removeFromCart = async (cartProductId) => {
+        const cartid = localStorage.getItem('cartid');
+        const id = localStorage.getItem('userId');
+        if (!cartid || !id) {
             console.log("Carrito no creado o usuario no logueado");
             return;
         }
         try {
-            const response = await CartService.removeProduct(cartId, productId, size);
+            const response = await CartService.removeProduct(cartid, cartProductId);
             await getCartByID(userId);
         }catch (error){
             console.error("Error eliminando producto del carrito: ", error);
@@ -132,12 +151,14 @@ const ShopContextProvider = (props) =>{
     };
 
     const clearCart = async() => {
-        if (!cartId || !userId) {
+        const cartid = localStorage.getItem('cartid');
+        const id = localStorage.getItem('userId');
+        if (!cartid || !id) {
             console.log("Carrito no creado o usuario no logueado");
             return;
         }
         try {
-            const response = await CartService.clearCart(cartId);
+            const response = await CartService.clearCart(cartid);
             await getCartByID(userId);
         }catch (error){
             console.error("Error limpiando el carrito: ", error);
@@ -146,19 +167,22 @@ const ShopContextProvider = (props) =>{
     };
     
     const getTotalCartAmount = async () => {
+        const cartid = localStorage.getItem('cartid');
         try {
-            const response = await CartService.getTotal(cartId);
-            return response.data.total;
-        }catch (error){
+            const response = await CartService.getTotal(cartid);
+            console.log("Total del carrito: ", response);
+            return response;
+        } catch (error) {
             console.error("Error obteniendo el total del carrito: ", error);
-            return 0;
+            return Infinity;
         }
-    }
+    };
 
-    const getTotalCartItems = async (cartId) => {
+    const getTotalCartItems = async () => {
+        const cartid = localStorage.getItem('cartid');
         try {
-            const response = await CartService.getItemCount(cartId);
-            return response.data.itemCount;
+            const response = await CartService.getItemCount(cartid);
+            return response;
         }catch (error){
             console.error("Error obteniendo la cantidad de items del carrito: ", error);
             return 0;
@@ -167,12 +191,13 @@ const ShopContextProvider = (props) =>{
     }
 
     const contextValue = { 
-        getTotalCartItems, 
-        getTotalCartAmount, 
+        getTotalCartAmount,
+        getTotalCartItems,
+        getCartByID,
         products, 
         filteredProducts,
         setFilteredProducts,
-        cartItems, 
+        cart, 
         addToCart, 
         removeFromCart,
         logueado, 
@@ -180,7 +205,8 @@ const ShopContextProvider = (props) =>{
         clearCart,
         signup,
         login,
-        logout
+        logout,
+        setLoading
     };
 
     return (

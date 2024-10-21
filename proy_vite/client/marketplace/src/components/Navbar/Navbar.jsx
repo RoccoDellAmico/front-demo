@@ -37,7 +37,7 @@ const Navbar = () => {
     useEffect(() => {
         const fetchTotalCartItems = async () => {
             if (logueado) {
-                const itemCount = await getTotalCartItems(2);
+                const itemCount = await getTotalCartItems();
                 setTotalCartItems(itemCount);
             } else {
                 setTotalCartItems(0);
