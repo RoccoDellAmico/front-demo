@@ -33,14 +33,20 @@ class AuthService {
         }
     }
 
-    logout(){
+    async logout(){
         let token = localStorage.getItem('token');
-        axios.post("http://localhost:4002/api/user/logout/2", { token: token }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        localStorage.removeItem('token');
+        try {
+            await axios.post("http://localhost:4002/api/user/logout/2", { token: token }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            localStorage.removeItem('token');
+            console.log('Logout successful');
+        }catch (error) {
+            console.error('Logout failed', error);
+            throw new Error('Logout failed');
+        }
     }
 }
 

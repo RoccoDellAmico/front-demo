@@ -12,19 +12,16 @@ const LoginSignup =() => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
-    const {changeLogueado} = useContext(ShopContext);
+    const { signup } = useContext(ShopContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try{
-            console.log(firstName);
-            console.log(lastName);
-            await AuthService.signup(firstName, lastName, email, password);
-            console.log('Succesful');
-            changeLogueado();
+            await signup(firstName, lastName, email, password);
+            console.log('Signup and cart creation successful');
             navigate('/');
         } catch(error) {
-            console.error('Error');
+            console.error('Signup failed');
             setErrorMessage('Signup failed');
         }
     }

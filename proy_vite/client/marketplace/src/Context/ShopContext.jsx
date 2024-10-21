@@ -17,6 +17,46 @@ const ShopContextProvider = (props) =>{
         setLogueado(!logueado);
     }
 
+    const signup = async (firstname, lastname, email, password) => {
+        try {
+            const response = await AuthService.signup(firstname, lastname, email, password);
+            console.log('Signup successful');
+            setUserId(response.userId);
+            setLogueado(true);
+            await createCart(response.userId);
+            return response;
+        }catch (error){
+            console.error('Failed signup: ', error);
+            throw new Error('Signup failed');
+        }
+    }
+
+    const login = async (email, password) => {
+        try {
+            const response = await AuthService.login(email, password);
+            console.log('Succesful login')
+            setUserId(response.userId);
+            setLogueado(true);
+            await getCartByID();
+            return response;
+        }catch (error){
+            console.error('Failed login: ', error);
+            throw new Error('The email address or password is incorrect.');
+        }
+    }
+
+    const logout = async () => {
+        try {
+            AuthService.logout();
+            setUserId(null);
+            setLogueado(false);
+            clearCart();
+            console.log('Logout successful');
+        }catch (error) {
+            console.error('Failed logout: ', error);
+        }
+    }
+
     const [products, setProducts] = useState([]);
     useEffect( () => {
         ProductService.getAllProducts().then(response => {
@@ -64,8 +104,8 @@ const ShopContextProvider = (props) =>{
     };
 
     const addToCart = async (productId, size, quantity) => {
-        if (!cartId){
-            console.log("Todavia no se creo el carrito");
+        if (!cartId || !userId) {
+            console.log("Carrito no creado o usuario no logueado");
             return;
         }
         try {
@@ -77,8 +117,8 @@ const ShopContextProvider = (props) =>{
     };
 
     const removeFromCart = async (productId,size) => {
-        if (!cartId){
-            console.log("Todavia no se creo el carrito");
+        if (!cartId || !userId) {
+            console.log("Carrito no creado o usuario no logueado");
             return;
         }
         try {
@@ -91,8 +131,8 @@ const ShopContextProvider = (props) =>{
     };
 
     const clearCart = async() => {
-        if (!cartId){
-            console.log("Todavia no se creo el carrito");
+        if (!cartId || !userId) {
+            console.log("Carrito no creado o usuario no logueado");
             return;
         }
         try {
@@ -134,7 +174,10 @@ const ShopContextProvider = (props) =>{
         removeFromCart,
         logueado, 
         changeLogueado, 
-        clearCart
+        clearCart,
+        signup,
+        login,
+        logout
     };
 
     return (

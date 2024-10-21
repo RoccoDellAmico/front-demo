@@ -7,13 +7,11 @@ import './LogoutButton.css'
 
 const LogoutButton = ()=> {
     const navigate = useNavigate();
-    const {changeLogueado} = useContext(ShopContext);
+    const { logout } = useContext(ShopContext);
 
     const handleClick = () => {
-        AuthService.logout()
-        changeLogueado();
+        logout();
         navigate('/')
-        console.log('logout');
     }
 
         /*async function logout() {

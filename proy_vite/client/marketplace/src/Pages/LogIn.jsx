@@ -10,20 +10,17 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
-    const {changeLogueado, getCartByID} = useContext(ShopContext);
+    const { login } = useContext(ShopContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try{
-            const response = await AuthService.login(email, password);
-            console.log('Succesful login')
-            changeLogueado();
+            const response = await login(email, password);
             if(response.role == 'ADMIN'){
                 navigate('/admin')
             } else {
                 navigate('/')
             }
-
         } catch(error) {
             console.error('Failed login');
             setErrorMessage('The email address or password is incorrect.');
