@@ -100,7 +100,9 @@ const ShopContextProvider = (props) =>{
             const response = await CartService.getCartById(id);
             if (response && response.cartProducts) {
                 setCart(response.cartProducts);
+                console.log("Carrito encontrado: ", response);
                 setCartId(response.cartId); // Asegúrate de que también guardas el ID del carrito si se encuentra
+                return response;
             } else {
                 console.log("No se encontró un carrito existente, creando uno nuevo...");
                 await createCart(userId);  // Si no hay carrito, lo creamos
@@ -118,13 +120,14 @@ const ShopContextProvider = (props) =>{
 
     const addToCart = async (productId, size, quantity) => {
         const cartid = localStorage.getItem('cartid');
+        const id = localStorage.getItem('userId');
         if (!cartid || !userId) {
             console.log("Carrito no creado o usuario no logueado");
             return;
         }
         try {
             const response = await CartService.addProductToCart(cartid, productId, size, quantity);
-            await getCartByID(userId);
+            setCart(response)
         }catch (error){
             console.error("Error agregando producto al carrito: ", error);
         }
@@ -162,13 +165,23 @@ const ShopContextProvider = (props) =>{
         
     };
     
-    
+    const getTotalCartAmount = async () => {
+        const cartid = localStorage.getItem('cartid');
+        try {
+            const response = await CartService.getTotal(cartid);
+            console.log("Total del carrito: ", response);
+            return response;
+        } catch (error) {
+            console.error("Error obteniendo el total del carrito: ", error);
+            return Infinity;
+        }
+    };
 
     const getTotalCartItems = async () => {
         const cartid = localStorage.getItem('cartid');
         try {
             const response = await CartService.getItemCount(cartid);
-            return response.itemCount;
+            return response;
         }catch (error){
             console.error("Error obteniendo la cantidad de items del carrito: ", error);
             return 0;
@@ -177,7 +190,9 @@ const ShopContextProvider = (props) =>{
     }
 
     const contextValue = { 
-        getTotalCartItems, 
+        getTotalCartAmount,
+        getTotalCartItems,
+        getCartByID,
         products, 
         cart, 
         addToCart, 
@@ -187,7 +202,8 @@ const ShopContextProvider = (props) =>{
         clearCart,
         signup,
         login,
-        logout
+        logout,
+        setLoading
     };
 
     return (

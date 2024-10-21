@@ -7,9 +7,12 @@ import ProductService from "../../services/ProductService";
 import CartService from "../../services/CartService";
 
 const CartItems = () => {
-    const {all_product,cart,removeFromCart} = useContext(ShopContext);
+    const {cart,removeFromCart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
 
     const [products, setProducts] = useState([]);
+    const [totalAmount, setTotalAmount] = useState(0);
+    const [carts,setCarts] = useState([]);
+
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -23,27 +26,39 @@ const CartItems = () => {
                 setLoading(false);
             }
         };
-        
+
+        const fetchTotalAmount = async () => {
+            const amount = await getTotalCartAmount();
+            console.log('TOTAL AMOUNT',amount);
+            setTotalAmount(amount);
+        };
+
         fetchProducts();
-    }, []);
+        fetchTotalAmount();
+    }, [getTotalCartAmount]);
 
-    const getTotalCartAmount = async () => {
-        const cartid = localStorage.getItem('cartid');
-        console.log(cartid);
-        try {
-            const response = await CartService.getTotal(cartid);
-            return response.total;
-        }catch (error){
-            console.error("Error obteniendo el total del carrito: ", error);
-            return 0;
+    useEffect(() => {
+        const fetchCart = async () => {
+            const carrito = await CartService.getCartById(localStorage.getItem('userId'));
+            console.log('BOCA ',carrito.cartProducts);
+            setCarts(carrito.cartProducts);
         }
-    }
 
+        const fetchTotalAmount = async () => {
+            const amount = await getTotalCartAmount();
+            console.log('TOTAL AMOUNT',amount);
+            setTotalAmount(amount);
+        };
+
+        fetchTotalAmount();
+        fetchCart();
+    },[])
+    
 
 
     const handleQuantityChange = (productId, size, newQuantity) => {
         if (newQuantity >= 0) {
-            updateProductQuantity(cartId, productId, size, newQuantity);
+            addToCart(productId, size, newQuantity);
         }
     };
 
@@ -58,32 +73,30 @@ const CartItems = () => {
                 <p>Remove</p>
             </div>
             <hr/>
-            {products.map( (e) => {
-                if(cart[e.id] > 0) {
-                    return (
-                        <div key={e.id}>
-                            <div className="cartitems-format cartitems-format-main">
-                                <img src={e.photos[0]} alt="" className="carticon-product-icon" />
-                                <p>{e.description}</p>
-                                <p>${e.price}</p>
-                                {/*<button className="cartitems-quantity"> {cartItems[e.id]} </button>*/}
-                                <input type="number" step="1" min='0' defaultValue={cart[e.id]} onChange={(e) => handleQuantityChange(e.id, selectedSize, e.target.value)} />
-                                <p> ${ e.price * cart[e.id] } </p>
-                                <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {removeFromCart(e.id)} } alt="" />
-                            </div>
-                            <hr />
+
+            {carts.map( (e) => {
+                return (
+                    <div key={e.id}>
+                        <div className="cartitems-format cartitems-format-main">
+                            <img src={e.product.photos[0]} alt="" className="carticon-product-icon" />
+                            <p>{e.product.description}</p>
+                            <p>${e.product.price}</p>
+                            <input type="number" step="1" min='0' defaultValue={cart[e.id]} onChange={(e) => handleQuantityChange(e.id, selectedSize, e.target.value)} />
+                            <p> ${ e.product.price * e.quantity } </p>
+                            <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {removeFromCart(e.id)} } alt="" />
                         </div>
-                    )
-                }
-                return null;
-            } )}
+                        <hr />
+                    </div>
+                )
+            })}
+
             <div className="cartitems-down">
                 <div className="cartitems-total">
                     <h1>cart Totals</h1>
                     <div>
                         <div className="cartitems-total-item">
                             <p>Subtotal</p>
-                            <p> ${getTotalCartAmount()} </p>
+                            <p> ${totalAmount} </p>
                         </div>
                         <hr />
                         <div className="cartitems-total-item">
@@ -93,7 +106,7 @@ const CartItems = () => {
                         <hr />
                         <div className="cartitems-total-item">
                             <h3>Total</h3>
-                            <h3> ${getTotalCartAmount()} </h3>
+                            <h3> ${totalAmount} </h3>
                         </div>
                     </div>
                     <Link to='/checkout'> <button>PROCEED TO CHECKOUT</button> </Link>

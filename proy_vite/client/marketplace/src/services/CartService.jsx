@@ -77,7 +77,11 @@ class CartService {
                 }
             };
 
-            const body = { cartId, productId, size, quantity };
+            const body = { 
+                cartId : cartId, 
+                size : size,
+                productId : productId, 
+                quantity : quantity };
 
             const response = await axios.put(`${CART_BASE_URL}/user/carts`, body, config);
             return response.data;
