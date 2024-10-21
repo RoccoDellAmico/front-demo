@@ -4,20 +4,42 @@ import { ShopContext } from "../../Context/ShopContext";
 import remove_icon from '../../assets/close.svg'
 import { Link } from 'react-router-dom'
 import ProductService from "../../services/ProductService";
+import CartService from "../../services/CartService";
 
 const CartItems = () => {
-    const {getTotalCartAmount,all_product,cartItems,removeFromCart} = useContext(ShopContext);
+    const {all_product,cart,removeFromCart} = useContext(ShopContext);
 
     const [products, setProducts] = useState([]);
 
-    useEffect( () => {
-        ProductService.getAllProducts().then(response => {
-            setProducts(response.data);
-            console.log(response.data);
-        }).catch(error => {
-            console.log(error);
-        })
-    },[])
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await ProductService.getAllProducts();
+                setProducts(response.data);
+                console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        fetchProducts();
+    }, []);
+
+    const getTotalCartAmount = async () => {
+        const cartid = localStorage.getItem('cartid');
+        console.log(cartid);
+        try {
+            const response = await CartService.getTotal(cartid);
+            return response.total;
+        }catch (error){
+            console.error("Error obteniendo el total del carrito: ", error);
+            return 0;
+        }
+    }
+
+
 
     const handleQuantityChange = (productId, size, newQuantity) => {
         if (newQuantity >= 0) {
@@ -37,7 +59,7 @@ const CartItems = () => {
             </div>
             <hr/>
             {products.map( (e) => {
-                if(cartItems[e.id] > 0) {
+                if(cart[e.id] > 0) {
                     return (
                         <div key={e.id}>
                             <div className="cartitems-format cartitems-format-main">
@@ -45,8 +67,8 @@ const CartItems = () => {
                                 <p>{e.description}</p>
                                 <p>${e.price}</p>
                                 {/*<button className="cartitems-quantity"> {cartItems[e.id]} </button>*/}
-                                <input type="number" step="1" min='0' defaultValue={cartItems[e.id]} onChange={(e) => handleQuantityChange(e.id, selectedSize, e.target.value)} />
-                                <p> ${ e.price * cartItems[e.id] } </p>
+                                <input type="number" step="1" min='0' defaultValue={cart[e.id]} onChange={(e) => handleQuantityChange(e.id, selectedSize, e.target.value)} />
+                                <p> ${ e.price * cart[e.id] } </p>
                                 <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {removeFromCart(e.id)} } alt="" />
                             </div>
                             <hr />
@@ -61,7 +83,7 @@ const CartItems = () => {
                     <div>
                         <div className="cartitems-total-item">
                             <p>Subtotal</p>
-                            <p> ${getTotalCartAmount().toFixed(2)} </p>
+                            <p> ${getTotalCartAmount()} </p>
                         </div>
                         <hr />
                         <div className="cartitems-total-item">
@@ -71,7 +93,7 @@ const CartItems = () => {
                         <hr />
                         <div className="cartitems-total-item">
                             <h3>Total</h3>
-                            <h3> ${getTotalCartAmount().toFixed(2)} </h3>
+                            <h3> ${getTotalCartAmount()} </h3>
                         </div>
                     </div>
                     <Link to='/checkout'> <button>PROCEED TO CHECKOUT</button> </Link>

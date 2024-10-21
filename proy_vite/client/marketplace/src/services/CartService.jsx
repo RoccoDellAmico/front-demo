@@ -18,7 +18,7 @@ class CartService {
             };
             const body = {userId}
             const response = await axios.post(`${CART_BASE_URL}/user/carts/create`, body, config);
-            return response;
+            return response.data;
         } catch (error) {
             console.error("Error creating cart", error);
             throw error;
@@ -36,8 +36,10 @@ class CartService {
                   Authorization: `Bearer ${token}`,  // Añadir el token en el encabezado
                 }
             };
+            console.log(userId)
             const response = await axios.get(`${CART_BASE_URL}/user/carts/${userId}`, config);
-            return response; 
+            console.log(userId)
+            return response.data; 
         } catch(error){
             console.error("Error fetching cart", error);
             throw error;
@@ -56,7 +58,7 @@ class CartService {
                 }
             };
             const response = await axios.get(`${CART_BASE_URL}/admin/carts`, config);
-            return response;  
+            return response.data;  
         }catch(error){
             console.error("Error fetching carts", error);
             throw error;
@@ -78,7 +80,7 @@ class CartService {
             const body = { cartId, productId, size, quantity };
 
             const response = await axios.put(`${CART_BASE_URL}/user/carts`, body, config);
-            return response;
+            return response.data;
         } catch (error) {
             console.error("Error adding product to cart", error);
             throw error;
@@ -98,7 +100,7 @@ class CartService {
                 }
             };
     
-            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/addOne`, null, config);
+            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/addOne`, config);
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
             console.error("Error adding one product to cart", error);
@@ -119,7 +121,7 @@ class CartService {
                 }
             };
     
-            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/substractOne`, null, config);
+            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/substractOne`, config);
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
             console.error("Error subtracting one product to cart", error);
@@ -140,7 +142,7 @@ class CartService {
                 }
             };
     
-            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/size/${size}/quantity/${quantity}`, null, config);
+            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/size/${size}/quantity/${quantity}`, config);
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
             console.error("Error updating product quantity", error);
@@ -161,7 +163,7 @@ class CartService {
                 }
             };
     
-            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/remove`, null, config);
+            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/remove`, config);
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
             console.error("Error removing one product to cart", error);
@@ -182,7 +184,7 @@ class CartService {
                 }
             };
     
-            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/clear`, null, config);
+            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/clear`, config);
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
             console.error("Error clearing cart", error);
@@ -203,7 +205,7 @@ class CartService {
                 }
             };
     
-            const response = await axios.get(`${CART_BASE_URL}/user/carts/${cartId}/getTotal`, null, config);
+            const response = await axios.get(`${CART_BASE_URL}/user/carts/${cartId}/getTotal`, config);
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
             console.error("Error getting total cart", error);
@@ -224,7 +226,7 @@ class CartService {
                 }
             };
     
-            const response = await axios.get(`${CART_BASE_URL}/user/carts/${cartId}/itemCount`, null, config);
+            const response = await axios.get(`${CART_BASE_URL}/user/carts/${cartId}/itemCount`, config);
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
             console.error("Error getting item count of cart", error);
@@ -245,7 +247,7 @@ class CartService {
                 }
             };
     
-            const response = await axios.get(`${CART_BASE_URL}/user/carts/${cartId}/cartProducts`, null, config);
+            const response = await axios.get(`${CART_BASE_URL}/user/carts/${cartId}/cartProducts`, config);
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
             console.error("Error getting cart products", error);
@@ -266,7 +268,7 @@ class CartService {
                 }
             };
     
-            const response = await axios.put(`${CART_BASE_URL}/user/carts/add-discount/${discountCode}/cart/${cartId}`, null, config);
+            const response = await axios.put(`${CART_BASE_URL}/user/carts/add-discount/${discountCode}/cart/${cartId}`, config);
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
             console.error("Error getting cart products", error);
