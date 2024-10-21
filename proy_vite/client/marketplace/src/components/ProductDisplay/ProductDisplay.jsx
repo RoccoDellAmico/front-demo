@@ -98,8 +98,8 @@ const ProductDisplay = (props) => {
                         <span className="checkmark">✔</span>
                     </div>
                 )}
-                <p className="productsiplay-right-category"><span>Category: </span> Women, T-shirt, Crop Top </p>
-                <p className="productsiplay-right-category"><span>Tags: </span> Modern, Latest</p>
+                {/*<p className="productsiplay-right-category"><span>Category: </span> Women, T-shirt, Crop Top </p>*/}
+                {/*<p className="productsiplay-right-category"><span>Tags: </span> Modern, Latest</p>*/}
 
             </div>
         </div>

@@ -11,8 +11,8 @@ export const ShopContext = createContext(null);
 const ShopContextProvider = (props) =>{
     const [loading, setLoading] = useState(true);
     const [userId, setUserId] = useState(null);
-
     const [logueado, setLogueado] = useState(false);
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const changeLogueado = () =>{
         setLogueado(!logueado);
     }
@@ -61,6 +61,7 @@ const ShopContextProvider = (props) =>{
     useEffect( () => {
         ProductService.getAllProducts().then(response => {
             setProducts(response.data);
+            setFilteredProducts(response.data);
             console.log(response.data);
             setLoading(false);
         }).catch(error => {
@@ -169,6 +170,8 @@ const ShopContextProvider = (props) =>{
         getTotalCartItems, 
         getTotalCartAmount, 
         products, 
+        filteredProducts,
+        setFilteredProducts,
         cartItems, 
         addToCart, 
         removeFromCart,

@@ -11,10 +11,13 @@ import LogoutButton from '../Logout Button/LogoutButton'
 
 const Navbar = () => {
 
-    const {logueado, getTotalCartItems} = useContext(ShopContext)    
+    //const {logueado, getTotalCartItems} = useContext(ShopContext)    
 
     const [clicked, setClicked] = useState(false)
     const [totalCartItems, setTotalCartItems] = useState(0); // Estado para almacenar la cantidad de items
+    const { logueado, getTotalCartItems, products, setFilteredProducts } = useContext(ShopContext);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredProducts, setFilteredProductsState] = useState([]);
 
     const handleClick = () => {
         if (clicked) {
@@ -22,6 +25,14 @@ const Navbar = () => {
         }
         setClicked(!clicked)
     }
+
+    const handleSearch = () => {
+        const filtered = products.filter(product =>
+            product.description.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredProducts(filtered);
+        setFilteredProductsState(filtered);
+    };
 
     useEffect(() => {
         const fetchTotalCartItems = async () => {
@@ -52,10 +63,28 @@ const Navbar = () => {
             </ul>
 
             <div className="right1">
-
-
-
-                <div className='search'> <img src= {search} alt="search"/> </div>
+            <div className="search-bar">
+                    <input
+                        type="text"
+                        placeholder="Search kits..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <button onClick={handleSearch}>
+                        <img src={search} alt="search" />
+                    </button>
+                </div>
+                <div className="search-results">
+                    {filteredProducts.map(product => (
+                        <div key={product.id} className="search-result-item">
+                            <Link to={`/product/${product.id}`}>
+                                <h3>{product.name}</h3>
+                                <p>{product.description}</p>
+                            </Link>
+                        </div>
+                    ))}
+                </div>
+                {/*<div className='search'> <img src= {search} alt="search"/> </div>*/}
                 <div className='cart'> 
                     {logueado ? <Link to='/cart'><img src={cart} alt="cart"/></Link> : <Link to='/login'><img src={cart} alt="cart"/></Link>}
                 </div>

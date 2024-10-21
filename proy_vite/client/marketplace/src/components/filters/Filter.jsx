@@ -42,7 +42,7 @@ const Filter = ()=>{
             <div>
                 <h3>Talle</h3>
                 <div>
-                    {["S", "M", "L", "XL", "XXL"].map((size)=>(
+                    {["XS", "S", "M", "L", "XL", "XXL"].map((size)=>(
                         <button key={size} onClick={(e)=>setSelectedSize(size)}>{size}</button>
                     ))}
                 </div>
