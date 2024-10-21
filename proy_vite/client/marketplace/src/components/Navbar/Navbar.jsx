@@ -59,7 +59,7 @@ const Navbar = () => {
                 <div className='cart'> 
                     {logueado ? <Link to='/cart'><img src={cart} alt="cart"/></Link> : <Link to='/login'><img src={cart} alt="cart"/></Link>}
                 </div>
-                <div className='nav-cart-count'> {totalCartItems} </div>
+                <div className='nav-cart-count'> {logueado ? totalCartItems : 0 }</div>
                 <div className="profile"> 
                     {logueado ? <Link to='/profile'> <img src={profile} alt="profile" /> </Link> : <></>}
                 </div>
