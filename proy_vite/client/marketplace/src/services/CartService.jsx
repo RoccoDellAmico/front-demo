@@ -154,7 +154,7 @@ class CartService {
         }
     }
 
-    async removeProduct(cartId, productId, size){
+    async removeProduct(cartId, cartProductId){
         try {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -167,7 +167,7 @@ class CartService {
                 }
             };
     
-            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/remove`, config);
+            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${cartProductId}/remove`, config);
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
             console.error("Error removing one product to cart", error);

@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
+import DiscountService from "../../services/DiscountService";
 
 const DiscountPanel = () => {
     const [discounts, setDiscounts] = useState([])
@@ -13,6 +14,16 @@ const DiscountPanel = () => {
     const [editingDiscount, setEditingDiscount] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
 
+    useEffect(() => {
+        DiscountService.getDiscounts()
+        .then(response => {
+            setDiscounts(response.data || [])
+        })
+        .catch(error => {
+            console.error('error fetching discounts' + error)
+        })
+    }, [])
+
     const updateDiscount = (e) => {
         e.preventDefault()
         if(!validateDates(editingDiscount.startDate, editingDiscount.endDate)){
@@ -20,6 +31,12 @@ const DiscountPanel = () => {
             return;
         }
         if(editingDiscount){
+            DiscountService.updateDiscount(editingDiscount.id, editingDiscount.code, editingDiscount.description, 
+                editingDiscount.percentage, editingDiscount.fixedAmount, 
+                formatDateToLocalDateTime(editingDiscount.startDate), formatDateToLocalDateTime(editingDiscount.endDate)
+            ).catch(error => {
+                console.error('error updating discount ' + error)
+            })
             setDiscounts(discounts.map((d) => (d.id === editingDiscount.id ? editingDiscount : d)))
             setEditingDiscount(null)
             setErrorMessage('')
@@ -32,7 +49,16 @@ const DiscountPanel = () => {
             setErrorMessage('The end date must be later than the start date.')
             return;
         }
-        setDiscounts([...discounts, {...newDiscount, id : Date.now()}])
+        DiscountService.createDiscount(newDiscount.code, newDiscount.description, 
+            newDiscount.percentage,
+            newDiscount.fixedAmount, formatDateToLocalDateTime(newDiscount.startDate), 
+            formatDateToLocalDateTime(newDiscount.endDate)
+        )
+        .then(response => {
+            setDiscounts([...discounts], {...newDiscount, id : response.data.id})
+            console.log(response.data)
+        })
+        .catch(error => {console.error('error creating discount ' + error)})
         setNewDiscount({
             code : '',
             description : '',
@@ -52,9 +78,15 @@ const DiscountPanel = () => {
         setEditingDiscount(discount)
     }
 
-    const deleteDiscount = (discountCode) => {
-        setDiscounts(discounts.filter((discount) => discount.code !== discountCode))
+    const deleteDiscount = (discountId) => {
+        DiscountService.deleteDiscount(discountId);
+        setDiscounts(discounts.filter((discount) => discount.id !== discountId))
     }
+
+    const formatDateToLocalDateTime = (dateString) => {
+        const date = new Date(dateString)
+        return date.toISOString().split('.')[0]
+    } 
 
     return(
         <>
@@ -83,8 +115,8 @@ const DiscountPanel = () => {
                         required/>
                     </div>
                     <div>
-                        <label>Percentage (Add the discounted value. E.g. 30% discount you have to enter 30)</label>
-                        <input type="number" min='0' max='100'
+                        <label>Percentage (Add the percentage to charge. E.g. for 30% discount enter 0,7)</label>
+                        <input type="number" min='0' max='1' step='0.01'
                         value={editingDiscount ? editingDiscount.percentage : newDiscount.percentage}
                         onChange={(e) => editingDiscount ?
                             setEditingDiscount({...editingDiscount, percentage : e.target.value})
@@ -127,6 +159,7 @@ const DiscountPanel = () => {
                 </form>
                 <div className="discount-list">
                     <h2>Discount List</h2>
+                    <table>
                     <thead>
                         <tr>
                             <th>Code</th>
@@ -140,7 +173,7 @@ const DiscountPanel = () => {
                     </thead>
                     <tbody>
                         {discounts.map((discount) => (
-                            <tr>
+                            <tr key={discount.code}>
                                 <td>{discount.code}</td>
                                 <td>{discount.description}</td>
                                 <td>{discount.percentage}</td>
@@ -149,11 +182,12 @@ const DiscountPanel = () => {
                                 <td>{discount.endDate}</td>
                                 <td>
                                     <button onClick={() => startEditing(discount)}>Edit</button>
-                                    <button onClick={() => deleteDiscount(discount.code)}>Delete</button>
+                                    <button onClick={() => deleteDiscount(discount.id)}>Delete</button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
+                    </table>
                 </div>
             </div>
         </>

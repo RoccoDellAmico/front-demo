@@ -133,7 +133,7 @@ const ShopContextProvider = (props) =>{
         }
     };
 
-    const removeFromCart = async (productId,size) => {
+    const removeFromCart = async (cartProductId) => {
         const cartid = localStorage.getItem('cartid');
         const id = localStorage.getItem('userId');
         if (!cartid || !id) {
@@ -141,7 +141,7 @@ const ShopContextProvider = (props) =>{
             return;
         }
         try {
-            const response = await CartService.removeProduct(cartid, productId, size);
+            const response = await CartService.removeProduct(cartid, cartProductId);
             await getCartByID(userId);
         }catch (error){
             console.error("Error eliminando producto del carrito: ", error);
