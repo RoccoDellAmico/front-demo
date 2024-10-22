@@ -7,37 +7,6 @@ const ProductPanel = ()=>{
     const[products, setProducts] = useState([]);const [loading, setLoading] = useState(true); // Add loading state
     const [error, setError] = useState(null); // Add error state
 
-    {/*useEffect( () => {
-        ProductService.getProductsAdmin()
-        .then(response => {
-            setProducts(response.data || []);
-            console.log(response.data);
-            setLoading(false);
-        }).catch(error => {
-            console.log(error);
-            setError('Failed to fetch products');
-            setLoading(false);
-        })
-    },[])
-
-    if (loading) {
-        return <p>Loading products...</p>; // Display loading message while fetching
-    }
-
-    if (error) {
-        return <p>{error}</p>; // Display error message if fetching fails
-    }*/}
-
-    useEffect(() => {
-        ProductService.getProductsAdmin()
-        .then(response => {
-            setProducts(response || [])
-        })
-        .catch(error => {
-            console.error('error fetching products ' + error)
-        })
-    }, [])
-
     const [newProduct, setNewProduct] = useState({
         description: '',
         price: 0,
@@ -52,6 +21,18 @@ const ProductPanel = ()=>{
     const[editingProduct, setEditingProduct] = useState(null);
     const[newSize, setNewSize] = useState({size : '', stock : 0});
     const[newPhoto, setNewPhoto] = useState('');
+
+
+    useEffect(() => {
+        ProductService.getProductsAdmin()
+        .then(response => {
+            setProducts(response || [])
+            console.log(response)
+        })
+        .catch(error => {
+            console.error('error fetching products ' + error)
+        })
+    }, [])
 
     const addProduct = async (e) => {
         e.preventDefault()
@@ -91,19 +72,23 @@ const ProductPanel = ()=>{
     }
 
     const deleteProduct = (id) => {
+        console.log('id del product a eliminar ' + id);
         ProductService.deleteProduct(id);
         setProducts(products.filter((product) => product.id !== id));
     }
 
     const addSize = () => {
         if (newSize.size === '') return; // Asegúrate de que haya un tamaño seleccionado
-        const sizeKey = newSize.size; // Usamos el tamaño como la clave
-        const sizeValue = newSize.stock; // Usamos el stock como el valor
+        const sizeKey = newSize.size;
+        console.log('size key ' + sizeKey)
+        const sizeValue = newSize.stock;
+        console.log('size value')
     
         if (editingProduct) {
             // Verifica si ya existe el tamaño en productStock
             if (editingProduct.productStock[sizeKey]) {
                 // Si ya existe, actualiza el stock
+                console.log('editando existing size')
                 setEditingProduct({
                     ...editingProduct,
                     productStock: {
@@ -113,15 +98,17 @@ const ProductPanel = ()=>{
                 });
             } else {
                 // Si no existe, añade el nuevo tamaño
+                console.log('no existing size')
                 setEditingProduct({
                     ...editingProduct,
                     productStock: {
                         ...editingProduct.productStock,
-                        [sizeKey]: sizeValue // Añade el nuevo tamaño
+                        sizeKey: sizeValue // Añade el nuevo tamaño
                     }
                 });
             }
         } else {
+            console.log('creando producto y agregando size')
             // Igualmente, verifica si ya existe el tamaño en newProduct
             if (newProduct.productStock[sizeKey]) {
                 // Si ya existe, actualiza el stock
@@ -144,6 +131,7 @@ const ProductPanel = ()=>{
             }
         }
     
+        console.log(editingProduct.productStock)
         // Resetea el tamaño y stock para el siguiente ingreso
         setNewSize({ size: "", stock: 0 });
     }
