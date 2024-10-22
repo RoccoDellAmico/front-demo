@@ -8,12 +8,13 @@ import CartService from "../../services/CartService";
 import update_icon from '../../assets/update.svg'
 
 const CartItems = () => {
-    const {updateProductQuantity,clearCart,cart,removeFromCart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
+    const {addDiscountCode,updateProductQuantity,clearCart,cart,removeFromCart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
 
     const [products, setProducts] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
     const [carts,setCarts] = useState([]);
     const [newQuantity, setNewQuantity] = useState(0);
+    const [promo,setPromo] = useState('');
 
     useEffect(() => {
         const fetchCart = async () => {
@@ -65,6 +66,10 @@ const CartItems = () => {
         fetchCart();
     },[])
 
+    const handleAddDiscountCode = () => {
+        addDiscountCode(promo);
+    };
+
 
     return (
         <div className="cartitems">
@@ -88,7 +93,7 @@ const CartItems = () => {
                             <p>{e.product.description}</p>
                             <p>${e.product.price}</p>
                             <p>{e.size}</p>
-                            <input type="number" step="1" min='0' defaultValue={e.quantity} onChange={(e) => setNewQuantity(Number(e.target.value))} />
+                            <input className="cantidad" type="number" step="1" min='0' defaultValue={e.quantity} onChange={(e) => setNewQuantity(Number(e.target.value))} />
                             <p> ${ e.product.price * e.quantity } </p>
                             <img className="cartitems-update-icon" src={update_icon} onClick={ () => {updateProductQuantity(e.id, newQuantity)} } alt="" />
                             <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {removeFromCart(e.id)} } alt="" />
@@ -127,8 +132,8 @@ const CartItems = () => {
                 <div className="cartitems-promocode">
                     <p>If you have a promo code, Enter it here</p>
                     <div className="cartitems-promobox">
-                        <input type="text" placeholder="promo code" />
-                        <button>Submit</button>
+                        <input type="text" placeholder="promo code" value={promo} onChange={(e) => setPromo(e.target.value)}/>
+                        <button onClick={handleAddDiscountCode} >Submit</button>
                     </div>
                 </div>
             </div>

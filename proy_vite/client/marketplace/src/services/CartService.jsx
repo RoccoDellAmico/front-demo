@@ -38,7 +38,7 @@ class CartService {
             };
             console.log(userId)
             const response = await axios.get(`${CART_BASE_URL}/user/carts/${userId}`, config);
-            console.log(userId)
+            console.log('cartservice',response.data)
             return response.data; 
         } catch(error){
             console.error("Error fetching cart", error);
@@ -87,6 +87,8 @@ class CartService {
             return response.data;
         } catch (error) {
             console.error("Error adding product to cart", error);
+            alert("No hay stock suficiente para la cantidad solicitada.");
+            return false;
             throw error;
         }
     }
@@ -278,7 +280,7 @@ class CartService {
                 }
             };
     
-            const response = await axios.put(`${CART_BASE_URL}/user/carts/add-discount/${discountCode}/cart/${cartId}`, config);
+            const response = await axios.delete(`${CART_BASE_URL}/user/carts/add-discount/${discountCode}/cart/${cartId}`, config);
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
             console.error("Error getting cart products", error);

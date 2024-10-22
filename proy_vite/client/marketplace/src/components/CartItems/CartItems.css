@@ -10,7 +10,7 @@
 
 .cartitems-format-main{
     display: grid;
-    grid-template-columns: 0.5fr 2fr 1fr 0.5fr 0.5fr 1fr 0.5fr 0.5fr;
+    grid-template-columns: 0.5fr 2fr 1fr 0.5fr 0.5fr 1fr 0.25fr 0.25fr;
     
     align-items: center;
     gap: 75px;
@@ -18,6 +18,12 @@
     color: #454545;
     font-size: 18px;
     font-weight: 600;
+}
+
+.cantidad {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
 }
 
 .cartitems-format{
@@ -45,6 +51,19 @@
 .cartitems-down{
     display: flex;
     margin: 100px 0px;
+}
+
+.botones button {
+    margin-top: 40px;
+    width: 262px;
+    height: 58px;
+    outline: none;
+    border: none;
+    background: #ff5a5a;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .cartitems-total{

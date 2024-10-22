@@ -28,13 +28,16 @@ const ProductDisplay = (props) => {
             return;
         }
         if (selectedSize) {
-            addToCart(productId, selectedSize, 1)
-            .then( () => {
+            const rta = addToCart(productId, selectedSize, 1)
+            if (rta){
                 setShowPopup(true);
                 setTimeout(() => {
                     setShowPopup(false);
                 }, 1500);
-            });
+            }
+            else{
+                alert("No hay stock suficiente para la cantidad solicitada.");
+            }
         } else {
             setShowError(true);
         }

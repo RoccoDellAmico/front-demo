@@ -23,6 +23,25 @@ class UserService {
             throw error;
         }
     }
+
+    async getUserById(userId) {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No token found. Please login again.');
+            }
+            const config = {
+                headers: {
+                  Authorization: `Bearer ${token}`,  // Añadir el token en el encabezado
+                }
+            };
+            const response = await axios.get(`${USER_BASE_URL}/users/${userId}`, config);
+            return response.data;  
+        }catch(error){
+            console.error("Error fetching users", error);
+            throw error;
+        }
+    }
 }
 
 export default new UserService();
