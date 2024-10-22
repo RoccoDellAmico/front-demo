@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import ProductService from '../services/ProductService';
 import AuthService from '../services/AuthService';
 import CartService from '../services/CartService';
-import PaymentService from '../services/PaymentService';
 import OrderService from '../services/OrderService';
+import UserService from '../services/UserService';
 
 
 export const ShopContext = createContext(null);
@@ -50,6 +50,7 @@ const ShopContextProvider = (props) =>{
             if (!respuesta){
                 await createCart(response.id);
             }
+            console.log('Carrito  shopcontext login',response);
             setLogueado(true);
             return response;
         }catch (error){
@@ -63,6 +64,7 @@ const ShopContextProvider = (props) =>{
             AuthService.logout();
             setUserId(null);
             localStorage.removeItem('userId');
+            localStorage.removeItem('cartid');
             setLogueado(false);
             setCart([])
             console.log('Logout successful');
@@ -105,6 +107,7 @@ const ShopContextProvider = (props) =>{
                 setCart(response.cartProducts);
                 console.log("Carrito encontrado: ", response);
                 setCartId(response.cartId); // Asegúrate de que también guardas el ID del carrito si se encuentra
+                localStorage.setItem('cartid', response.cartId);
                 return response;
             } else {
                 console.log("No se encontró un carrito existente, creando uno nuevo...");
@@ -131,8 +134,10 @@ const ShopContextProvider = (props) =>{
         try {
             const response = await CartService.addProductToCart(cartid, productId, size, quantity);
             setCart(response)
+            return true;
         }catch (error){
             console.error("Error agregando producto al carrito: ", error);
+            return false;
         }
     };
 
@@ -206,6 +211,39 @@ const ShopContextProvider = (props) =>{
         
     }
 
+    const addDiscountCode = async (code) => {
+        const cartid = localStorage.getItem('cartid');
+        try {
+            const response = await CartService.addDiscountCode(cartid, code);
+            console.log("Código de descuento aplicado: ", response);
+            setCart(response);
+        } catch (error) {
+            console.error("Error aplicando el código de descuento: ", error);
+            return null;
+        }
+    }
+
+    const getOrders = async () => {
+        try {
+            const response = await OrderService.getOrders();
+            return response;
+        } catch (error) {
+            console.error("Error obteniendo las ordenes: ", error);
+            return [];
+        }
+    }
+
+    const getOrdersById = async () => {
+        const id = localStorage.getItem('userId');
+        try {
+            const response = await OrderService.getOrdersById(id);
+            return response;
+        } catch (error) {
+            console.error("Error obteniendo las ordenes por ID: ", error);
+            return [];
+        }
+    }
+
     const placeOrder = async () => {
         const cartid = localStorage.getItem('cartid');
         try {
@@ -213,6 +251,17 @@ const ShopContextProvider = (props) =>{
             console.log("Orden realizada: ", response);
         } catch (error) {
             console.error("Error realizando la orden: ", error);
+        }
+    }
+
+    const getUserById = async => {
+        const id = localStorage.getItem('userId');
+        try {
+            const response = UserService.getUserById(id);
+            return response;
+        }catch (error) {
+            console.error("Error obteniendo el usuario: ", error);
+            return null;
         }
     }
 
@@ -230,11 +279,15 @@ const ShopContextProvider = (props) =>{
         logueado, 
         changeLogueado, 
         clearCart,
+        addDiscountCode,
         signup,
         login,
         logout,
         setLoading,
-        placeOrder
+        getOrders,
+        getOrdersById,
+        placeOrder,
+        getUserById
     };
 
     return (

@@ -17,3 +17,21 @@
 .checkbox-container label {
     grid-column: 2;
 }
+.filter-container {
+    display: flex;
+    gap: 0; 
+}
+
+.filters {
+    flex: 1;
+    padding: 15px;
+}
+
+.filtered-products {
+    flex: 2;
+    padding: 15px; 
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start; 
+}

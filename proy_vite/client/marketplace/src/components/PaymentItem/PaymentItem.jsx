@@ -36,56 +36,26 @@ const PaymentItem = () => {
         const cuotas = document.getElementById('cuotas').value;
         const DNI = document.getElementById('DNI').value;
         const telefono = document.getElementById('Telefono').value;
-        const pais = document.getElementById('pais').value;
-        const ciudad = document.getElementById('ciudad').value;
-        const adress = document.getElementById('adress').value;
-        const floor = document.getElementById('floor').value;
-        const postalCode = document.getElementById('postalCode').value;
-        
-        if (!numeroTarjeta || !titular || !vencimiento || !cvv || !nombre || !cuotas || !DNI || !telefono || !pais || !ciudad || !adress || !postalCode) {
+
+        if (!numeroTarjeta || !titular || !vencimiento || !cvv || !nombre || !cuotas || !DNI || !telefono) {
             setErrorMessage('Please complete all fields');
             return;
         }
 
         setErrorMessage('');
         setShowPopup(true);
-        placeOrder();
         setTimeout(() => {
             setShowPopup(false);
             clearCart();
             navigate('/');
         }, 2000);
 
+        placeOrder();
     };
 
     return (
         <div className='payment'>
             <div className="payment-container">
-            <h1>Shipping information </h1>
-            <div className="payment-fields"> 
-                <div class="input-container">
-                            <input type="text" id='pais' required />
-                            <label for="pais">Country</label>
-                </div>
-                <div class="input-container">
-                            <input type="text" id='ciudad' required />
-                            <label for="ciudad">City</label>
-                </div>
-                <div className="shipping-fields-data">
-                    <div class="input-container">
-                        <input type="text" id='adress' required />
-                        <label for="adress">Address</label>
-                    </div>
-                    <div class="input-container">
-                        <input type="number" id='floor' required className='no-spinner'/>
-                        <label for="floor">Floor (optional)</label>
-                    </div>
-                    <div class="input-container">
-                        <input type="number" id='postalCode' required className='no-spinner'/>
-                        <label for="postalCode">Postal Code</label>
-                    </div>
-                </div>
-            </div>
             <h1>Payment Method</h1>
                 <div className="payment-fields">
                     <div className="input-container">

@@ -10,9 +10,13 @@
 }
 
 .tabs {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     margin-bottom: 20px;
+}
+
+.tabs button {
+    width: 100%;
 }
 
 .tab {
@@ -20,7 +24,6 @@
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     cursor: pointer;
-    flex-grow: 1;
     text-align: center;
 }
 
