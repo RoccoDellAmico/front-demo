@@ -62,7 +62,25 @@ class ProductService{
             };
             await axios.put(`${PRODUCTO_BASE_URL}/admin/products/update`, product, config);
         }catch(error){
-            console.error("Error creating product ", error);
+            console.error("Error updating product ", error);
+            throw error;
+        }
+    }
+
+    async deleteProduct(productId){
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No token found. Please login again.');
+            }
+            const config = {
+                headers: {
+                  Authorization: `Bearer ${token}`,  // Añadir el token en el encabezado
+                }
+            };
+            await axios.delete(`${PRODUCTO_BASE_URL}/admin/products/${productId}`, config);
+        }catch(error){
+            console.error("Error deleting product ", error);
             throw error;
         }
     }
