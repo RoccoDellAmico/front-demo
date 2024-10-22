@@ -143,7 +143,8 @@ const ShopContextProvider = (props) =>{
         }
         try {
             const response = await CartService.removeProduct(cartid, cartProductId);
-            await getCartByID(userId);
+            console.log("Producto eliminado del carrito SHOPCONTEXT: ", response);
+            setCart(response);
         }catch (error){
             console.error("Error eliminando producto del carrito: ", error);
         }
@@ -159,7 +160,8 @@ const ShopContextProvider = (props) =>{
         }
         try {
             const response = await CartService.clearCart(cartid);
-            await getCartByID(userId);
+            console.log("Carrito limpiado SHOPCONTEXT: ", response);
+            setCart(response);
         }catch (error){
             console.error("Error limpiando el carrito: ", error);
         }

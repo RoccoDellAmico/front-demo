@@ -7,11 +7,20 @@ import ProductService from "../../services/ProductService";
 import CartService from "../../services/CartService";
 
 const CartItems = () => {
-    const {cart,removeFromCart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
+    const {clearCart,cart,removeFromCart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
 
     const [products, setProducts] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
     const [carts,setCarts] = useState([]);
+
+    useEffect(() => {
+        const fetchCart = async () => {
+            const carrito = await CartService.getCartById(localStorage.getItem('userId'));
+            console.log('BOCA ',carrito.cartProducts);
+            setCarts(carrito.cartProducts);
+        }
+        fetchCart();
+    },[cart])
 
 
     useEffect(() => {
@@ -55,7 +64,6 @@ const CartItems = () => {
     },[])
     
 
-
     const handleQuantityChange = (productId, size, newQuantity) => {
         if (newQuantity >= 0) {
             addToCart(productId, size, newQuantity);
@@ -68,6 +76,7 @@ const CartItems = () => {
                 <p>Products</p>
                 <p>Title</p>
                 <p>Price</p>
+                <p>Size</p>
                 <p>Quantity</p>
                 <p>Total</p>
                 <p>Remove</p>
@@ -81,7 +90,8 @@ const CartItems = () => {
                             <img src={e.product.photos[0]} alt="" className="carticon-product-icon" />
                             <p>{e.product.description}</p>
                             <p>${e.product.price}</p>
-                            <input type="number" step="1" min='0' defaultValue={cart[e.id]} onChange={(e) => handleQuantityChange(e.id, selectedSize, e.target.value)} />
+                            <p>{e.size}</p>
+                            <input type="number" step="1" min='0' defaultValue={e.quantity} onChange={(e) => handleQuantityChange(e.id, selectedSize, e.target.value)} />
                             <p> ${ e.product.price * e.quantity } </p>
                             <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {removeFromCart(e.id)} } alt="" />
                         </div>
@@ -89,6 +99,11 @@ const CartItems = () => {
                     </div>
                 )
             })}
+
+            <div className="botones">
+                <button onClick={clearCart}>Clear Cart</button>
+                <button>Save Cart</button>
+            </div>
 
             <div className="cartitems-down">
                 <div className="cartitems-total">

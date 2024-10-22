@@ -63,7 +63,7 @@ const Navbar = () => {
             </ul>
 
             <div className="right1">
-            <div className="search-bar">
+                {/*<div className="search-bar">
                     <input
                         type="text"
                         placeholder="Search kits..."
@@ -73,7 +73,7 @@ const Navbar = () => {
                     <button onClick={handleSearch}>
                         <img src={search} alt="search" />
                     </button>
-                </div>
+                </div>*/}
                 <div className="search-results">
                     {filteredProducts.map(product => (
                         <div key={product.id} className="search-result-item">

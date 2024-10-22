@@ -133,7 +133,7 @@ class CartService {
         }
     }
 
-    async updateProductQuantity(cartId, productId, size, quantity){
+    async updateProductQuantity(cartId, cartProductId, quantity){
         try {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -160,14 +160,15 @@ class CartService {
             if (!token) {
                 throw new Error('No token found. Please login again.');
             }
-    
             const config = {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
                 }
             };
+
+            console.log("Removing product with cartId:", cartId, "and cartProductId:", cartProductId);
     
-            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${cartProductId}/remove`, config);
+            const response = await axios.delete(`${CART_BASE_URL}/user/carts/${cartId}/products/${cartProductId}/remove`, config);
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
             console.error("Error removing one product to cart", error);
@@ -188,7 +189,8 @@ class CartService {
                 }
             };
     
-            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/clear`, config);
+            const response = await axios.delete(`${CART_BASE_URL}/user/carts/${cartId}/clear`, config);
+            console.log("Cart cleared CARTSERVICE", response);
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
             console.error("Error clearing cart", error);
