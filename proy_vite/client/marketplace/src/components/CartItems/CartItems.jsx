@@ -5,13 +5,15 @@ import remove_icon from '../../assets/close.svg'
 import { Link } from 'react-router-dom'
 import ProductService from "../../services/ProductService";
 import CartService from "../../services/CartService";
+import update_icon from '../../assets/update.svg'
 
 const CartItems = () => {
-    const {clearCart,cart,removeFromCart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
+    const {updateProductQuantity,clearCart,cart,removeFromCart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
 
     const [products, setProducts] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
     const [carts,setCarts] = useState([]);
+    const [newQuantity, setNewQuantity] = useState(0);
 
     useEffect(() => {
         const fetchCart = async () => {
@@ -62,13 +64,7 @@ const CartItems = () => {
         fetchTotalAmount();
         fetchCart();
     },[])
-    
 
-    const handleQuantityChange = (productId, size, newQuantity) => {
-        if (newQuantity >= 0) {
-            addToCart(productId, size, newQuantity);
-        }
-    };
 
     return (
         <div className="cartitems">
@@ -79,6 +75,7 @@ const CartItems = () => {
                 <p>Size</p>
                 <p>Quantity</p>
                 <p>Total</p>
+                <p>Update</p>
                 <p>Remove</p>
             </div>
             <hr/>
@@ -91,8 +88,9 @@ const CartItems = () => {
                             <p>{e.product.description}</p>
                             <p>${e.product.price}</p>
                             <p>{e.size}</p>
-                            <input type="number" step="1" min='0' defaultValue={e.quantity} onChange={(e) => handleQuantityChange(e.id, selectedSize, e.target.value)} />
+                            <input type="number" step="1" min='0' defaultValue={e.quantity} onChange={(e) => setNewQuantity(Number(e.target.value))} />
                             <p> ${ e.product.price * e.quantity } </p>
+                            <img className="cartitems-update-icon" src={update_icon} onClick={ () => {updateProductQuantity(e.id, newQuantity)} } alt="" />
                             <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {removeFromCart(e.id)} } alt="" />
                         </div>
                         <hr />
@@ -102,7 +100,6 @@ const CartItems = () => {
 
             <div className="botones">
                 <button onClick={clearCart}>Clear Cart</button>
-                <button>Save Cart</button>
             </div>
 
             <div className="cartitems-down">

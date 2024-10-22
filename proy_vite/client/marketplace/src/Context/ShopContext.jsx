@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import ProductService from '../services/ProductService';
 import AuthService from '../services/AuthService';
 import CartService from '../services/CartService';
+import PaymentService from '../services/PaymentService';
+import OrderService from '../services/OrderService';
 
 
 export const ShopContext = createContext(null);
@@ -167,6 +169,18 @@ const ShopContextProvider = (props) =>{
         }
         
     };
+
+    const updateProductQuantity = async(cartProductId, quantity) => {
+        const cartid = localStorage.getItem('cartid');
+        try {
+            console.log("CANTIDAD: ", quantity);
+            const response = await CartService.updateProductQuantity(cartid, cartProductId, quantity);
+            console.log("Cantidad del producto actualizada SHOPCONTEXT: ", response);
+            setCart(response);
+        } catch (error) {
+            console.error("Error actualizando la cantidad del producto: ", error);
+        }
+    }
     
     const getTotalCartAmount = async () => {
         const cartid = localStorage.getItem('cartid');
@@ -192,6 +206,16 @@ const ShopContextProvider = (props) =>{
         
     }
 
+    const placeOrder = async () => {
+        const cartid = localStorage.getItem('cartid');
+        try {
+            const response = await OrderService.placeOrder(cartid);
+            console.log("Orden realizada: ", response);
+        } catch (error) {
+            console.error("Error realizando la orden: ", error);
+        }
+    }
+
     const contextValue = { 
         getTotalCartAmount,
         getTotalCartItems,
@@ -202,13 +226,15 @@ const ShopContextProvider = (props) =>{
         cart, 
         addToCart, 
         removeFromCart,
+        updateProductQuantity,
         logueado, 
         changeLogueado, 
         clearCart,
         signup,
         login,
         logout,
-        setLoading
+        setLoading,
+        placeOrder
     };
 
     return (
