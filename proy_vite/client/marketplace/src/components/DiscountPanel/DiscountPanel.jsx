@@ -174,7 +174,7 @@ const DiscountPanel = () => {
                     <tbody>
                         {discounts.map((discount) => (
                             <tr key={discount.code}>
-                                <td>{discount.code}</td>
+                                <td>{discount.code + discount.id} </td>
                                 <td>{discount.description}</td>
                                 <td>{discount.percentage}</td>
                                 <td>{discount.fixedAmount}</td>

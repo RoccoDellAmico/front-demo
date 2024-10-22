@@ -78,7 +78,7 @@ class DiscountService{
                     Authorization: `Bearer ${token}`,
                 }
             }
-            await axios.delete(`${DISCOUNTS_BASE_URL}/delete/${id}`, null, config)
+            await axios.delete(`${DISCOUNTS_BASE_URL}/delete/${id}`, config)
         } catch(error) {
             console.error('error ' + error)
             throw error
