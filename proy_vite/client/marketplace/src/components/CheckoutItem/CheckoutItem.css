@@ -1,4 +1,4 @@
-.payment{
+.checkout{
     width: 100%;
     height: auto;
     background: #fce3fe;
@@ -6,26 +6,26 @@
     padding-bottom: 150px;
 }
 
-.payment-container{
-    width: 1000px;
+.checkout-container{
+    width: 750px;
     height: auto;
     background: white;
     margin: auto;
     padding: 40px 60px;
 }
 
-.payment-container h1{
+.checkout-container h1{
     margin: 20px 0px;
 }
 
-.payment-fields{
+.checkout-fields{
     display: flex;
     flex-direction: column;
     gap: 29px;
     margin-top: 30px;
 }
 
-.payment-fields input{
+.checkout-fields input{
     height: 72px;
     width: 100%;
     padding-left: 20px;
@@ -40,40 +40,8 @@
     grid-template-columns: 2fr 1fr 1fr;
 }
 
-.cuotas {
-    margin-right: 0;
-    width: 100%;
-}
 
-.cuotas select{
-    height: 72px;
-    width: 100%;
-    padding-left: 20px;
-    border: 1px solid #c9c9c9;
-    outline: none;
-    color: #999;
-    font-size: 18px;
-}
-
-.datos-titular{
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-}
-
-.tajetas{
-    margin-top: 50px;
-}
-
-.tarjetas-aceptadas{
-    gap: 10px;
-    display: flex;
-}
-
-.tarjetas-aceptadas img{
-    height: 50px;
-}
-
-.payment-pagar button{
+.checkout-container button{
 width: 100%;
 height: 71px;
 color: white;
@@ -90,16 +58,6 @@ cursor: pointer;
     margin: 20px 0;
 }
 
-/* Estilos para el input */
-/*.input-container input {
-    height: 72px;
-    width: 100%;
-    padding-left: 20px;
-    border: 1px solid #c9c9c9;
-    outline: none;
-    color: #5c5c5c;
-    font-size: 18px;
-}*/
 
 /* Estilos para el label */
 .input-container label {
@@ -132,12 +90,7 @@ color: #333;
     margin: 0;
 }
 
-.shipping-fields-data {
+.datos-direccion {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 10px;
-}
-
-.shipping-fields-data .input-container {
-    margin-right: 0;
+    grid-template-columns: 1fr 1fr 1fr;
 }

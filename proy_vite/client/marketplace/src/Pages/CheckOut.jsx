@@ -1,11 +1,10 @@
 import React from "react";
-import {Link} from 'react-router-dom'
+import CheckoutItem from "../components/CheckoutItem/CheckoutItem";
 
 const CheckOut = () => {
     return (
         <div>
-            <h1>CheckOut</h1>
-            <Link to='/payment'> <button>Proceed to payment</button> </Link>
+            <CheckoutItem/>
         </div>
     )
 }

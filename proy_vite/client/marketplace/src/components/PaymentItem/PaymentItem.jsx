@@ -23,8 +23,9 @@ const PaymentItem = () => {
     const [cuotas, setCuotas] = useState('')
     const [showPopup, setShowPopup] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const { clearCart } = useContext(ShopContext);
+    const { clearCart , placeOrder } = useContext(ShopContext);
     const navigate = useNavigate();
+
 
     const handlePayClick = () => {
         const numeroTarjeta = document.getElementById('numero_tarjeta').value;
@@ -35,51 +36,83 @@ const PaymentItem = () => {
         const cuotas = document.getElementById('cuotas').value;
         const DNI = document.getElementById('DNI').value;
         const telefono = document.getElementById('Telefono').value;
-
-        if (!numeroTarjeta || !titular || !vencimiento || !cvv || !nombre || !cuotas || !DNI || !telefono) {
+        const pais = document.getElementById('pais').value;
+        const ciudad = document.getElementById('ciudad').value;
+        const adress = document.getElementById('adress').value;
+        const floor = document.getElementById('floor').value;
+        const postalCode = document.getElementById('postalCode').value;
+        
+        if (!numeroTarjeta || !titular || !vencimiento || !cvv || !nombre || !cuotas || !DNI || !telefono || !pais || !ciudad || !adress || !postalCode) {
             setErrorMessage('Please complete all fields');
             return;
         }
 
         setErrorMessage('');
         setShowPopup(true);
+        placeOrder();
         setTimeout(() => {
             setShowPopup(false);
             clearCart();
             navigate('/');
         }, 2000);
+
     };
 
     return (
         <div className='payment'>
             <div className="payment-container">
+            <h1>Shipping information </h1>
+            <div className="payment-fields"> 
+                <div class="input-container">
+                            <input type="text" id='pais' required />
+                            <label for="pais">Country</label>
+                </div>
+                <div class="input-container">
+                            <input type="text" id='ciudad' required />
+                            <label for="ciudad">City</label>
+                </div>
+                <div className="shipping-fields-data">
+                    <div class="input-container">
+                        <input type="text" id='adress' required />
+                        <label for="adress">Address</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="number" id='floor' required className='no-spinner'/>
+                        <label for="floor">Floor (optional)</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="number" id='postalCode' required className='no-spinner'/>
+                        <label for="postalCode">Postal Code</label>
+                    </div>
+                </div>
+            </div>
             <h1>Payment Method</h1>
                 <div className="payment-fields">
-                    <div class="input-container">
+                    <div className="input-container">
                         <input type="number" id='numero_tarjeta' required className='no-spinner'/>
-                        <label for="numero_tarjeta">Card number</label>
+                        <label htmlFor="numero_tarjeta">Card number</label>
                     </div>
                     <div className="payment-fields-data">
-                        <div class="input-container">
+                        <div className="input-container">
                             <input type="text" id='titular' required />
-                            <label for="titular">Card owner</label>
+                            <label htmlFor="titular">Card owner</label>
                         </div>
-                        <div class="input-container">
+                        <div className="input-container">
                             <input type="text" id='vencimiento' required className='no-spinner'/>
-                            <label for="vencimiento">Expiration date (MM/YY)</label>
+                            <label htmlFor="vencimiento">Expiration date (MM/YY)</label>
                         </div>
-                    <div class="input-container">
+                    <div className="input-container">
                             <input type="number" id='CVV' required className='no-spinner'/>
-                            <label for="CVV">Security code</label>
+                            <label htmlFor="CVV">Security code</label>
                         </div>
                     </div>
-                    <div class="input-container">
+                    <div className="input-container">
                         <input type="text" id="nombre" required/>
-                        <label for="nombre">Name</label>
+                        <label htmlFor="nombre">Name</label>
                     </div>
                     <div className="cuotas">
-                        <select name="cuotas" id="cuotas" onChange={(e) => setCuotas(e.target.value)}>
-                            <option value="" disabled selected>Select the number of installments</option>
+                        <select name="cuotas" id="cuotas" value={cuotas} onChange={(e) => setCuotas(e.target.value)}>
+                            <option value="" disabled>Select the number of installments</option>
                             <option value="1 cuota">1 installment</option>
                             <option value="3 cuotas">3 installments</option>
                             <option value="6 cuotas">6 installments</option>
@@ -87,13 +120,13 @@ const PaymentItem = () => {
                         </select>
                     </div>
                     <div className="datos-titular">
-                        <div class="input-container">
+                        <div className="input-container">
                             <input type="number" id="DNI" required className='no-spinner'/>
-                            <label for="DNI">ID number</label>
+                            <label htmlFor="DNI">ID number</label>
                         </div>
-                        <div class="input-container">
+                        <div className="input-container">
                             <input type="number" id="Telefono" required className='no-spinner'/>
-                            <label for="Telefono">Phone number</label>
+                            <label htmlFor="Telefono">Phone number</label>
                         </div>
                     </div>
                 </div>

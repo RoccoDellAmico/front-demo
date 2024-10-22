@@ -145,10 +145,14 @@ class CartService {
                     Authorization: `Bearer ${token}`
                 }
             };
-    
-            const response = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/size/${size}/quantity/${quantity}`, config);
+            console.log("Updating product quantity with cartId:", cartId, "and cartProductId:", cartProductId, "and quantity:", quantity);
+            const response = await axios.delete(`${CART_BASE_URL}/user/carts/${cartId}/products/${cartProductId}/quantity/${quantity}/update`, config);
+            console.log("Product quantity updated CARTSERVICE", response);
             return response.data; // Devuelve los datos de la respuesta
         } catch (error) {
+            if (error.response && error.response.status === 400) {
+                alert("No hay stock suficiente para la cantidad solicitada.");
+            }
             console.error("Error updating product quantity", error);
             throw error;
         }
