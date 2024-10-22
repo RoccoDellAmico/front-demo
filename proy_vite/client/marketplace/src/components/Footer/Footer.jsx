@@ -11,7 +11,7 @@ const Footer = () => {
     return (
         <div className='footer'>
             <div className="footer-logo">
-                <h2>Football <span>Kits</span></h2>
+                <h2>Football <span>Kits Arg</span></h2>
             </div>
             <div className="footer-links">
                 <Link to='/'>Home</Link>
