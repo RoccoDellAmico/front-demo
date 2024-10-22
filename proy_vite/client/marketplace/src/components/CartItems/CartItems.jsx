@@ -122,6 +122,7 @@ const CartItems = () => {
                         </div>
                     </div>
                     <Link to='/checkout'> <button>PROCEED TO CHECKOUT</button> </Link>
+                    {/*<Link to='/payment'> <button>PROCEED TO CHECKOUT</button> </Link>*/}
                 </div>
                 <div className="cartitems-promocode">
                     <p>If you have a promo code, Enter it here</p>

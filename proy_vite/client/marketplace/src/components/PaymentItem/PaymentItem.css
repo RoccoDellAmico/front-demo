@@ -131,3 +131,13 @@ color: #333;
     -webkit-appearance: none;
     margin: 0;
 }
+
+.shipping-fields-data {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 10px;
+}
+
+.shipping-fields-data .input-container {
+    margin-right: 0;
+}
