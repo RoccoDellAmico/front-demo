@@ -4,13 +4,14 @@ import './ProductPanel.css'
 import ProductService from '../../services/ProductService'
 const ProductPanel = ()=>{
 
-    const[products, setProducts] = useState([]);const [loading, setLoading] = useState(true); // Add loading state
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true); // Add loading state
     const [error, setError] = useState(null); // Add error state
 
     const [newProduct, setNewProduct] = useState({
         description: '',
         price: 0,
-        productStock: {}, // Cambia a un objeto
+        productStock: [], // Cambia a un objeto
         club: '',
         league: '',
         photos: [],
@@ -36,15 +37,17 @@ const ProductPanel = ()=>{
 
     const addProduct = async (e) => {
         e.preventDefault()
-        ProductService.createProduct(newProduct)
+        let arrayProductStock = newProduct.productStock
+        let prod = {...newProduct, productStock : convertProductStockArrayToObject(newProduct.productStock)}
+        ProductService.createProduct(prod)
         .then(response => {
-            setProducts([...products, {...newProduct, id : response.id}])
+            setProducts([...products, {...newProduct, id : response.id, productStock : arrayProductStock}])
         })
         .catch(error => {console.error('error creating product ' + error)})
         setNewProduct({
             description: '',
             price: 0,
-            productStock: {}, // Cambia a un objeto
+            productStock: [], // Cambia a un objeto
             league: '',
             club: '',
             photos: [],
@@ -57,7 +60,9 @@ const ProductPanel = ()=>{
     const updateProduct = (e) => {
         e.preventDefault()
         if (editingProduct) {
-            ProductService.updateProduct(editingProduct)
+            let arrayProductStock = editingProduct.productStock
+            let prod = {...editingProduct, productStock : convertProductStockArrayToObject(editingProduct.productStock)}
+            ProductService.updateProduct(prod)
             .catch(error => {console.error('error updating product ' + error)})
             setProducts(products.map((p) => (p.id === editingProduct.id ? editingProduct : p)))
             setEditingProduct(null)
@@ -80,61 +85,41 @@ const ProductPanel = ()=>{
     const addSize = () => {
         if (newSize.size === '') return; // Asegúrate de que haya un tamaño seleccionado
         const sizeKey = newSize.size;
-        console.log('size key ' + sizeKey)
         const sizeValue = newSize.stock;
-        console.log('size value')
     
         if (editingProduct) {
-            // Verifica si ya existe el tamaño en productStock
-            if (editingProduct.productStock[sizeKey]) {
-                // Si ya existe, actualiza el stock
-                console.log('editando existing size')
-                setEditingProduct({
-                    ...editingProduct,
-                    productStock: {
-                        ...editingProduct.productStock,
-                        [sizeKey]: editingProduct.productStock[sizeKey] + sizeValue // Suma el stock existente
-                    }
-                });
+            const updatedProductStock = [...editingProduct.productStock];
+    
+            const existingSizeIndex = updatedProductStock.findIndex(stock => stock.size === sizeKey);
+    
+            if (existingSizeIndex >= 0) {
+                // Actualiza el stock si el tamaño ya existe
+                updatedProductStock[existingSizeIndex].stock = sizeValue;
             } else {
-                // Si no existe, añade el nuevo tamaño
-                console.log('no existing size')
-                setEditingProduct({
-                    ...editingProduct,
-                    productStock: {
-                        ...editingProduct.productStock,
-                        sizeKey: sizeValue // Añade el nuevo tamaño
-                    }
-                });
+                // Agrega un nuevo par size: stock si no existe
+                updatedProductStock.push({ size: sizeKey, stock: sizeValue });
             }
+    
+            setEditingProduct({ ...editingProduct, productStock: updatedProductStock });
         } else {
-            console.log('creando producto y agregando size')
-            // Igualmente, verifica si ya existe el tamaño en newProduct
-            if (newProduct.productStock[sizeKey]) {
-                // Si ya existe, actualiza el stock
-                setNewProduct({
-                    ...newProduct,
-                    productStock: {
-                        ...newProduct.productStock,
-                        [sizeKey]: newProduct.productStock[sizeKey] + sizeValue // Suma el stock existente
-                    }
-                });
+            const updatedProductStock = [...newProduct.productStock];
+    
+            const existingSizeIndex = updatedProductStock.findIndex(stock => stock.size === sizeKey);
+    
+            if (existingSizeIndex >= 0) {
+                // Actualiza el stock si el tamaño ya existe
+                updatedProductStock[existingSizeIndex].stock = sizeValue;
             } else {
-                // Si no existe, añade el nuevo tamaño
-                setNewProduct({
-                    ...newProduct,
-                    productStock: {
-                        ...newProduct.productStock,
-                        [sizeKey]: sizeValue // Añade el nuevo tamaño
-                    }
-                });
+                // Agrega un nuevo par size: stock si no existe
+                updatedProductStock.push({ size: sizeKey, stock: sizeValue });
             }
+    
+            setNewProduct({ ...newProduct, productStock: updatedProductStock });
         }
     
-        console.log(editingProduct.productStock)
-        // Resetea el tamaño y stock para el siguiente ingreso
-        setNewSize({ size: "", stock: 0 });
-    }
+        // Reinicia el campo de nuevo tamaño y stock
+        setNewSize({ size: '', stock: 0 });
+    };
 
     const addPhoto = () => {
         console.log("foto added", newPhoto);
@@ -154,19 +139,21 @@ const ProductPanel = ()=>{
     
     const removeSize = (sizeToRemove) => {
         if (editingProduct) {
-            const { [sizeToRemove]: _, ...updatedStock } = editingProduct.productStock; // Elimina el tamaño del objeto
+            // Filtra los tamaños para eliminar el que coincide con sizeToRemove
+            const updatedStock = editingProduct.productStock.filter((stock) => stock.size !== sizeToRemove);
             setEditingProduct({
                 ...editingProduct,
-                productStock: updatedStock // Actualiza el objeto productStock sin el tamaño eliminado
+                productStock: updatedStock // Actualiza el productStock sin el tamaño eliminado
             });
         } else {
-            const { [sizeToRemove]: _, ...updatedStock } = newProduct.productStock; // Elimina el tamaño del objeto
+            // Filtra los tamaños para eliminar el que coincide con sizeToRemove
+            const updatedStock = newProduct.productStock.filter((stock) => stock.size !== sizeToRemove);
             setNewProduct({
                 ...newProduct,
-                productStock: updatedStock // Actualiza el objeto productStock sin el tamaño eliminado
+                productStock: updatedStock // Actualiza el productStock sin el tamaño eliminado
             });
         }
-    }
+    };
 
     const removePhoto = (index) => {
         if(editingProduct){
@@ -181,6 +168,13 @@ const ProductPanel = ()=>{
             })
         }
     }
+
+    const convertProductStockArrayToObject = (productStockArray) => {
+        return productStockArray.reduce((acc, item) => {
+            acc[item.size] = item.stock;
+            return acc;
+        }, {});
+    };
 
     return(
         <>
@@ -329,16 +323,19 @@ const ProductPanel = ()=>{
                             </tr>
                         </thead>
                         <tbody>
-                            {products.map((product)=>(
-                                <tr>
+                            {products.map((product, index)=>(
+                                <tr key={index}>
                                     <td>{product.description}</td>
                                     <td>${product.price.toFixed(2)}</td>
                                     <td>
-                                        {product.productStock && Object.entries(product.productStock).map(([size, stock], index) => (
-                                            <div key={size}>
-                                                {size}: {stock}
-                                            </div>
-                                        ))}
+                                        {product.productStock && 
+                                            Object.entries(product.productStock).map(([size, stock], index) => (
+                                                <div key={index}>
+                                                {typeof size === 'object' ? JSON.stringify(size) : size}: 
+                                                {typeof stock === 'object' ? JSON.stringify(stock) : stock}
+                                                </div>
+                                            ))
+                                        }
                                     </td>
                                     <td>{product.club}</td>
                                     <td>{product.league}</td>
