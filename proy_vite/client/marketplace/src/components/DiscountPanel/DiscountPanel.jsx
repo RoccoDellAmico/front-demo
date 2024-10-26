@@ -13,16 +13,25 @@ const DiscountPanel = () => {
     });
     const [editingDiscount, setEditingDiscount] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
+    const [shouldFetchDiscounts, setShouldFetchDiscounts] = useState(true);
 
     useEffect(() => {
-        DiscountService.getDiscounts()
-        .then(response => {
-            setDiscounts(response.data || [])
-        })
-        .catch(error => {
-            console.error('error fetching discounts' + error)
-        })
-    }, [])
+
+        const fetchDiscounts = async () => {
+            try {
+                const response = await DiscountService.getDiscounts()
+                setDiscounts(response.data || [])
+                setShouldFetchDiscounts(false)
+            }catch(error) {
+                console.error('error fetching discounts' + error)
+            }
+        }
+
+        if (shouldFetchDiscounts){
+            fetchDiscounts()
+        }
+
+    }, [shouldFetchDiscounts])
 
     const updateDiscount = (e) => {
         e.preventDefault()
@@ -40,6 +49,7 @@ const DiscountPanel = () => {
             setDiscounts(discounts.map((d) => (d.id === editingDiscount.id ? editingDiscount : d)))
             setEditingDiscount(null)
             setErrorMessage('')
+            setShouldFetchDiscounts(true)
         }
     }
 
@@ -57,6 +67,7 @@ const DiscountPanel = () => {
         .then(response => {
             setDiscounts([...discounts], {...newDiscount, id : response.data.id})
             console.log(response.data)
+            setShouldFetchDiscounts(true)
         })
         .catch(error => {console.error('error creating discount ' + error)})
         setNewDiscount({
@@ -81,6 +92,7 @@ const DiscountPanel = () => {
     const deleteDiscount = (discountId) => {
         DiscountService.deleteDiscount(discountId);
         setDiscounts(discounts.filter((discount) => discount.id !== discountId))
+        setShouldFetchDiscounts(true)
     }
 
     const formatDateToLocalDateTime = (dateString) => {
