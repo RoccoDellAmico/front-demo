@@ -79,6 +79,7 @@ class DiscountService{
                 }
             }
             await axios.delete(`${DISCOUNTS_BASE_URL}/delete/${id}`, config)
+            console.log('Deleted discount')
         } catch(error) {
             console.error('error ' + error)
             throw error

@@ -22,6 +22,7 @@ const DiscountPanel = () => {
                 const response = await DiscountService.getDiscounts()
                 setDiscounts(response.data || [])
                 setShouldFetchDiscounts(false)
+                console.log('FECHING DISCOUNTS')
             }catch(error) {
                 console.error('error fetching discounts' + error)
             }
@@ -34,23 +35,34 @@ const DiscountPanel = () => {
     }, [shouldFetchDiscounts])
 
     const updateDiscount = (e) => {
-        e.preventDefault()
-        if(!validateDates(editingDiscount.startDate, editingDiscount.endDate)){
-            setErrorMessage('The end date must be later than the start date.')
-            return;
-        }
-        if(editingDiscount){
-            DiscountService.updateDiscount(editingDiscount.id, editingDiscount.code, editingDiscount.description, 
-                editingDiscount.percentage, editingDiscount.fixedAmount, 
-                formatDateToLocalDateTime(editingDiscount.startDate), formatDateToLocalDateTime(editingDiscount.endDate)
-            ).catch(error => {
+
+        const fetchupdateDiscount = async () => {
+            try {
+                e.preventDefault()
+                if(!validateDates(editingDiscount.startDate, editingDiscount.endDate)){
+                    setErrorMessage('The end date must be later than the start date.')
+                    return;
+                }
+                if(editingDiscount){
+                    await DiscountService.updateDiscount(editingDiscount.id, editingDiscount.code, editingDiscount.description, 
+                        editingDiscount.percentage, editingDiscount.fixedAmount, 
+                        formatDateToLocalDateTime(editingDiscount.startDate), formatDateToLocalDateTime(editingDiscount.endDate)
+                    )/*.catch(error => {
+                        console.error('error updating discount ' + error)
+                    })*/
+                    //setDiscounts(discounts.map((d) => (d.id === editingDiscount.id ? editingDiscount : d)))
+                    setEditingDiscount(null)
+                    setErrorMessage('')
+                    console.log('Updated discount')
+                    setShouldFetchDiscounts(true)
+                }
+
+            }catch (error) {
                 console.error('error updating discount ' + error)
-            })
-            setDiscounts(discounts.map((d) => (d.id === editingDiscount.id ? editingDiscount : d)))
-            setEditingDiscount(null)
-            setErrorMessage('')
-            setShouldFetchDiscounts(true)
+            }
         }
+
+        fetchupdateDiscount()
     }
 
     const addDiscount = (e) => {
@@ -90,10 +102,24 @@ const DiscountPanel = () => {
     }
 
     const deleteDiscount = (discountId) => {
-        DiscountService.deleteDiscount(discountId);
-        setDiscounts(discounts.filter((discount) => discount.id !== discountId))
-        setShouldFetchDiscounts(true)
+
+        const fetchDeleteDiscount = async () => {
+            try{
+                await DiscountService.deleteDiscount(discountId);
+                console.log('Deleted  panel')
+                setShouldFetchDiscounts(true)
+                //setDiscounts(discounts.filter((discount) => discount.id !== discountId))
+
+            }catch(error) {
+                console.error('error deleting discount ' + error)
+            }
+        }
+
+        fetchDeleteDiscount()
     }
+
+
+        
 
     const formatDateToLocalDateTime = (dateString) => {
         const date = new Date(dateString)
