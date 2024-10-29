@@ -35,7 +35,7 @@ class OrderService {
                   Authorization: `Bearer ${token}`,  // Añadir el token en el encabezado
                 }
             };
-            const response = await axios.delete(`${ORDER_BASE_URL}/admin/orders`, config);
+            const response = await axios.get(`${ORDER_BASE_URL}/admin/orders`, config);
             return response.data;  
         }catch(error){
             console.error("Error getting orders by id", error);
