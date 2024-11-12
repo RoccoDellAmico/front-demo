@@ -1,30 +1,33 @@
-import React, { useState , useContext } from 'react'
-import './CSS/LoginSignup.css'
-import { Link, useNavigate } from 'react-router-dom'
-import AuthService from '../services/AuthService'
-import { ShopContext } from '../Context/ShopContext'
+import React, { useState } from "react";
+import './CSS/LoginSignup.css';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { signup } from '../redux/AuthSlice';
 
 const LoginSignup =() => {
-
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [firstname, setFirstname] = useState('');
+    const [lastname, setLastname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
-    const { signup } = useContext(ShopContext);
+    const dispatch = useDispatch();
+    const auth = useSelector((state) => state.auth);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try{
-            await signup(firstName, lastName, email, password);
-            console.log('Signup and cart creation successful');
-            navigate('/');
-        } catch(error) {
-            console.error('Signup failed');
-            setErrorMessage('Signup failed');
+        try {
+            await dispatch(signup({ firstname, lastname, email, password })).unwrap();
+            if (auth.isAdmin) {
+                navigate('/admin');
+            } else {
+                navigate('/');
+            }
+        } catch (error) {
+            console.error('Failed signup', error);
+            setErrorMessage('There was an error with your signup.');
         }
-    }
+    };
 
     return (
         <div className='loginsignup'>

@@ -1,21 +1,16 @@
-import React, { useState , useContext, useEffect } from 'react'
+import React, { useState , useSelector, useEffect } from 'react'
 import '../Navbar/Navbar3.css'
 import BurgerButtom from '../BurgerButtom/BurgerButtom'
-import search from '../../assets/search.svg'
 import cart from '../../assets/cart.svg'
 import {Link} from 'react-router-dom'
-import { ShopContext } from '../../Context/ShopContext'
 import profile from '../../assets/profile.svg'
-import AuthService from '../../services/AuthService'
 import LogoutButton from '../Logout Button/LogoutButton'
 
-const Navbar = () => {
-
-    //const {logueado, getTotalCartItems} = useContext(ShopContext)    
+const Navbar = () => {  
 
     const [clicked, setClicked] = useState(false)
     const [totalCartItems, setTotalCartItems] = useState(0); // Estado para almacenar la cantidad de items
-    const { logueado, getTotalCartItems, products} = useContext(ShopContext);
+    const { isAuthenticated, token } = useSelector((state) => state.auth);
 
     const handleClick = () => {
         if (clicked) {
@@ -35,7 +30,7 @@ const Navbar = () => {
         };
         
         fetchTotalCartItems();
-    }, [logueado, getTotalCartItems]); 
+    }, [isAuthenticated, token]); 
 
 
     return(
@@ -59,11 +54,10 @@ const Navbar = () => {
                 </div>
                 <div className='nav-cart-count'> {logueado ? totalCartItems : 0 }</div>
                 <div className="profile"> 
-                    {logueado ? <Link to='/profile'> <img src={profile} alt="profile" /> </Link> : <></>}
+                    {isAuthenticated ? <Link to='/profile'> <img src={profile} alt="profile" /> </Link> : <></>}
                 </div>
                 <div className="boton-login">
-                    {/*logueado ? <LogoutButton/> : <Link to='/signUp'> <button>Login</button> </Link>*/} 
-                    {logueado ? <LogoutButton/> : <Link to='/login'> <button>Login</button> </Link>} 
+                {isAuthenticated ? <LogoutButton/> : <Link to='/login'> <button>Login</button> </Link>} 
                 </div>
             </div>
 

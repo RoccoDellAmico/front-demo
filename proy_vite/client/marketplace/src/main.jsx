@@ -3,12 +3,13 @@ import { createRoot } from 'react-dom/client' // DOM virtual con el que trabaja 
 import App from './App' // main renderiza a app, por eso la trae
 import {BrowserRouter} from "react-router-dom";
 import ShopContextProvider from "./Context/ShopContext";
+import { store } from "./redux/store";
 //import './index.css'
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ShopContextProvider>
+      <ShopContextProvider store={store}>
         <App />
       </ShopContextProvider>
     </BrowserRouter>

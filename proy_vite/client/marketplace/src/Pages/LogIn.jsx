@@ -1,31 +1,31 @@
-import React, { useState , useEffect , useContext } from "react";
-import './CSS/Login.css'
-import { Link, useNavigate } from 'react-router-dom'
-import AuthService from "../services/AuthService";
-import { ShopContext } from  '../Context/ShopContext'
+import React, { useState } from "react";
+import './CSS/Login.css';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../redux/AuthSlice';
 
 const Login = () => {
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
-    const { login } = useContext(ShopContext);
+    const dispatch = useDispatch();
+    const auth = useSelector((state) => state.auth);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try{
-            const response = await login(email, password);
-            if(response.role == 'ADMIN'){
-                navigate('/admin')
+        try {
+            await dispatch(login({ email, password })).unwrap();
+            if (auth.isAdmin) {
+                navigate('/admin');
             } else {
-                navigate('/')
+                navigate('/');
             }
-        } catch(error) {
-            console.error('Failed login');
+        } catch (error) {
+            console.error('Failed login', error);
             setErrorMessage('The email address or password is incorrect.');
         }
-    }
+    };
 
     return (
         <div className="login">
@@ -36,12 +36,12 @@ const Login = () => {
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
                 </div>
                 {errorMessage && <p className="error-message">{errorMessage}</p>}
-                <button type={"submit"} onClick={handleSubmit} >Continue</button>
+                <button type={"submit"} onClick={handleSubmit}>Continue</button>
                 <p className="login-forgot-pw">Forgot your password? <span>Click here</span> </p>
                 <p className="login-forgot-pw">Don't have an account? <Link to='/signup'><span>Sign up</span></Link> </p>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Login
+export default Login;

@@ -1,6 +1,6 @@
 import Navbar from './components/Navbar/Navbar';
 import Navbar1 from './components/Navbar/Navbar1';
-
+import { Provider } from 'react-redux';
 import React from 'react';
 import {BrowserRouter,Routes, Route} from "react-router-dom";
 import Home from './Pages/Home';
@@ -19,10 +19,12 @@ import CheckOut from './Pages/CheckOut';
 import Payment from './Pages/Payment';
 import AdminPanel from './Pages/AdminPanel';
 import Profile from './Pages/Profile';
+import { store } from './redux/store';
 
 
 const App = () => {
   return (
+    <Provider store={store}>
     <div className='main'>
       <Navbar/>
       <Routes>
@@ -42,6 +44,7 @@ const App = () => {
       </Routes>
       <Footer/>
     </div>
+    </Provider>
   ) 
 }
 
