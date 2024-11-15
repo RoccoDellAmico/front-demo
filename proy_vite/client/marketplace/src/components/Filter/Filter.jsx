@@ -1,23 +1,27 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import './Filter.css';
 import { ShopContext } from "../../Context/ShopContext";
 import Item from '../Item/Item';
 
 const Filter = (props) => {
-    const { products, setFilteredProducts } = useContext(ShopContext);
+    const { products } = useContext(ShopContext);
     const [priceRange, setPriceRange] = useState(0);
     const [searchTerm, setSearchTerm] = useState("");
-    const [filteredProducts, setFilteredProductsState] = useState([]);
+    const [filteredProducts, setFilteredProductsState] = useState(products);
+
+    useEffect(() => {
+        setFilteredProductsState(products);
+    }, [products]);
 
     const clearFilters = () => {
         setPriceRange(0);
         setSearchTerm("");
-        setFilteredProductsState([]);
+        setFilteredProductsState(products);
     };
 
     const applyFilters = () => {
         if (searchTerm.trim() === "" && priceRange === 0) {
-            setFilteredProductsState([]);
+            setFilteredProductsState(products);
             return;
         }
 

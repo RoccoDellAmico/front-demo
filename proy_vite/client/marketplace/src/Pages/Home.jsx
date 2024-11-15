@@ -5,7 +5,7 @@ import Filter from '../components/Filter/Filter'
 const Home =() => (
     <div>
         <Filter/>
-        <Popular/>
+        {/*<Popular/>*/}
     </div>
 )
 
