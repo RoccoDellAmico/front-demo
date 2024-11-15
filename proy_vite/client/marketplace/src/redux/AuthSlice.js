@@ -29,7 +29,7 @@ export const logout = createAsyncThunk('auth/logout', async ({ token }) => {
             Authorization: `Bearer ${token}`
         }
     };
-    const { data } = await axios.post('http://localhost:4002/api/v1/auth/logout', {}, header);
+    const { data } = await axios.post('http://localhost:4002/api/user/logout/2', {}, header);
     return data;
 });
 
