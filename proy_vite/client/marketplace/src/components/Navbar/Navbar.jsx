@@ -1,4 +1,5 @@
-import React, { useState , useSelector, useEffect } from 'react'
+import React, { useState , useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import '../Navbar/Navbar3.css'
 import BurgerButtom from '../BurgerButtom/BurgerButtom'
 import cart from '../../assets/cart.svg'
