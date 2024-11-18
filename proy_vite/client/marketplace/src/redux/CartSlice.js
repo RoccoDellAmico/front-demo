@@ -52,6 +52,14 @@ export const clearCart = createAsyncThunk('cart/clearCart', async ({ token }, { 
     return data;
 })
 
+const getTotalQuantity = (cartItems) => {
+    let total = 0;
+    for(let item of cartItems){
+        total += item.quantity;
+    }
+    return total;
+}
+
 const cartSlice = createSlice({
     name: 'cart',
     initialState: {
@@ -75,15 +83,18 @@ const cartSlice = createSlice({
                 if (action.payload.discountCode) {
                     state.discountCode = action.payload.discountCode;
                 }
+                state.totalQuantity = getTotalQuantity(state.cartItems);
             })
             .addCase(addProductToCart.fulfilled, (state, action) => {
                 state.cartItems = action.payload.cartProducts;
+                state.totalQuantity = getTotalQuantity(state.cartItems);
             })
             .addCase(addProductToCart.rejected, (state, action) => {
                 state.error = action.error.message;
             })
             .addCase(removeProductFromCart.fulfilled, (state, action) => {
                 state.cartItems = action.payload.cartProducts;
+                state.totalQuantity = getTotalQuantity(state.cartItems);
             })
             .addCase(clearCart.fulfilled, (state) => {
                 state.cartItems = [];

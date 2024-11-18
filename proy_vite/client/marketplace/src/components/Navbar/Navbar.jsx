@@ -53,7 +53,7 @@ const Navbar = () => {
                 <div className='cart'> 
                     {isAuthenticated ? <Link to='/cart'><img src={cart} alt="cart"/></Link> : <Link to='/login'><img src={cart} alt="cart"/></Link>}
                 </div>
-                <div className='nav-cart-count'> {isAuthenticated ? totalCartItems : 0 }</div>
+                <div className='nav-cart-count'> {isAuthenticated ? totalQuantity : 0 }</div>
                 <div className="profile"> 
                     {isAuthenticated ? <Link to='/profile'> <img src={profile} alt="profile" /> </Link> : <></>}
                 </div>
