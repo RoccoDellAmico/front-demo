@@ -5,16 +5,21 @@ import ShopCategory from "../../Pages/ShopCategory";
 import { ShopContext } from "../../Context/ShopContext";
 import './ProductDisplay.css';
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addProductToCart } from "../../redux/CartSlice";
 
 const ProductDisplay = (props) => {
     const {product} = props;
-    const {addToCart, logueado} = useContext(ShopContext)
+    /*const {addToCart, logueado} = useContext(ShopContext)*/
 
     const [selectedSize, setSelectedSize] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const [showError, setShowError] = useState(false);
     const [mainImage, setMainImage] = useState(product.photos[0]);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { isAuthenticated, token } = useSelector((state) => state.auth);
+    const { cartId } = useSelector((state) => state.cart);
 
     const handleSizeSelect = (size) => {
         setSelectedSize(size);
@@ -23,12 +28,13 @@ const ProductDisplay = (props) => {
     
 
     const handleAddToCart = (productId) => {
-        if(!logueado){
+        if(!isAuthenticated){
             navigate('/logIn')
             return;
         }
         if (selectedSize) {
-            const rta = addToCart(productId, selectedSize, 1)
+            console.log(cartId) //DELETE CONSOLE.LOG
+            const rta = dispatch(addProductToCart({ size: selectedSize, productId, quantity: 1, token })).unwrap();
             if (rta){
                 setShowPopup(true);
                 setTimeout(() => {
@@ -42,6 +48,7 @@ const ProductDisplay = (props) => {
             setShowError(true);
         }
     };
+
 
     const handleImageClick = (photo) => {
         setMainImage(photo);

@@ -36,7 +36,7 @@ export const logout = createAsyncThunk('auth/logout', async ({ token }) => {
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
-        user: null,
+        id: null,
         isAuthenticated: false,
         status: 'idle',
         error: null,
@@ -45,7 +45,7 @@ const authSlice = createSlice({
     },
     reducers: {
         logoutSuccess: (state) => {
-            state.user = null;
+            state.id = null;
             state.isAuthenticated = false;
             state.isAdmin = false;
             state.token = null;
@@ -59,7 +59,7 @@ const authSlice = createSlice({
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.user = action.payload.id;
+                state.id = action.payload.id;
                 state.isAuthenticated = true;
                 state.isAdmin = action.payload.role === 'ADMIN';
                 state.token = action.payload.access_token;
@@ -69,7 +69,7 @@ const authSlice = createSlice({
                 state.error = action.error.message;
             })
             .addCase(logout.fulfilled, (state) => {
-                state.user = null;
+                state.id = null;
                 state.isAuthenticated = false;
                 state.isAdmin = false;
                 state.token = null;

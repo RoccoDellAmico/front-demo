@@ -6,13 +6,13 @@ import cart from '../../assets/cart.svg'
 import {Link} from 'react-router-dom'
 import profile from '../../assets/profile.svg'
 import LogoutButton from '../Logout Button/LogoutButton'
-import { useSelector } from 'react-redux';
 
 const Navbar = () => {  
 
     const [clicked, setClicked] = useState(false)
     const [totalCartItems, setTotalCartItems] = useState(0); // Estado para almacenar la cantidad de items
     const { isAuthenticated, token } = useSelector((state) => state.auth);
+    const { totalQuantity } = useSelector((state) => state.cart);
 
     const handleClick = () => {
         if (clicked) {
@@ -24,8 +24,7 @@ const Navbar = () => {
     useEffect(() => {
         const fetchTotalCartItems = async () => {
             if (isAuthenticated) {
-                const itemCount = await getTotalCartItems();
-                setTotalCartItems(itemCount);
+                setTotalCartItems(totalQuantity);
             } else {
                 setTotalCartItems(0);
             }

@@ -3,28 +3,32 @@ import axios from 'axios';
 
 const CART_BASE_URL = "http://localhost:4002/api";
 
-export const createCart = createAsyncThunk('cart/createCart', async ({ userId, token }) => {
+export const createCart = createAsyncThunk('cart/createCart', async ({ id, token }) => {
     const header = {
         headers: {  Authorization: `Bearer ${token}` } 
     };
-    const { data } = await axios.post(`${CART_BASE_URL}/user/carts/create`, { userId }, header);
+    const body = { userId : id};
+    const { data } = await axios.post(`${CART_BASE_URL}/user/carts/create`, body, header);
     return data;
 })
 
-export const getCartById = createAsyncThunk('cart/getCartById', async ({ userId, token }) => {
+export const getCartById = createAsyncThunk('cart/getCartById', async ({ id, token }) => {
     const header = {
         headers: {  Authorization: `Bearer ${token}` } 
     };
-    const { data } = await axios.get(`${CART_BASE_URL}/user/carts/${userId}`, header);
+    const { data } = await axios.get(`${CART_BASE_URL}/user/carts/${id}`, header);
+    console.log(data)
     return data;
 })
 
 export const addProductToCart = createAsyncThunk('cart/addProductToCart', 
-    async ({ size, productId, quantity, token }) => {
+    async ({ size, productId, quantity, token }, { getState }) => {
     const header = {
         headers: {  Authorization: `Bearer ${token}` } 
     };
-    const { data } = await axios.post(`${CART_BASE_URL}/user/carts`, 
+    const cartId = getState().cart.cartId;
+    console.log(cartId) // DELETE CONSOLE.LOG
+    const { data } = await axios.put(`${CART_BASE_URL}/user/carts`, 
         { cartId, size, productId, quantity }, header);
     return data;
 })

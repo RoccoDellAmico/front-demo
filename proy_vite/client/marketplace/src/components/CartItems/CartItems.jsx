@@ -3,9 +3,9 @@ import './CartItems.css';
 import { ShopContext } from "../../Context/ShopContext";
 import remove_icon from '../../assets/close.svg'
 import { Link } from 'react-router-dom'
-import ProductService from "../../services/ProductService";
-import CartService from "../../services/CartService";
 import update_icon from '../../assets/update.svg'
+import { useDispatch, useSelector } from "react-redux";
+import { getCartById } from "../../redux/CartSlice";
 
 const CartItems = () => {
     const {addDiscountCode,updateProductQuantity,clearCart,cart,removeFromCart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
@@ -15,18 +15,25 @@ const CartItems = () => {
     const [carts,setCarts] = useState([]);
     const [newQuantity, setNewQuantity] = useState(0);
     const [promo,setPromo] = useState('');
+    const dispatch = useDispatch();
+    const { cartItems, discountCode } = useSelector((state) => state.cart);
+    const { id, token } = useSelector((state) => state.auth); 
 
-    useEffect(() => {
+    /*useEffect(() => {
         const fetchCart = async () => {
             const carrito = await CartService.getCartById(localStorage.getItem('userId'));
             console.log('BOCA ',carrito.cartProducts);
             setCarts(carrito.cartProducts);
         }
         fetchCart();
-    },[cart])
-
+    },[cart])*/
 
     useEffect(() => {
+        dispatch(getCartById({id, token})).unwrap();
+    }, [dispatch, id, token])
+        
+
+    /*useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const response = await ProductService.getAllProducts();
@@ -64,7 +71,7 @@ const CartItems = () => {
 
         fetchTotalAmount();
         fetchCart();
-    },[])
+    },[])*/
 
     const handleAddDiscountCode = () => {
         addDiscountCode(promo);
@@ -85,7 +92,7 @@ const CartItems = () => {
             </div>
             <hr/>
 
-            {carts.map( (e) => {
+            {cartItems.map( (e) => {
                 return (
                     <div key={e.id}>
                         <div className="cartitems-format cartitems-format-main">
