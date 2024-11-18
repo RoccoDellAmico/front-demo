@@ -35,3 +35,8 @@
     gap: 20px;
     justify-content: flex-start; 
 }
+
+.filtered-products img {
+    width: 300px;
+    height: 350px;
+}

@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
 
-const BASE_USER_URL = 'http://localhost:3001/api';
+const BASE_USER_URL = 'http://localhost:4002/api';
 
 export const fetchProducts = createAsyncThunk( 'product/fetchProducts', async () => {
-    const response = await axios.get(`${BASE_USER_URL}/products/get`);
+    const response = await axios.get(`${BASE_USER_URL}/public/products/get`);
     return response.data;
 })
 
@@ -52,10 +52,25 @@ const productSlice = createSlice({
     initialState: {
         products: [],
         adminProducts: [],
+        filteredProducts: [],
+        filters: {},
         error: null,
         loading: false,
     },
-    reducers: {},
+    reducers: {
+        setFilter: (state, action) => {
+            state.filters = { ...state.filters, ...action.payload };
+            state.filteredProducts = state.products.filter(product => {
+                const matchesDescription = !state.filters.searchTerm || product.description.toLowerCase().includes(state.filters.searchTerm.toLowerCase());
+                const matchesPrice = !state.filters.priceRange || product.price <= state.filters.priceRange;
+                return matchesDescription && matchesPrice;
+            });
+        },
+        clearFilters: (state) => {
+            state.filters = {};
+            state.filteredProducts = state.products;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchProducts.pending, (state) => {
@@ -63,6 +78,7 @@ const productSlice = createSlice({
             })
             .addCase(fetchProducts.fulfilled, (state, action) => {
                 state.products = action.payload;
+                state.filteredProducts = action.payload; 
                 state.loading = false;
             })
             .addCase(fetchProducts.rejected, (state, action) => {
@@ -89,8 +105,10 @@ const productSlice = createSlice({
                 state.adminProducts[index] = action.payload.product;
                 const index2 = state.products.findIndex(product => product.iid === action.payload.data.id);
                 state.products[index2] = action.payload.data;
-            })
+            });
     }
 });
+
+export const { setFilter, clearFilters } = productSlice.actions;
 
 export default productSlice.reducer;
