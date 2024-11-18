@@ -1,10 +1,11 @@
-import React, { useState , useSelector, useEffect } from 'react'
+import React, { useState , useEffect } from 'react'
 import '../Navbar/Navbar3.css'
 import BurgerButtom from '../BurgerButtom/BurgerButtom'
 import cart from '../../assets/cart.svg'
 import {Link} from 'react-router-dom'
 import profile from '../../assets/profile.svg'
 import LogoutButton from '../Logout Button/LogoutButton'
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {  
 

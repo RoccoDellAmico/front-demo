@@ -85,9 +85,9 @@ const productSlice = createSlice({
                 state.products.push(action.payload.data);
             })
             .addCase(updateProduct.fulfilled, (state, action) => {
-                const index = state.adminProducts.findIndex(product => product._id === action.payload.product._id);
+                const index = state.adminProducts.findIndex(product => product.id === action.payload.product.id);
                 state.adminProducts[index] = action.payload.product;
-                const index2 = state.products.findIndex(product => product._id === action.payload.data._id);
+                const index2 = state.products.findIndex(product => product.iid === action.payload.data.id);
                 state.products[index2] = action.payload.data;
             })
     }

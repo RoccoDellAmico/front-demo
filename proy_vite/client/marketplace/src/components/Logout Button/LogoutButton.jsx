@@ -11,7 +11,6 @@ const LogoutButton = () => {
 
     const handleClick = async () => {
         try {
-            console.log(token)
             await dispatch(logout({token})).unwrap();
             navigate('/');
         } catch (error) {

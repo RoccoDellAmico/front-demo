@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './CSS/Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,22 +10,27 @@ const Login = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const auth = useSelector((state) => state.auth);
+    const { isAdmin, isAuthenticated } = useSelector((state) => state.auth);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await dispatch(login({ email, password })).unwrap();
-            if (auth.isAdmin) {
-                navigate('/admin');
-            } else {
-                navigate('/');
-            }
         } catch (error) {
             console.error('Failed login', error);
             setErrorMessage('The email address or password is incorrect.');
         }
     };
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            if (isAdmin) {
+                navigate('/admin');
+            } else {
+                navigate('/');
+            }
+        }
+    }, [isAuthenticated, isAdmin, navigate]);
 
     return (
         <div className="login">

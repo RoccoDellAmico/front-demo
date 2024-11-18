@@ -59,10 +59,10 @@ const authSlice = createSlice({
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.user = action.payload.userId;
+                state.user = action.payload.id;
                 state.isAuthenticated = true;
-                state.isAdmin = action.payload.userRole === 'ADMIN';
-                state.token = action.payload.accessToken
+                state.isAdmin = action.payload.role === 'ADMIN';
+                state.token = action.payload.access_token;
             })
             .addCase(login.rejected, (state, action) => {
                 state.status = 'failed';

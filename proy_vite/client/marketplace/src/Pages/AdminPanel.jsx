@@ -2,14 +2,23 @@ import ProductPanel from "../components/ProductsPanel/ProductPanel"
 import CartPanel from "../components/CartsPanel/CartsPanel"
 import PaymentPanel from "../components/PaymentPanel/PaymentPanel"
 import UserPanel from '../components/UserPanel/UserPanel'
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 import './CSS/AdminPanel.css'
 import DiscountPanel from "../components/DiscountPanel/DiscountPanel"
 import OrderPanel from "../components/OrderPanel/OrderPanel"
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import ErrorPage from "./ErrorPage"
 
 const AdminPanel = ()=>{
-
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("products");
+    const { isAuthenticated, isAdmin } = useSelector(state => state.auth);
+
+    if(!isAdmin){
+        return <ErrorPage/>
+    }
 
     return(
         <div>

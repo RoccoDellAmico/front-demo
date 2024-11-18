@@ -19,12 +19,12 @@ import CheckOut from './Pages/CheckOut';
 import Payment from './Pages/Payment';
 import AdminPanel from './Pages/AdminPanel';
 import Profile from './Pages/Profile';
+import ErrorPage from './Pages/ErrorPage';
 import { store } from './redux/store';
 
 
 const App = () => {
   return (
-    <Provider store={store}>
     <div className='main'>
       <Navbar/>
       <Routes>
@@ -41,10 +41,10 @@ const App = () => {
         <Route path="/product/:productId" element={<Product/>} />
         <Route path='/admin' element={<AdminPanel/>}/>
         <Route path='/profile' element={<Profile/>}/>
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
       <Footer/>
     </div>
-    </Provider>
   ) 
 }
 

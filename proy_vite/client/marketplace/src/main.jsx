@@ -4,14 +4,17 @@ import App from './App' // main renderiza a app, por eso la trae
 import {BrowserRouter} from "react-router-dom";
 import ShopContextProvider from "./Context/ShopContext";
 import { store } from "./redux/store";
+import { Provider } from 'react-redux';
 //import './index.css'
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ShopContextProvider store={store}>
-        <App />
-      </ShopContextProvider>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <ShopContextProvider store={store}>
+          <App />
+        </ShopContextProvider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
 )
