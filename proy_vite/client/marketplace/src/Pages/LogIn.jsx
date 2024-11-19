@@ -3,6 +3,7 @@ import './CSS/Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../redux/AuthSlice';
+import { getCartById } from '../redux/CartSlice';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -10,7 +11,7 @@ const Login = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { isAdmin, isAuthenticated } = useSelector((state) => state.auth);
+    const { id, isAdmin, isAuthenticated, token } = useSelector((state) => state.auth);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,10 +28,11 @@ const Login = () => {
             if (isAdmin) {
                 navigate('/admin');
             } else {
+                dispatch(getCartById({id, token}))
                 navigate('/');
             }
         }
-    }, [isAuthenticated, isAdmin, navigate]);
+    }, [isAuthenticated, isAdmin, id, token, navigate]);
 
     return (
         <div className="login">
