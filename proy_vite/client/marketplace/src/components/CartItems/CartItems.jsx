@@ -5,11 +5,11 @@ import remove_icon from '../../assets/close.svg'
 import { Link } from 'react-router-dom'
 import update_icon from '../../assets/update.svg'
 import { useDispatch, useSelector } from "react-redux";
-import { getCartById, clearCart } from "../../redux/CartSlice";
+import { getCartById, clearCart, removeProductFromCart } from "../../redux/CartSlice";
 import { applyDiscountCode } from "../../redux/CartSlice";
 
 const CartItems = () => {
-    const {updateProductQuantity,cart,removeFromCart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
+    const {updateProductQuantity,cart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
     const [totalAmount, setTotalAmount] = useState(0);
     const [newQuantity, setNewQuantity] = useState(0);
     const [promo, setPromo] = useState('');
@@ -71,6 +71,11 @@ const CartItems = () => {
         fetchCart();
     },[])*/
 
+    const handleRemoveFromCart = (id) => {
+        dispatch(removeProductFromCart({productId: id, token}));
+    }
+
+
     const handleClearCart = () => {
         dispatch(clearCart({token}));
     };
@@ -105,7 +110,7 @@ const CartItems = () => {
                             <input className="cantidad" type="number" step="1" min='0' defaultValue={e.quantity} onChange={(e) => setNewQuantity(Number(e.target.value))} />
                             <p> ${ e.product.price * e.quantity } </p>
                             <img className="cartitems-update-icon" src={update_icon} onClick={ () => {updateProductQuantity(e.id, newQuantity)} } alt="" />
-                            <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {removeFromCart(e.id)} } alt="" />
+                            <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {handleRemoveFromCart(e.id)} } alt="" />
                         </div>
                         <hr />
                     </div>
