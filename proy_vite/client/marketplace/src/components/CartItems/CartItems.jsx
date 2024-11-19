@@ -7,16 +7,14 @@ import update_icon from '../../assets/update.svg'
 import arrow_down from '../../assets/arrow_down.svg'
 import arrow_up from '../../assets/arrow_up.svg'
 import { useDispatch, useSelector } from "react-redux";
-import { getCartById , addOneProductToCart , substractOneProduct } from "../../redux/CartSlice";
+import { getCartById, clearCart, removeProductFromCart } from "../../redux/CartSlice";
+import { applyDiscountCode , addOneProductToCart , substractOneProduct } from "../../redux/CartSlice";
 
 const CartItems = () => {
-    const {addDiscountCode,updateProductQuantity,clearCart,cart,removeFromCart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
-
-    const [products, setProducts] = useState([]);
+    const {updateProductQuantity,cart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
     const [totalAmount, setTotalAmount] = useState(0);
-    const [carts,setCarts] = useState([]);
     const [newQuantity, setNewQuantity] = useState(0);
-    const [promo,setPromo] = useState('');
+    const [promo, setPromo] = useState('');
     const dispatch = useDispatch();
     const { cartItems, discountCode} = useSelector((state) => state.cart);
     const { id, token } = useSelector((state) => state.auth); 
@@ -75,8 +73,17 @@ const CartItems = () => {
         fetchCart();
     },[])*/
 
+    const handleRemoveFromCart = (id) => {
+        dispatch(removeProductFromCart({productId: id, token}));
+    }
+
+
+    const handleClearCart = () => {
+        dispatch(clearCart({token}));
+    };
+
     const handleAddDiscountCode = () => {
-        addDiscountCode(promo);
+        dispatch(applyDiscountCode({code: promo, token}));
     };
 
 
@@ -110,7 +117,7 @@ const CartItems = () => {
                             </div>
                             <p> ${ e.product.price * e.quantity } </p>
                             <img className="cartitems-update-icon" src={update_icon} onClick={ () => {updateProductQuantity(e.id, newQuantity)} } alt="" />
-                            <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {removeFromCart(e.id)} } alt="" />
+                            <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {handleRemoveFromCart(e.id)} } alt="" />
                         </div>
                         <hr />
                     </div>
@@ -118,7 +125,7 @@ const CartItems = () => {
             })}
 
             <div className="botones">
-                <button onClick={clearCart}>Clear Cart</button>
+                <button onClick={handleClearCart}>Clear Cart</button>
             </div>
 
             <div className="cartitems-down">
@@ -147,9 +154,12 @@ const CartItems = () => {
                     <p>If you have a promo code, Enter it here</p>
                     <div className="cartitems-promobox">
                         <input type="text" placeholder="promo code" value={promo} onChange={(e) => setPromo(e.target.value)}/>
-                        <button onClick={handleAddDiscountCode} >Submit</button>
+                        <button onClick={handleAddDiscountCode} >Apply discount</button>
                     </div>
                 </div>
+            {discountCode && (
+                console.log('DISCOUNT CODE', discountCode)
+            )}
             </div>
         </div>
     )

@@ -21,7 +21,7 @@ const Navbar = () => {
         setClicked(!clicked)
     }
 
-    useEffect(() => {
+    /*useEffect(() => {
         const fetchTotalCartItems = async () => {
             if (isAuthenticated) {
                 setTotalCartItems(totalQuantity);
@@ -31,7 +31,7 @@ const Navbar = () => {
         };
         
         fetchTotalCartItems();
-    }, [isAuthenticated, token]); 
+    }, [isAuthenticated, token]); */
 
 
     return(

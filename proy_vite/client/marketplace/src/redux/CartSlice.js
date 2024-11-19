@@ -74,6 +74,15 @@ export const clearCart = createAsyncThunk('cart/clearCart', async ({ token }, { 
     return data;
 })
 
+export const applyDiscountCode = createAsyncThunk('cart/applyDiscountCode', async ({ code, token }, { getState }) => {
+    const cartId = getState().cart.cartId;
+    const header = {
+        headers: {  Authorization: `Bearer ${token}` } 
+    };
+    const { data } = await axios.put(`${CART_BASE_URL}/user/carts/add-discount/${code}/cart/${cartId}`, {}, header);
+    return data;
+})
+
 const getTotalQuantity = (cartItems) => {
     let total = 0;
     for(let item of cartItems){
@@ -135,6 +144,10 @@ const cartSlice = createSlice({
             .addCase(clearCart.fulfilled, (state) => {
                 state.cartItems = [];
                 state.totalQuantity = 0;
+                state.discountCode = null;
+            })
+            .addCase(applyDiscountCode.fulfilled, (state, action) => {
+                state.discountCode = action.payload.discountCode;
             })
     }
 });
