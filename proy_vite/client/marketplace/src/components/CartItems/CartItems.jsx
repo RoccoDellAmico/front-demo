@@ -146,9 +146,7 @@ const CartItems = () => {
                     </div>
                 </div>
             {discountCode && (
-                <div>
-                    <p>Discount Code Applied: {discountCode}</p>
-                </div>
+                console.log('DISCOUNT CODE', discountCode)
             )}
             </div>
         </div>
