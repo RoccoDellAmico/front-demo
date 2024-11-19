@@ -50,7 +50,8 @@ const orderSlice = createSlice({
                 state.error = action.error.message;
             })
             .addCase(getOrdersByUser.fulfilled, (state, action) => {
-                state.orderByUser = action.payload;
+                state.ordersByUser = action.payload;
+                console.log(action.payload);
             })
             .addCase(placeOrder.rejected, (state, action) => {
                 state.error = action.error.message;
