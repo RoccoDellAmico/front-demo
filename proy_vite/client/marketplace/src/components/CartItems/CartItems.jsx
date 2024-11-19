@@ -4,8 +4,10 @@ import { ShopContext } from "../../Context/ShopContext";
 import remove_icon from '../../assets/close.svg'
 import { Link } from 'react-router-dom'
 import update_icon from '../../assets/update.svg'
+import arrow_down from '../../assets/arrow_down.svg'
+import arrow_up from '../../assets/arrow_up.svg'
 import { useDispatch, useSelector } from "react-redux";
-import { getCartById } from "../../redux/CartSlice";
+import { getCartById , addOneProductToCart , substractOneProduct } from "../../redux/CartSlice";
 
 const CartItems = () => {
     const {addDiscountCode,updateProductQuantity,clearCart,cart,removeFromCart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
@@ -16,7 +18,7 @@ const CartItems = () => {
     const [newQuantity, setNewQuantity] = useState(0);
     const [promo,setPromo] = useState('');
     const dispatch = useDispatch();
-    const { cartItems, discountCode } = useSelector((state) => state.cart);
+    const { cartItems, discountCode} = useSelector((state) => state.cart);
     const { id, token } = useSelector((state) => state.auth); 
 
     /*useEffect(() => {
@@ -100,7 +102,12 @@ const CartItems = () => {
                             <p>{e.product.description}</p>
                             <p>${e.product.price}</p>
                             <p>{e.size}</p>
-                            <input className="cantidad" type="number" step="1" min='0' defaultValue={e.quantity} onChange={(e) => setNewQuantity(Number(e.target.value))} />
+                            <div className="quantity">
+                                <img className="arrow_down" src={arrow_down} onClick={() => { dispatch(substractOneProduct({ size: e.size, productId: e.id, token })) }} alt="" />
+                                <input className="cantidad" type="number" step="1" min='0' defaultValue={e.quantity} onChange={(e) => setNewQuantity(Number(e.target.value))} />
+                                <img className="arrow_up" src={arrow_up} onClick={() => { dispatch(addOneProductToCart({ size: e.size, productId: e.id, token })) }} alt="" />
+
+                            </div>
                             <p> ${ e.product.price * e.quantity } </p>
                             <img className="cartitems-update-icon" src={update_icon} onClick={ () => {updateProductQuantity(e.id, newQuantity)} } alt="" />
                             <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {removeFromCart(e.id)} } alt="" />

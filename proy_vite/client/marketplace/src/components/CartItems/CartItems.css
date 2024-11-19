@@ -26,6 +26,17 @@
     border-radius: 10px;
 }
 
+.quantity {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity img{
+    cursor: pointer;
+}
+
 .cartitems-format{
     font-size: 17px;
     font-weight: 500;

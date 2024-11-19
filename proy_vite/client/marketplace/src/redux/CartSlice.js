@@ -33,6 +33,28 @@ export const addProductToCart = createAsyncThunk('cart/addProductToCart',
     return data;
 })
 
+export const addOneProductToCart = createAsyncThunk('cart/addOneProductToCart',
+    async ({ size, productId, token }, { getState }) => {
+    const header = {
+        headers: {  Authorization: `Bearer ${token}` } 
+    };
+    const cartId = getState().cart.cartId;
+    const { data } = await axios.delete(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/addOne`, header);
+    console.log('addOneSlice',data)
+    return data;
+})
+
+export const substractOneProduct = createAsyncThunk('cart/substractOneProduct',
+    async ({ size, productId, token }, { getState }) => {
+    const header = {
+        headers: {  Authorization: `Bearer ${token}` } 
+    };
+    const cartId = getState().cart.cartId;
+    const { data } = await axios.delete(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/substractOne`, header);
+    console.log('SubtractOneSlice',data)
+    return data;
+})
+
 export const removeProductFromCart = createAsyncThunk('cart/removeProductFromCart', 
     async ({ productId, token }, { getState }) => {
     const cartId = getState().cart.cartId;   
@@ -90,6 +112,20 @@ const cartSlice = createSlice({
                 state.totalQuantity = getTotalQuantity(state.cartItems);
             })
             .addCase(addProductToCart.rejected, (state, action) => {
+                state.error = action.error.message;
+            })
+            .addCase(addOneProductToCart.fulfilled, (state, action) => {
+                state.cartItems = action.payload.cartProducts;
+                state.totalQuantity = getTotalQuantity(state.cartItems);
+            })
+            .addCase(addOneProductToCart.rejected, (state, action) => {
+                state.error = action.error.message;
+            })
+            .addCase(substractOneProduct.fulfilled, (state, action) => {
+                state.cartItems = action.payload.cartProducts;
+                state.totalQuantity = getTotalQuantity(state.cartItems);
+            })
+            .addCase(substractOneProduct.rejected, (state, action) => {
                 state.error = action.error.message;
             })
             .addCase(removeProductFromCart.fulfilled, (state, action) => {
