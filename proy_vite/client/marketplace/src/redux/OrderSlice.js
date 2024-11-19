@@ -13,13 +13,13 @@ export const getOrders = createAsyncThunk( 'order/getOrders', async ({ token }) 
     return data;
 });
 
-export const getOrdersByUser = createAsyncThunk( 'order/getOrdersByUser', async ({ userId, token }) => {
+export const getOrdersByUser = createAsyncThunk( 'order/getOrdersByUser', async ({ id, token }) => {
     const config = {
         headers: { 
             Authorization: `Bearer ${token}`,
         }
     };
-    const { data } = await axios.get(`${BASE_ORDER_URL}/user/orders/${userId}`, config);
+    const { data } = await axios.get(`${BASE_ORDER_URL}/user/orders/${id}`, config);
     return data;
 });
 
@@ -38,6 +38,7 @@ const orderSlice = createSlice({
     initialState: {
         orders: [],
         error: null,
+        ordersByUser: [],
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -49,7 +50,7 @@ const orderSlice = createSlice({
                 state.error = action.error.message;
             })
             .addCase(getOrdersByUser.fulfilled, (state, action) => {
-                state.orders = action.payload;
+                state.orderByUser = action.payload;
             })
             .addCase(placeOrder.rejected, (state, action) => {
                 state.error = action.error.message;

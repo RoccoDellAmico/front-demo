@@ -2,29 +2,41 @@ import React, { useState , useContext, useEffect } from "react";
 import "./CSS/Profile.css";
 import { ShopContext } from "../Context/ShopContext";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getOrdersByUser } from "../redux/OrderSlice";
+import { getUserById } from "../redux/UserSlice";
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState("personal-info");
-    const {getOrdersById, getUserById} = useContext(ShopContext);
-    const [orders, setOrders] = useState([]);
-    const [usuario, setUsuario] = useState({});
+    //const {getOrdersById, getUserById} = useContext(ShopContext);
+    //const [orders, setOrders] = useState([]);
+    //const [user, setUser] = useState({});
+    const dispatch = useDispatch();
+    const { id, token } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.user);
+    const { ordersByUser } = useSelector((state) => state.order);
 
-    useEffect(() => {
+    /*useEffect(() => {
         const fetchOrdenes = async () => {
-            const ordenes = await getOrdersById();
+            const ordenes = await getorderByUserById();
             setOrders(ordenes);
         };
         const fetchUser = async () => {
             const user = await getUserById();
-            setUsuario(user);
+            setuser(user);
         }
 
         fetchUser();
         fetchOrdenes();
-    },[])
+    },[])*/
+
+    useEffect(() => {
+        dispatch(getUserById({id, token})).unwrap();
+        dispatch(getOrdersByUser({id, token})).unwrap();
+    },[dispatch, id, token])
 
     // Mock data
-    const user = {
+    const mockUser = {
         name: "John Doe",
         email: "john.doe@example.com",
         avatar: "/placeholder.svg?height=100&width=100",
@@ -49,9 +61,9 @@ const Profile = () => {
                 {activeTab === "personal-info" && (
                 <div>
                     <h2>Personal Information</h2>
-                    <p>Name: {usuario.firstName}</p>
-                    <p>Surname: {usuario.lastName}</p>
-                    <p>Email: {usuario.email}</p>
+                    <p>Name: {user.firstName}</p>
+                    <p>Surname: {user.lastName}</p>
+                    <p>Email: {user.email}</p>
                 </div>
                 )}
 
@@ -59,7 +71,7 @@ const Profile = () => {
                 <div>
                     <h2>My Orders</h2>
                     <ul>
-                    {orders.map((o) => (
+                    {ordersByUser.map((o) => (
                         <li key={o.orderId}>
                         Total: ${o.total} - {o.orderProducts.map((p) => (
                                                                             <div key={p.id}>
