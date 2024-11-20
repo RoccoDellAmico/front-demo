@@ -1,12 +1,16 @@
 import React from "react";
 import { useState , useEffect } from "react"
 import './ProductPanel.css'
-import ProductService from '../../services/ProductService'
+//import ProductService from '../../services/ProductService'
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProductsAdmin } from "../../redux/ProductSlice"
+
+
 const ProductPanel = ()=>{
 
     const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true); // Add loading state
-    const [error, setError] = useState(null); // Add error state
+    //const [loading, setLoading] = useState(true); // Add loading state
+    //const [error, setError] = useState(null); // Add error state
 
     const [newProduct, setNewProduct] = useState({
         description: '',
@@ -23,7 +27,15 @@ const ProductPanel = ()=>{
     const[newSize, setNewSize] = useState({size : '', stock : 0});
     const[newPhoto, setNewPhoto] = useState('');
 
+    const dispatch = useDispatch();
+    const { token } = useSelector((state) => state.auth);
+    const { adminProducts } = useSelector((state) => state.product)
 
+    useEffect (() => {
+        dispatch(fetchProductsAdmin({ token }))
+    }, [ dispatch, token])
+
+    /*
     useEffect(() => {
         ProductService.getProductsAdmin()
         .then(response => {
@@ -33,7 +45,7 @@ const ProductPanel = ()=>{
         .catch(error => {
             console.error('error fetching products ' + error)
         })
-    }, [])
+    }, [])*/
 
     const addProduct = async (e) => {
         e.preventDefault()
@@ -323,7 +335,7 @@ const ProductPanel = ()=>{
                             </tr>
                         </thead>
                         <tbody>
-                            {products.map((product, index)=>(
+                            {adminProducts.map((product, index)=>(
                                 <tr key={index}>
                                     <td>{product.description}</td>
                                     <td>${product.price.toFixed(2)}</td>

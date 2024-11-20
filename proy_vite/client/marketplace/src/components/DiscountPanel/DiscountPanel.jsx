@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react"
-import DiscountService from "../../services/DiscountService";
+//import DiscountService from "../../services/DiscountService";
+import { useSelector, useDispatch } from "react-redux";
+import { getDiscounts, createDiscount, deleteDiscount, updateDiscount } from "../../redux/DiscountSlice";
 
 const DiscountPanel = () => {
-    const [discounts, setDiscounts] = useState([])
+    //const [discounts, setDiscounts] = useState([])
     const [newDiscount, setNewDiscount] = useState({
         code : '',
         description : '',
@@ -15,6 +17,16 @@ const DiscountPanel = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [shouldFetchDiscounts, setShouldFetchDiscounts] = useState(true);
 
+    const dispatch = useDispatch();
+    const { token } = useSelector(state => state.auth);
+    const { discounts } = useSelector(state => state.discount);
+
+    useEffect(() => {
+        dispatch(getDiscounts({ token}));
+        setShouldFetchDiscounts(false)
+    }, [dispatch, token]);
+
+    /*
     useEffect(() => {
 
         const fetchDiscounts = async () => {
@@ -32,34 +44,45 @@ const DiscountPanel = () => {
             fetchDiscounts()
         }
 
-    }, [shouldFetchDiscounts])
+    }, [shouldFetchDiscounts])*/
 
     const updateDiscount = (e) => {
 
         const fetchupdateDiscount = async () => {
-            try {
-                e.preventDefault()
-                if(!validateDates(editingDiscount.startDate, editingDiscount.endDate)){
-                    setErrorMessage('The end date must be later than the start date.')
-                    return;
-                }
-                if(editingDiscount){
-                    await DiscountService.updateDiscount(editingDiscount.id, editingDiscount.code, editingDiscount.description, 
-                        editingDiscount.percentage, editingDiscount.fixedAmount, 
-                        formatDateToLocalDateTime(editingDiscount.startDate), formatDateToLocalDateTime(editingDiscount.endDate)
-                    )/*.catch(error => {
-                        console.error('error updating discount ' + error)
-                    })*/
-                    //setDiscounts(discounts.map((d) => (d.id === editingDiscount.id ? editingDiscount : d)))
-                    setEditingDiscount(null)
-                    setErrorMessage('')
-                    console.log('Updated discount')
-                    setShouldFetchDiscounts(true)
-                }
-
-            }catch (error) {
-                console.error('error updating discount ' + error)
+            
+            e.preventDefault()
+            if(!validateDates(editingDiscount.startDate, editingDiscount.endDate)){
+                setErrorMessage('The end date must be later than the start date.')
+                return;
             }
+            if(editingDiscount){
+
+                dispatch(updateDiscount({
+                    id: editingDiscount.id,
+                    code: editingDiscount.code,
+                    description: editingDiscount.description,
+                    percentage: editingDiscount.percentage,
+                    fixedAmount: editingDiscount.fixedAmount,
+                    startDate: formatDateToLocalDateTime(editingDiscount.startDate),
+                    endDate: formatDateToLocalDateTime(editingDiscount.endDate),
+                    token : {token}
+                }))
+
+                /*await DiscountService.updateDiscount(editingDiscount.id, editingDiscount.code, editingDiscount.description, 
+                    editingDiscount.percentage, editingDiscount.fixedAmount, 
+                    formatDateToLocalDateTime(editingDiscount.startDate), formatDateToLocalDateTime(editingDiscount.endDate)
+                )*/
+                /*.catch(error => {
+                    console.error('error updating discount ' + error)
+                })*/
+                //setDiscounts(discounts.map((d) => (d.id === editingDiscount.id ? editingDiscount : d)))
+                setEditingDiscount(null)
+                setErrorMessage('')
+                console.log('Updated discount')
+                setShouldFetchDiscounts(true)
+            }
+
+            
         }
 
         fetchupdateDiscount()
