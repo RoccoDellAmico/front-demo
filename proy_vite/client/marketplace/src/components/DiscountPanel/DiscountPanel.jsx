@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-//import DiscountService from "../../services/DiscountService";
 import { useSelector, useDispatch } from "react-redux";
 import { getDiscounts, createDiscount, deleteDiscount, updateDiscount } from "../../redux/DiscountSlice";
 
@@ -51,38 +50,6 @@ const DiscountPanel = () => {
         }
     }
 
-    /*const handleAddDiscount = async (e) => {
-        e.preventDefault()
-        if(!validateDates(newDiscount.startDate, newDiscount.endDate)){
-            setErrorMessage('The end date must be later than the start date.')
-            return;
-        }
-        try {
-            await dispatch(createDiscount({
-                code: newDiscount.code,
-                description: newDiscount.description,
-                percentage: newDiscount.percentage,
-                fixedAmount: newDiscount.fixedAmount,
-                startDate: newDiscount.startDate,
-                endDate: newDiscount.endDate,
-                token
-            })).unwrap();
-            
-            setNewDiscount({
-                code : '',
-                description : '',
-                percentage : 0,
-                fixedAmount : 0,
-                startDate : new Date().toISOString().split("T")[0],
-                endDate : new Date().toISOString().split("T")[0]
-            })
-            setErrorMessage('')
-        } catch (error) {
-            console.error('error creating discount ' + error)
-        }
-    }*/
-
-
     const handleAddDiscount = async (e) => {
         e.preventDefault()
         if(!validateDates(newDiscount.startDate, newDiscount.endDate)){
@@ -125,13 +92,7 @@ const DiscountPanel = () => {
         }
     };
 
-    /*const formatDateToLocalDateTime = (dateString) => {
-        const date = new Date(dateString)
-        return date.toISOString().split('.')[0]
-    }*/
-
     const formatToLocalDateTime = (date) => {
-        console.log(date)
         return date + 'T00:00:00'
     }
 
