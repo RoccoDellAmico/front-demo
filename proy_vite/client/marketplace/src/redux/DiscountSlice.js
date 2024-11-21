@@ -62,6 +62,10 @@ export const updateDiscount = createAsyncThunk('discount/updateDiscount',
     return data;
 });
 
+const formatDate = (dateString) => {
+    return new Date(dateString).toISOString();
+};
+
 const discountSlice = createSlice({
     name: 'discount',
     initialState: {
@@ -72,20 +76,32 @@ const discountSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getDiscounts.fulfilled, (state, action) => {
-                state.discounts = action.payload;
-            }) 
+                state.discounts = action.payload.map(discount => ({
+                    ...discount,
+                    startDate: formatDate(discount.startDate),
+                    endDate: formatDate(discount.endDate),
+                }));
+            })
             .addCase(getDiscounts.rejected, (state, action) => {
                 state.error = action.error.message;
             })
             .addCase(createDiscount.fulfilled, (state, action) => {
-                state.discounts.push(action.payload);
+                state.discounts.push({
+                    ...action.payload, 
+                    startDate: formatDate(action.payload.startDate), 
+                    endDate: formatDate(action.payload.endDate)
+                });
             })
             .addCase(createDiscount.rejected, (state, action) => {
                 state.error = action.error.message;
             })
             .addCase(updateDiscount.fulfilled, (state, action) => {
                 const index = state.discounts.findIndex(discount => discount.id === action.payload.id);
-                state.discounts[index] = action.payload;
+                state.discounts[index] = {
+                    ...action.payload, 
+                    startDate: formatDate(action.payload.startDate), 
+                    endDate: formatDate(action.payload.endDate)
+                };
             })
             .addCase(updateDiscount.rejected, (state, action) => {
                 state.error = action.error.message;
