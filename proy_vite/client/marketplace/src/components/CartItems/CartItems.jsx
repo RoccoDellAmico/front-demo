@@ -110,13 +110,13 @@ const CartItems = () => {
                             <p>${e.product.price}</p>
                             <p>{e.size}</p>
                             <div className="quantity">
-                                <img className="arrow_down" src={arrow_down} onClick={() => { dispatch(substractOneProduct({ size: e.size, productId: e.id, token })) }} alt="" />
-                                <input className="cantidad" type="number" step="1" min='0' defaultValue={e.quantity} onChange={(e) => setNewQuantity(Number(e.target.value))} />
-                                <img className="arrow_up" src={arrow_up} onClick={() => { dispatch(addOneProductToCart({ size: e.size, productId: e.id, token })) }} alt="" />
+                                <img className="arrow_down" src={arrow_down} onClick={() => { dispatch(substractOneProduct({ size: e.size, productId: e.product.id, token })) }} alt="" />
+                                <p>{e.quantity}</p>
+                                <img className="arrow_up" src={arrow_up} onClick={() => { dispatch(addOneProductToCart({ size: e.size, productId: e.product.id, token })) }} alt="" />
 
                             </div>
                             <p> ${ e.product.price * e.quantity } </p>
-                            <img className="cartitems-update-icon" src={update_icon} onClick={ () => {updateProductQuantity(e.id, newQuantity)} } alt="" />
+                            <img className="cartitems-update-icon" src={update_icon} onClick={ () => {updateProductQuantity(e.prod.id, newQuantity)} } alt="" />
                             <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {handleRemoveFromCart(e.id)} } alt="" />
                         </div>
                         <hr />
