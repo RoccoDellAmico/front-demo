@@ -26,6 +26,9 @@ const ProductPanel = ()=>{
     const[editingProduct, setEditingProduct] = useState(null);
     const[newSize, setNewSize] = useState({size : '', stock : 0});
     const[newPhoto, setNewPhoto] = useState('');
+    const dispatch = useDispatch();
+    const { token } = useSelector((state) => state.auth);
+    const { adminProducts } = useSelector((state) => state.product);
 
     const dispatch = useDispatch();
     const { token } = useSelector((state) => state.auth);

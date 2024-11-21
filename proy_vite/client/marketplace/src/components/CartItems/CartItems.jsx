@@ -1,6 +1,6 @@
 import React , { useContext , useState , useEffect } from "react";
 import './CartItems.css';
-import { ShopContext } from "../../Context/ShopContext";
+//import { ShopContext } from "../../Context/ShopContext";
 import remove_icon from '../../assets/close.svg'
 import { Link } from 'react-router-dom'
 import update_icon from '../../assets/update.svg'
@@ -11,12 +11,12 @@ import { getCartById, clearCart, removeProductFromCart } from "../../redux/CartS
 import { applyDiscountCode , addOneProductToCart , substractOneProduct, getTotal } from "../../redux/CartSlice";
 
 const CartItems = () => {
-    const {updateProductQuantity,cart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
+    //const {updateProductQuantity,cart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
     const [totalAmount, setTotalAmount] = useState(0);
     const [newQuantity, setNewQuantity] = useState(0);
     const [promo, setPromo] = useState('');
     const dispatch = useDispatch();
-    const { cartItems, discountCode, total} = useSelector((state) => state.cart);
+    const { cartItems, discountCode, total } = useSelector((state) => state.cart);
     const { id, token } = useSelector((state) => state.auth); 
 
     /*useEffect(() => {
@@ -74,10 +74,17 @@ const CartItems = () => {
         fetchCart();
     },[])*/
 
+    const handleSubstractOneProduct = (size, id) => {
+        dispatch(substractOneProduct({size, productId: id, token}));
+    }
+
+    const handleAddOneProduct = (size, id) => {
+        dispatch(addOneProductToCart({size, productId: id, token}));
+    }
+
     const handleRemoveFromCart = (id) => {
         dispatch(removeProductFromCart({productId: id, token}));
     }
-
 
     const handleClearCart = () => {
         dispatch(clearCart({token}));

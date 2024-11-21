@@ -1,8 +1,8 @@
 import React, { useState , useEffect } from 'react';
 import './UserPanel.css';
-//import UserService from "../../services/UserService";
-import { useDispatch, useSelector } from "react-redux";
-import { getUsers } from "../../redux/UserSlice";
+import UserService from "../../services/UserService";
+import { useDispatch, useSelector } from 'react-redux';
+import { getUsers } from '../../redux/UserSlice';
 
 const UserPanel = () => {
 
@@ -10,12 +10,8 @@ const UserPanel = () => {
     //const [loading, setLoading] = useState(true); // Add loading state
     //const [error, setError] = useState(null); // Add error state
     const dispatch = useDispatch();
-    const { token } = useSelector((state) => state.auth);
-    const { users } = useSelector((state) => state.user)
-
-    useEffect( () => {
-        dispatch(getUsers({ token }));
-    }, [dispatch, token]);
+    const { token } = useSelector(state => state.auth);
+    const { users, error, loading } = useSelector(state => state.user);
 
     /*useEffect( () => {
         UserService.getUsers()
@@ -29,7 +25,11 @@ const UserPanel = () => {
             setLoading(false);
         })
     },[])*/
-    /*
+
+    useEffect( () => {
+        dispatch(getUsers({ token }))
+    },[dispatch])
+
     if (loading) {
         return <p>Loading users...</p>; // Display loading message while fetching
     }

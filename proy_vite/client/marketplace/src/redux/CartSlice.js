@@ -35,6 +35,7 @@ export const addProductToCart = createAsyncThunk('cart/addProductToCart',
 
 export const addOneProductToCart = createAsyncThunk('cart/addOneProductToCart',
     async ({ size, productId, token }, { getState }) => {
+    console.log('addOneProductToCart size ',size, ' product id ', productId, ' token del usuario',token)
     const header = {
         headers: {  Authorization: `Bearer ${token}` } 
     };
