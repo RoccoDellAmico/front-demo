@@ -1,14 +1,18 @@
 import React, { useContext , useState , useEffect } from 'react'
 import "./RelatedProducts.css";
 import Item from "../Item/Item";
-import { ShopContext } from '../../Context/ShopContext';
-import ProductService from '../../services/ProductService'
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchProducts } from '../../redux/ProductSlice';
 
 
 const RelatedProducts = (props) => {
 
-    const {products} = useContext(ShopContext);
+    const dispatch = useDispatch();
+    const { products } = useSelector(state => state.product);
 
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, [dispatch])
 
     const {product} = props;
 
