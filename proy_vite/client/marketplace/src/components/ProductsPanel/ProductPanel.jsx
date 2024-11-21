@@ -3,7 +3,7 @@ import { useState , useEffect } from "react"
 import './ProductPanel.css'
 //import ProductService from '../../services/ProductService'
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductsAdmin, deleteProduct, createProduct } from "../../redux/ProductSlice"
+import { fetchProductsAdmin, deleteProduct, createProduct, updateProduct } from "../../redux/ProductSlice"
 
 
 const ProductPanel = ()=>{
@@ -23,6 +23,7 @@ const ProductPanel = ()=>{
         typeOfProduct: '',
         year: 0
     });
+
     const[editingProduct, setEditingProduct] = useState(null);
     const[newSize, setNewSize] = useState({size : '', stock : 0});
     const[newPhoto, setNewPhoto] = useState('');
@@ -36,40 +37,7 @@ const ProductPanel = ()=>{
         }
     }, [ dispatch, token, shouldFetchProducts ]);
 
-    /*
-    useEffect(() => {
-        ProductService.getProductsAdmin()
-        .then(response => {
-            setProducts(response || [])
-            console.log(response)
-        })
-        .catch(error => {
-            console.error('error fetching products ' + error)
-        })
-    }, [])*/
-
-    const handleaddProduct = async (e) => {
-        /*e.preventDefault()
-
-        let arrayProductStock = newProduct.productStock
-        let prod = {...newProduct, productStock : convertProductStockArrayToObject(newProduct.productStock)}
-        ProductService.createProduct(prod)
-        .then(response => {
-            setProducts([...products, {...newProduct, id : response.id, productStock : arrayProductStock}])
-        })
-        .catch(error => {console.error('error creating product ' + error)})
-        setNewProduct({
-            description: '',
-            price: 0,
-            productStock: [], // Cambia a un objeto
-            league: '',
-            club: '',
-            photos: [],
-            clientCategory: '',
-            typeOfProduct: '',
-            year: 0
-        });*/
-
+    const handleAddProduct = async (e) => {
         e.preventDefault()
         
         let prod = {...newProduct, productStock : convertProductStockArrayToObject(newProduct.productStock)}
@@ -88,19 +56,17 @@ const ProductPanel = ()=>{
         });
 
         setShouldFetchProducts(true);
-
-
     }
 
-    const updateProduct = (e) => {
+    const handleUpdateProduct = async (e) => {
         e.preventDefault()
+
         if (editingProduct) {
-            let arrayProductStock = editingProduct.productStock
             let prod = {...editingProduct, productStock : convertProductStockArrayToObject(editingProduct.productStock)}
-            ProductService.updateProduct(prod)
-            .catch(error => {console.error('error updating product ' + error)})
-            setProducts(products.map((p) => (p.id === editingProduct.id ? editingProduct : p)))
+            await dispatch(updateProduct({ product: prod, token }));
+            
             setEditingProduct(null)
+            setShouldFetchProducts(true);
         }
     }
 
@@ -124,7 +90,6 @@ const ProductPanel = ()=>{
     
         if (editingProduct) {
             const updatedProductStock = [...editingProduct.productStock];
-    
             const existingSizeIndex = updatedProductStock.findIndex(stock => stock.size === sizeKey);
     
             if (existingSizeIndex >= 0) {
@@ -138,7 +103,6 @@ const ProductPanel = ()=>{
             setEditingProduct({ ...editingProduct, productStock: updatedProductStock });
         } else {
             const updatedProductStock = [...newProduct.productStock];
-    
             const existingSizeIndex = updatedProductStock.findIndex(stock => stock.size === sizeKey);
     
             if (existingSizeIndex >= 0) {
@@ -151,7 +115,6 @@ const ProductPanel = ()=>{
     
             setNewProduct({ ...newProduct, productStock: updatedProductStock });
         }
-    
         // Reinicia el campo de nuevo tamaño y stock
         setNewSize({ size: '', stock: 0 });
     };
@@ -217,7 +180,7 @@ const ProductPanel = ()=>{
 
                 <h1>Football Kits admin panel</h1>
                 <h2>{editingProduct ? 'Edit product' : 'Add product'}</h2>
-                <form onSubmit={editingProduct ? updateProduct : handleaddProduct}>
+                <form onSubmit={editingProduct ? handleUpdateProduct : handleAddProduct}>
                     <div className="description">
                         <label htmlFor="description">Description</label>
                         <textarea id="description" 
