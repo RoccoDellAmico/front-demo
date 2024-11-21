@@ -3,7 +3,7 @@ import { useState , useEffect } from "react"
 import './ProductPanel.css'
 //import ProductService from '../../services/ProductService'
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductsAdmin, deleteProduct } from "../../redux/ProductSlice"
+import { fetchProductsAdmin, deleteProduct, createProduct } from "../../redux/ProductSlice"
 
 
 const ProductPanel = ()=>{
@@ -48,8 +48,9 @@ const ProductPanel = ()=>{
         })
     }, [])*/
 
-    const addProduct = async (e) => {
-        e.preventDefault()
+    const handleaddProduct = async (e) => {
+        /*e.preventDefault()
+
         let arrayProductStock = newProduct.productStock
         let prod = {...newProduct, productStock : convertProductStockArrayToObject(newProduct.productStock)}
         ProductService.createProduct(prod)
@@ -67,7 +68,28 @@ const ProductPanel = ()=>{
             clientCategory: '',
             typeOfProduct: '',
             year: 0
+        });*/
+
+        e.preventDefault()
+        
+        let prod = {...newProduct, productStock : convertProductStockArrayToObject(newProduct.productStock)}
+        await dispatch(createProduct({ newProduct: prod, token }));
+
+        setNewProduct({
+            description: '',
+            price: 0,
+            productStock: [], // Cambia a un objeto
+            league: '',
+            club: '',
+            photos: [],
+            clientCategory: '',
+            typeOfProduct: '',
+            year: 0
         });
+
+        setShouldFetchProducts(true);
+
+
     }
 
     const updateProduct = (e) => {
@@ -195,7 +217,7 @@ const ProductPanel = ()=>{
 
                 <h1>Football Kits admin panel</h1>
                 <h2>{editingProduct ? 'Edit product' : 'Add product'}</h2>
-                <form onSubmit={editingProduct ? updateProduct : addProduct}>
+                <form onSubmit={editingProduct ? updateProduct : handleaddProduct}>
                     <div className="description">
                         <label htmlFor="description">Description</label>
                         <textarea id="description" 
