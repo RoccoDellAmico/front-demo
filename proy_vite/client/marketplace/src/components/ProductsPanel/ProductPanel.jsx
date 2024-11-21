@@ -310,12 +310,12 @@ const ProductPanel = ()=>{
                             <tr>
                                 <th>Description</th>
                                 <th>Price</th>
-                                <th>productStock and Stock</th>
+                                <th>Stock</th>
                                 <th>Club</th>
                                 <th>League</th>
                                 <th>Photos</th>
-                                <th>Client category</th>
-                                <th>Type of product</th>
+                                <th>Category</th>
+                                <th>Type</th>
                                 <th>Year</th>
                                 <th>Actions</th>
                             </tr>
@@ -340,7 +340,7 @@ const ProductPanel = ()=>{
                                     <td>
                                         {product.photos.map((photo, index)=>(
                                             <div key={index}>
-                                                <a href={photo} target="_blank">{photo}</a>
+                                                <img src={photo} alt="photo" style={{ width: '100px', height: '100px' }}/>
                                             </div>
                                         ))}
                                     </td>
