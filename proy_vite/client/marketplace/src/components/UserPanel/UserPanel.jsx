@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState , useEffect } from 'react';
 import './UserPanel.css';
 import UserService from "../../services/UserService";
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,7 +36,7 @@ const UserPanel = () => {
 
     if (error) {
         return <p>{error}</p>; // Display error message if fetching fails
-    }
+    }*/
 
 
     return (
@@ -69,3 +69,5 @@ const UserPanel = () => {
 }
 
 export default UserPanel;
+
+

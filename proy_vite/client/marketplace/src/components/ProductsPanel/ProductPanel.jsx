@@ -1,15 +1,16 @@
 import React from "react";
 import { useState , useEffect } from "react"
 import './ProductPanel.css'
-import ProductService from '../../services/ProductService'
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchProductsAdmin } from "../../redux/ProductSlice";
+//import ProductService from '../../services/ProductService'
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProductsAdmin } from "../../redux/ProductSlice"
+
 
 const ProductPanel = ()=>{
 
     const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true); // Add loading state
-    const [error, setError] = useState(null); // Add error state
+    //const [loading, setLoading] = useState(true); // Add loading state
+    //const [error, setError] = useState(null); // Add error state
 
     const [newProduct, setNewProduct] = useState({
         description: '',
@@ -29,8 +30,16 @@ const ProductPanel = ()=>{
     const { token } = useSelector((state) => state.auth);
     const { adminProducts } = useSelector((state) => state.product);
 
+    const dispatch = useDispatch();
+    const { token } = useSelector((state) => state.auth);
+    const { adminProducts } = useSelector((state) => state.product)
 
-    /*useEffect(() => {
+    useEffect (() => {
+        dispatch(fetchProductsAdmin({ token }))
+    }, [ dispatch, token])
+
+    /*
+    useEffect(() => {
         ProductService.getProductsAdmin()
         .then(response => {
             setProducts(response || [])
@@ -40,10 +49,6 @@ const ProductPanel = ()=>{
             console.error('error fetching products ' + error)
         })
     }, [])*/
-
-    useEffect(() => {
-        dispatch(fetchProductsAdmin({ token }));
-    } , [dispatch])
 
     const addProduct = async (e) => {
         e.preventDefault()

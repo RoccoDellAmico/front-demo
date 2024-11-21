@@ -1,0 +1,9 @@
+.order-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.order-panel h1{
+    margin: 100px 170px;
+}

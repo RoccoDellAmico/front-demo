@@ -15,6 +15,10 @@ import supervielle from '../../assets/tarjetas/supervielle.png'
 import cencosud from '../../assets/tarjetas/cencosud2.png'
 import patagonia from '../../assets/tarjetas/patagonia.png'
 import './PaymentItem.css'
+import { useDispatch, useSelector } from "react-redux";
+import { placeOrder } from "../../redux/OrderSlice";
+import { clearCart } from "../../redux/CartSlice";
+
 
 
 
@@ -23,8 +27,11 @@ const PaymentItem = () => {
     const [cuotas, setCuotas] = useState('')
     const [showPopup, setShowPopup] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const { clearCart , placeOrder } = useContext(ShopContext);
+    //const { clearCart , placeOrder } = useContext(ShopContext);
     const navigate = useNavigate();
+    const { token } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+    const { cartId } = useSelector((state) => state.cart);
 
 
     const handlePayClick = () => {
@@ -46,11 +53,11 @@ const PaymentItem = () => {
         setShowPopup(true);
         setTimeout(() => {
             setShowPopup(false);
-            clearCart();
+            dispatch(clearCart({token}));
             navigate('/');
         }, 2000);
 
-        placeOrder();
+        dispatch(placeOrder({cartId, token}));
     };
 
     return (

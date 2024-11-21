@@ -29,7 +29,7 @@ export const placeOrder = createAsyncThunk( 'order/placeOrder', async ({ cartId,
             Authorization: `Bearer ${token}`,
         }
     };
-    const { data } = await axios.post(`${BASE_ORDER_URL}/user/placeOrder/${cartId}`, config);
+    const { data } = await axios.delete(`${BASE_ORDER_URL}/user/placeOrder/${cartId}`, config);
     return data;
 });
 
@@ -54,6 +54,7 @@ const orderSlice = createSlice({
             })
             .addCase(getOrdersByUser.fulfilled, (state, action) => {
                 state.ordersByUser = action.payload;
+                console.log(action.payload);
             })
             .addCase(placeOrder.rejected, (state, action) => {
                 state.error = action.error.message;

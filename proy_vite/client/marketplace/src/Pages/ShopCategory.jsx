@@ -1,14 +1,19 @@
 import React, { useContext , useState , useEffect } from 'react'
 import './CSS/ShopCategory.css'
-import { ShopContext } from '../Context/ShopContext';
 import dropdown_icon from '../assets/dropdown_icon.png';
 import Item from '../components/Item/Item'
-import ProductService from '../services/ProductService';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchProducts } from '../redux/ProductSlice';
 
 
 const ShopCategory =(props) => {
 
-    const {products} = useContext(ShopContext);
+    const dispatch = useDispatch();
+    const { products } = useSelector((state) => state.product);
+
+    useEffect(() => {
+        dispatch(fetchProducts());
+    },[dispatch]);
 
 
     return (

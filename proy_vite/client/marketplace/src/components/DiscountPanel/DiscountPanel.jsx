@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react"
-import DiscountService from "../../services/DiscountService";
+//import DiscountService from "../../services/DiscountService";
+import { useSelector, useDispatch } from "react-redux";
+import { getDiscounts, createDiscount, deleteDiscount, updateDiscount } from "../../redux/DiscountSlice";
 
 const DiscountPanel = () => {
-    const [discounts, setDiscounts] = useState([])
+
+    const dispatch = useDispatch();
+    const { token } = useSelector(state => state.auth);
+    const { discounts , error } = useSelector(state => state.discount);
+
     const [newDiscount, setNewDiscount] = useState({
         code : '',
         description : '',
@@ -11,86 +17,69 @@ const DiscountPanel = () => {
         startDate : new Date().toISOString().split("T")[0],
         endDate : new Date().toISOString().split("T")[0]
     });
+
     const [editingDiscount, setEditingDiscount] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
-    const [shouldFetchDiscounts, setShouldFetchDiscounts] = useState(true);
 
     useEffect(() => {
+        dispatch(getDiscounts({ token}));
+    }, [dispatch, token]);
 
-        const fetchDiscounts = async () => {
-            try {
-                const response = await DiscountService.getDiscounts()
-                setDiscounts(response.data || [])
-                setShouldFetchDiscounts(false)
-                console.log('FECHING DISCOUNTS')
-            }catch(error) {
-                console.error('error fetching discounts' + error)
-            }
+    const handleUpdateDiscount = async (e) => {
+        e.preventDefault()
+        if(!validateDates(editingDiscount.startDate, editingDiscount.endDate)){
+            setErrorMessage('The end date must be later than the start date.')
+            return;
         }
-
-        if (shouldFetchDiscounts){
-            fetchDiscounts()
-        }
-
-    }, [shouldFetchDiscounts])
-
-    const updateDiscount = (e) => {
-
-        const fetchupdateDiscount = async () => {
+        if(editingDiscount){
             try {
-                e.preventDefault()
-                if(!validateDates(editingDiscount.startDate, editingDiscount.endDate)){
-                    setErrorMessage('The end date must be later than the start date.')
-                    return;
-                }
-                if(editingDiscount){
-                    await DiscountService.updateDiscount(editingDiscount.id, editingDiscount.code, editingDiscount.description, 
-                        editingDiscount.percentage, editingDiscount.fixedAmount, 
-                        formatDateToLocalDateTime(editingDiscount.startDate), formatDateToLocalDateTime(editingDiscount.endDate)
-                    )/*.catch(error => {
-                        console.error('error updating discount ' + error)
-                    })*/
-                    //setDiscounts(discounts.map((d) => (d.id === editingDiscount.id ? editingDiscount : d)))
-                    setEditingDiscount(null)
-                    setErrorMessage('')
-                    console.log('Updated discount')
-                    setShouldFetchDiscounts(true)
-                }
-
-            }catch (error) {
+                await dispatch(updateDiscount({
+                    id: editingDiscount.id,
+                    code: editingDiscount.code,
+                    description: editingDiscount.description,
+                    percentage: editingDiscount.percentage,
+                    fixedAmount: editingDiscount.fixedAmount,
+                    startDate: formatDateToLocalDateTime(editingDiscount.startDate),
+                    endDate: formatDateToLocalDateTime(editingDiscount.endDate),
+                    token
+                })).unwrap();
+                setEditingDiscount(null);
+                setErrorMessage('');
+            } catch (error) {
                 console.error('error updating discount ' + error)
             }
         }
-
-        fetchupdateDiscount()
     }
 
-    const addDiscount = (e) => {
+    const handleAddDiscount = async (e) => {
         e.preventDefault()
         if(!validateDates(newDiscount.startDate, newDiscount.endDate)){
             setErrorMessage('The end date must be later than the start date.')
             return;
         }
-        DiscountService.createDiscount(newDiscount.code, newDiscount.description, 
-            newDiscount.percentage,
-            newDiscount.fixedAmount, formatDateToLocalDateTime(newDiscount.startDate), 
-            formatDateToLocalDateTime(newDiscount.endDate)
-        )
-        .then(response => {
-            setDiscounts([...discounts], {...newDiscount, id : response.data.id})
-            console.log(response.data)
-            setShouldFetchDiscounts(true)
-        })
-        .catch(error => {console.error('error creating discount ' + error)})
-        setNewDiscount({
-            code : '',
-            description : '',
-            percentage : 0,
-            fixedAmount : 0,
-            startDate : new Date().toISOString().split("T")[0],
-            endDate : new Date().toISOString().split("T")[0]
-        })
-        setErrorMessage('')
+        try {
+            await dispatch(createDiscount({
+                code: newDiscount.code,
+                description: newDiscount.description,
+                percentage: newDiscount.percentage,
+                fixedAmount: newDiscount.fixedAmount,
+                startDate: newDiscount.startDate,
+                endDate: newDiscount.endDate,
+                token
+            })).unwrap();
+            
+            setNewDiscount({
+                code : '',
+                description : '',
+                percentage : 0,
+                fixedAmount : 0,
+                startDate : new Date().toISOString().split("T")[0],
+                endDate : new Date().toISOString().split("T")[0]
+            })
+            setErrorMessage('')
+        } catch (error) {
+            console.error('error creating discount ' + error)
+        }
     }
 
     const validateDates = (startDate, endDate) => {
@@ -101,25 +90,13 @@ const DiscountPanel = () => {
         setEditingDiscount(discount)
     }
 
-    const deleteDiscount = (discountId) => {
-
-        const fetchDeleteDiscount = async () => {
-            try{
-                await DiscountService.deleteDiscount(discountId);
-                console.log('Deleted  panel')
-                setShouldFetchDiscounts(true)
-                //setDiscounts(discounts.filter((discount) => discount.id !== discountId))
-
-            }catch(error) {
-                console.error('error deleting discount ' + error)
-            }
+    const handleDeleteDiscount = async (discountId) => {
+        try {
+            await dispatch(deleteDiscount({ id: discountId, token}))
+        } catch(error) {
+            console.error('error deleting discount ' + error)
         }
-
-        fetchDeleteDiscount()
-    }
-
-
-        
+    };
 
     const formatDateToLocalDateTime = (dateString) => {
         const date = new Date(dateString)
@@ -131,7 +108,7 @@ const DiscountPanel = () => {
             <div className="discount-panel">
                 <h1>Admin discount panel</h1>
                 <h2>{editingDiscount ? "Edit discount" : "Create discount"}</h2>
-                <form onSubmit={editingDiscount ? updateDiscount : addDiscount}>
+                <form onSubmit={editingDiscount ? handleUpdateDiscount : handleAddDiscount}>
                     <div>
                         <label>Discount Code</label>
                         <input type="text" placeholder="discount code"
@@ -220,7 +197,7 @@ const DiscountPanel = () => {
                                 <td>{discount.endDate}</td>
                                 <td>
                                     <button onClick={() => startEditing(discount)}>Edit</button>
-                                    <button onClick={() => deleteDiscount(discount.id)}>Delete</button>
+                                    <button onClick={() => handleDeleteDiscount(discount.id)}>Delete</button>
                                 </td>
                             </tr>
                         ))}
