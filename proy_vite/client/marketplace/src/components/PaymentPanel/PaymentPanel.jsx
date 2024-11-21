@@ -1,25 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './PaymentPanel.css';
-import PaymentService from "../../services/PaymentService";
+import { useDispatch, useSelector } from 'react-redux';
+import { getPayments } from '../../redux/PaymentSlice';
 
 const PayemntPanel = () => {
+    const dispatch = useDispatch();
+    const { payments, loading, error } = useSelector( state => state.payment );
+    const { token } = useSelector( state => state.auth );
 
-    const [payments, setPayments] = useState([]);
-    const [loading, setLoading] = useState(true); // Add loading state
-    const [error, setError] = useState(null); // Add error state
-
-    useEffect( () => {
-        PaymentService.getPaymentAdmin()
-        .then(response => {
-            setPayments(response.data || []);
-            console.log(response.data);
-            setLoading(false);
-        }).catch(error => {
-            console.log(error);
-            setError('Failed to fetch payments');
-            setLoading(false);
-        })
-    },[])
+    useEffect(() => {
+        dispatch(getPayments({ token }));
+    }, [dispatch]);
 
     if (loading) {
         return <p>Loading payments...</p>;

@@ -28,12 +28,22 @@ const userSlice = createSlice({
     initialState: {
         users: [],
         user: {},
+        error: '',
+        loading: false,
     },
     reducers: {},
     extraReducers: (builder) => {
         builder
+        .addCase(getUsers.pending, (state, action) => {
+            state.loading = true;
+        })
         .addCase(getUsers.fulfilled, (state, action) => {
             state.users = action.payload;
+            state.loading = false;
+        })
+        .addCase(getUsers.rejected, (state, action) => {
+            state.error = action.error.message;
+            state.loading = false;
         })
         .addCase(getUserById.fulfilled, (state, action) => {
             state.user = action.payload;

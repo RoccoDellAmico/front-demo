@@ -35,11 +35,13 @@ export const addProductToCart = createAsyncThunk('cart/addProductToCart',
 
 export const addOneProductToCart = createAsyncThunk('cart/addOneProductToCart',
     async ({ size, productId, token }, { getState }) => {
+    console.log('addOneProductToCart size ',size, ' product id ', productId, ' token del usuario',token)
     const header = {
         headers: {  Authorization: `Bearer ${token}` } 
     };
     const cartId = getState().cart.cartId;
-    const { data } = await axios.delete(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/addOne`, header);
+    console.log('CART ID ', cartId)
+    const { data } = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/addOne`,{},  header);
     console.log('addOneSlice',data)
     return data;
 })
@@ -50,7 +52,7 @@ export const substractOneProduct = createAsyncThunk('cart/substractOneProduct',
         headers: {  Authorization: `Bearer ${token}` } 
     };
     const cartId = getState().cart.cartId;
-    const { data } = await axios.delete(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/substractOne`, header);
+    const { data } = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/substractOne`, {}, header);
     console.log('SubtractOneSlice',data)
     return data;
 })

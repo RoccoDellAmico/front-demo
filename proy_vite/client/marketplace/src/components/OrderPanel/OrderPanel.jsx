@@ -1,24 +1,25 @@
-import React, {useContext,useState,useEffect} from "react";
+import React, { useEffect } from "react";
 import './OrderPanel.css';
-import { ShopContext } from "../../Context/ShopContext";
+import { useDispatch, useSelector } from "react-redux";
+import { getOrders } from "../../redux/OrderSlice";
 
 const OrderPanel = () => {
-
-    const {getOrders} = useContext(ShopContext);
-    const [orders, setOrders] = useState([]);
+    const dispatch = useDispatch();
+    const { token } = useSelector((state) => state.auth);
+    const { orders, error } = useSelector((state) => state.order);
 
     useEffect(() => {
-        const fetchOrders = async () => {
-            const orders = await getOrders();
-            console.log('ORDERS',orders);
-            setOrders(orders);
-        }
-        fetchOrders();
-    },[])
+        dispatch(getOrders({ token }));
+    }, [dispatch]);
+
+    if(error){
+        return <p>{error}</p>
+    }
 
     return (
         <div>
-            <ul>
+            {orders.length === 0 ? (<p>No orders found</p>) :
+            (<ul>
                 {orders.map((o) => (
                     <li key={o.orderId}>
                     Order_Id: {o.orderId} - Total: ${o.total} - {o.orderProducts.map((p) => (
@@ -28,7 +29,7 @@ const OrderPanel = () => {
                     )) }
                     </li>
                 ))}
-                </ul>
+                </ul>)}
         </div>
     )
 }

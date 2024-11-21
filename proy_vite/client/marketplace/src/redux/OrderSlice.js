@@ -46,11 +46,14 @@ const orderSlice = createSlice({
             .addCase(getOrders.fulfilled, (state, action) => {
                 state.orders = action.payload;
             })
+            .addCase(getOrders.rejected, (state, action) => {
+                state.error = action.error.message;
+            })
             .addCase(getOrdersByUser.rejected, (state, action) => {
                 state.error = action.error.message;
             })
             .addCase(getOrdersByUser.fulfilled, (state, action) => {
-                state.orderByUser = action.payload;
+                state.ordersByUser = action.payload;
             })
             .addCase(placeOrder.rejected, (state, action) => {
                 state.error = action.error.message;
