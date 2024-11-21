@@ -3,14 +3,14 @@ import { useState , useEffect } from "react"
 import './ProductPanel.css'
 //import ProductService from '../../services/ProductService'
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductsAdmin } from "../../redux/ProductSlice"
+import { fetchProductsAdmin, deleteProduct } from "../../redux/ProductSlice"
 
 
 const ProductPanel = ()=>{
 
-    const [products, setProducts] = useState([]);
-    //const [loading, setLoading] = useState(true); // Add loading state
-    //const [error, setError] = useState(null); // Add error state
+    const dispatch = useDispatch();
+    const { token } = useSelector((state) => state.auth);
+    const { adminProducts } = useSelector((state) => state.product);
 
     const [newProduct, setNewProduct] = useState({
         description: '',
@@ -26,17 +26,15 @@ const ProductPanel = ()=>{
     const[editingProduct, setEditingProduct] = useState(null);
     const[newSize, setNewSize] = useState({size : '', stock : 0});
     const[newPhoto, setNewPhoto] = useState('');
-    const dispatch = useDispatch();
-    const { token } = useSelector((state) => state.auth);
-    const { adminProducts } = useSelector((state) => state.product);
+    const [shouldFetchProducts, setShouldFetchProducts] = useState(true);
 
-    const dispatch = useDispatch();
-    const { token } = useSelector((state) => state.auth);
-    const { adminProducts } = useSelector((state) => state.product)
 
     useEffect (() => {
-        dispatch(fetchProductsAdmin({ token }))
-    }, [ dispatch, token])
+        if (shouldFetchProducts) {
+            dispatch(fetchProductsAdmin({ token }));
+            setShouldFetchProducts(false);
+        }
+    }, [ dispatch, token, shouldFetchProducts ]);
 
     /*
     useEffect(() => {
@@ -91,10 +89,10 @@ const ProductPanel = ()=>{
         });
     }
 
-    const deleteProduct = (id) => {
+    const handleDeleteProduct = async (id) => {
+        await dispatch(deleteProduct({ id, token }));
+        setShouldFetchProducts(true);
         console.log('id del product a eliminar ' + id);
-        ProductService.deleteProduct(id);
-        setProducts(products.filter((product) => product.id !== id));
     }
 
     const addSize = () => {
@@ -366,7 +364,7 @@ const ProductPanel = ()=>{
                                     <td>{product.year}</td>
                                     <td>
                                         <button onClick={()=>startEditing(product)}>Edit</button>
-                                        <button onClick={()=>deleteProduct(product.id)}>Delete</button>
+                                        <button onClick={()=>handleDeleteProduct(product.id)}>Delete</button>
                                     </td>
                                 </tr>
                             ))}
