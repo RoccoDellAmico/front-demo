@@ -348,7 +348,7 @@ const ProductPanel = ()=>{
                                     <td>{product.typeOfProduct}</td>
                                     <td>{product.year}</td>
                                     <td>
-                                        <button onClick={()=>startEditing(product)}>Edit</button>
+                                        <button onClick={() => { startEditing(product); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Edit</button>
                                         <button onClick={()=>handleDeleteProduct(product.id)}>Delete</button>
                                     </td>
                                 </tr>
