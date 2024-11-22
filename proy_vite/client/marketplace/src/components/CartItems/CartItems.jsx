@@ -18,6 +18,7 @@ const CartItems = () => {
     const dispatch = useDispatch();
     const { cartItems, discountCode, total } = useSelector((state) => state.cart);
     const { id, token } = useSelector((state) => state.auth); 
+    const [showPopup, setShowPopup] = useState(false);
 
     /*useEffect(() => {
         const fetchCart = async () => {
@@ -33,6 +34,13 @@ const CartItems = () => {
         dispatch(getTotal({token})).unwrap();
     }, [dispatch, id, token])
         
+    const handleProceedToCheckout = () => {
+        if (cartItems.length === 0) {
+            setShowPopup(true);
+        } else {
+            // Proceed to checkout
+        }
+    };
 
     /*useEffect(() => {
         const fetchProducts = async () => {
@@ -155,8 +163,11 @@ const CartItems = () => {
                             <h3> ${total} </h3>
                         </div>
                     </div>
-                    <Link to='/checkout'> <button>PROCEED TO CHECKOUT</button> </Link>
-                    {/*<Link to='/payment'> <button>PROCEED TO CHECKOUT</button> </Link>*/}
+                                    <div>
+                    <Link to='/checkout' onClick={handleProceedToCheckout}>
+                        <button>PROCEED TO CHECKOUT</button>
+                    </Link>
+                </div>
                 </div>
                 <div className="cartitems-promocode">
                     <p>If you have a promo code, Enter it here</p>
@@ -167,6 +178,12 @@ const CartItems = () => {
                 </div>
             {discountCode && (
                 console.log('DISCOUNT CODE', discountCode)
+            )}
+                        {showPopup && (
+                <div className="popup">
+                    <p>You can't proceed with an empty cart</p>
+                    <button onClick={() => setShowPopup(false)}>X</button>
+                </div>
             )}
             </div>
         </div>

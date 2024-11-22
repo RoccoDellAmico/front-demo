@@ -56,7 +56,9 @@ const productSlice = createSlice({
         filters: {
             searchTerm: '',
             priceRange: 0,
-            league: ''
+            league: '',
+            typeOfProduct: '',
+            size: ''
         },
         error: null,
         loading: false,

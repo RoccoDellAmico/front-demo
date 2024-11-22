@@ -34,7 +34,7 @@ const CheckoutItem = () => {
                         <label htmlFor="piso">Floor (optional)</label>
                         </div>
                         <div className="input-container">
-                            <input type="text" id='departamento' required className='no-spinner' maxLength={3}/>
+                            <input type="text" id='departamento' required  maxLength={10}/>
                             <label htmlFor="departamento">Apartment (optional)</label>
                         </div>
                         <div className="input-container">

@@ -29,6 +29,7 @@ const FilterRedux = () => {
 
     const handleApplyFilters = () => {
         dispatch(setFilter({ searchTerm, priceRange, league, typeOfProduct, size }));
+        setPriceRange(0);
         setSearchTerm("");
         setLeague("");
         setTypeOfProduct("");
@@ -61,13 +62,15 @@ const FilterRedux = () => {
                 <div>
                     <h3>Price</h3>
                     <input 
-                        type="range" 
+                        className="no-spinner" 
+                        type="number" 
                         min="0" 
                         max="300000" 
+                        placeholder='Max Price'
                         value={priceRange} 
                         onChange={(e) => setPriceRange(e.target.value)} 
                     />
-                    <span>${priceRange}</span>
+                    {/*<span>${priceRange}</span>*/}
                 </div>
                 <div>
                     <h3>League</h3>
@@ -77,10 +80,9 @@ const FilterRedux = () => {
                 </div>
                 <div>
                     <h3>Type of Product</h3>
-                    <button onClick={() => handleTypeOfProductClick('HOME')}>HOME</button>
-                    <button onClick={() => handleTypeOfProductClick('AWAY')}>AWAY</button>
-                    <button onClick={() => handleTypeOfProductClick('THIRD')}>THIRD</button>
-                    <button onClick={() => handleTypeOfProductClick('GOALKEEPER')}>GOALKEEPER</button>
+                    {['HOME', 'AWAY', 'THIRD', 'GOALKEEPER'].map(typeOption => (
+                        <button key={typeOption} onClick={() => handleTypeOfProductClick(typeOption)}>{typeOption}</button>
+                    ))}
                 </div>
                 <div>
                     <h3>Size</h3>
