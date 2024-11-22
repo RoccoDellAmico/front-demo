@@ -10,8 +10,7 @@ import LogoutButton from '../Logout Button/LogoutButton'
 const Navbar = () => {  
 
     const [clicked, setClicked] = useState(false)
-    const [totalCartItems, setTotalCartItems] = useState(0); // Estado para almacenar la cantidad de items
-    const { isAuthenticated, token } = useSelector((state) => state.auth);
+    const { isAuthenticated, isAdmin } = useSelector((state) => state.auth);
     const { totalQuantity } = useSelector((state) => state.cart);
 
     const handleClick = () => {
@@ -20,19 +19,6 @@ const Navbar = () => {
         }
         setClicked(!clicked)
     }
-
-    /*useEffect(() => {
-        const fetchTotalCartItems = async () => {
-            if (isAuthenticated) {
-                setTotalCartItems(totalQuantity);
-            } else {
-                setTotalCartItems(0);
-            }
-        };
-        
-        fetchTotalCartItems();
-    }, [isAuthenticated, token]); */
-
 
     return(
         <div className='navbar'>

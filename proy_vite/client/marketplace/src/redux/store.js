@@ -6,6 +6,7 @@ import orderReducer from './OrderSlice'
 import userReducer from './UserSlice'
 import paymentReducer from './PaymentSlice'
 import productReducer from './ProductSlice'
+import suggestionReducer from './SuggestionSlice'
 
 export const store = configureStore({
     reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
         user: userReducer,
         payment: paymentReducer,
         product: productReducer,
+        suggestion: suggestionReducer,
     },
 })

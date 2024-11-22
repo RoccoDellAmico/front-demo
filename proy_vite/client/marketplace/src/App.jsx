@@ -1,6 +1,4 @@
 import Navbar from './components/Navbar/Navbar';
-import Navbar1 from './components/Navbar/Navbar1';
-import { Provider } from 'react-redux';
 import React from 'react';
 import {BrowserRouter,Routes, Route} from "react-router-dom";
 import Home from './Pages/Home';
@@ -20,7 +18,7 @@ import Payment from './Pages/Payment';
 import AdminPanel from './Pages/AdminPanel';
 import Profile from './Pages/Profile';
 import ErrorPage from './Pages/ErrorPage';
-import { store } from './redux/store';
+import Suggestion from './Pages/Suggestion';
 
 
 const App = () => {
@@ -41,6 +39,7 @@ const App = () => {
         <Route path="/product/:productId" element={<Product/>} />
         <Route path='/admin' element={<AdminPanel/>}/>
         <Route path='/profile' element={<Profile/>}/>
+        <Route path='/suggestion' element={<Suggestion/>}/>
         <Route path="*" element={<ErrorPage />} />
       </Routes>
       <Footer/>
