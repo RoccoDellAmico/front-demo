@@ -53,7 +53,11 @@ const productSlice = createSlice({
         products: [],
         adminProducts: [],
         filteredProducts: [],
-        filters: {},
+        filters: {
+            searchTerm: '',
+            priceRange: 0,
+            league: ''
+        },
         error: null,
         loading: false,
     },
@@ -63,11 +67,20 @@ const productSlice = createSlice({
             state.filteredProducts = state.products.filter(product => {
                 const matchesDescription = !state.filters.searchTerm || product.description.toLowerCase().includes(state.filters.searchTerm.toLowerCase());
                 const matchesPrice = !state.filters.priceRange || product.price <= state.filters.priceRange;
-                return matchesDescription && matchesPrice;
+                const matchesLeague = !state.filters.league || (product.league && product.league.toLowerCase().includes(state.filters.league.toLowerCase()));
+                const matchesTypeOfProduct = !state.filters.typeOfProduct || product.typeOfProduct === state.filters.typeOfProduct;
+                const matchesSize = !state.filters.size || (product.productStock && product.productStock[state.filters.size] > 0);
+                return matchesDescription && matchesPrice && matchesLeague && matchesTypeOfProduct && matchesSize;
             });
         },
         clearFilters: (state) => {
-            state.filters = {};
+            state.filters = {
+                searchTerm: '',
+                priceRange: 0,
+                league: '' ,
+                typeOfProduct: '',
+                size: ''
+            };
             state.filteredProducts = state.products;
         }
     },

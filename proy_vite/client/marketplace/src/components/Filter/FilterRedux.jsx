@@ -10,20 +10,37 @@ const FilterRedux = () => {
     const filteredProducts = useSelector(state => state.product.filteredProducts);
     const [priceRange, setPriceRange] = useState(0);
     const [searchTerm, setSearchTerm] = useState("");
+    const [league, setLeague] = useState("");
+    const [typeOfProduct, setTypeOfProduct] = useState("");
+    const [size, setSize] = useState("");
 
     useEffect(() => {
-        dispatch(setFilter({ searchTerm: "", priceRange: 0 }));
+        dispatch(setFilter({ searchTerm: "", priceRange: 0, league: "", typeOfProduct: "", size: "" }));
     }, [dispatch]);
 
     const handleClearFilters = () => {
         setPriceRange(0);
         setSearchTerm("");
+        setLeague("");
+        setTypeOfProduct("");
+        setSize("");
         dispatch(clearFilters());
     };
 
     const handleApplyFilters = () => {
-        dispatch(setFilter({ searchTerm, priceRange }));
+        dispatch(setFilter({ searchTerm, priceRange, league, typeOfProduct, size }));
         setSearchTerm("");
+        setLeague("");
+        setTypeOfProduct("");
+        setSize("");
+    };
+
+    const handleTypeOfProductClick = (type) => {
+        setTypeOfProduct(type);
+    };
+
+    const handleSizeClick = (selectedSize) => {
+        setSize(selectedSize);
     };
 
     console.log('Products:', products);
@@ -32,13 +49,13 @@ const FilterRedux = () => {
     return (
         <div className="filter-container">
             <div className="filters">
+            <h2>Look for a kit</h2>
                 <div>
-                    <h3>Look for a kit</h3>
+                    <h3>Club or country</h3>
                     <input 
                         type="text" 
                         value={searchTerm} 
                         onChange={(e) => setSearchTerm(e.target.value)} 
-                        placeholder="Club or country" 
                     />
                 </div>
                 <div>
@@ -51,6 +68,25 @@ const FilterRedux = () => {
                         onChange={(e) => setPriceRange(e.target.value)} 
                     />
                     <span>${priceRange}</span>
+                </div>
+                <div>
+                    <h3>League</h3>
+                    <input type="text" 
+                    value={league}
+                    onChange={(e) => setLeague(e.target.value)}/>
+                </div>
+                <div>
+                    <h3>Type of Product</h3>
+                    <button onClick={() => handleTypeOfProductClick('HOME')}>HOME</button>
+                    <button onClick={() => handleTypeOfProductClick('AWAY')}>AWAY</button>
+                    <button onClick={() => handleTypeOfProductClick('THIRD')}>THIRD</button>
+                    <button onClick={() => handleTypeOfProductClick('GOALKEEPER')}>GOALKEEPER</button>
+                </div>
+                <div>
+                    <h3>Size</h3>
+                    {['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].map(sizeOption => (
+                        <button key={sizeOption} onClick={() => handleSizeClick(sizeOption)}>{sizeOption}</button>
+                    ))}
                 </div>
                 <button onClick={handleApplyFilters}>Search</button>
                 <button onClick={handleClearFilters}>Clear</button>

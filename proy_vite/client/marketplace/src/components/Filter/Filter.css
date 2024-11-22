@@ -40,3 +40,7 @@
     width: 300px;
     height: 350px;
 }
+.filtered-products img:hover{
+    transform: scale(1.05);
+    transition: 0.6s;
+}

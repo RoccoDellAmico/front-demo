@@ -30,9 +30,9 @@ const ProductPanel = ()=>{
     const { token } = useSelector((state) => state.auth);
     const { adminProducts } = useSelector((state) => state.product);
 
-    const dispatch = useDispatch();
+    /*const dispatch = useDispatch();
     const { token } = useSelector((state) => state.auth);
-    const { adminProducts } = useSelector((state) => state.product)
+    const { adminProducts } = useSelector((state) => state.product)*/
 
     useEffect (() => {
         dispatch(fetchProductsAdmin({ token }))

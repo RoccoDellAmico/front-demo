@@ -36,7 +36,7 @@ const UserPanel = () => {
 
     if (error) {
         return <p>{error}</p>; // Display error message if fetching fails
-    }*/
+    }
 
 
     return (
