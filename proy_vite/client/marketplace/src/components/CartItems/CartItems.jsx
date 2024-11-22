@@ -9,7 +9,7 @@ import arrow_up from '../../assets/arrow_up.svg'
 import { useDispatch, useSelector } from "react-redux";
 import { getCartById, clearCart, removeProductFromCart } from "../../redux/CartSlice";
 import { applyDiscountCode , addOneProductToCart , substractOneProduct, getTotal } from "../../redux/CartSlice";
-
+import { useNavigate } from "react-router-dom";
 const CartItems = () => {
     //const {updateProductQuantity,cart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
     const [totalAmount, setTotalAmount] = useState(0);
@@ -19,6 +19,7 @@ const CartItems = () => {
     const { cartItems, discountCode, total } = useSelector((state) => state.cart);
     const { id, token } = useSelector((state) => state.auth); 
     const [showPopup, setShowPopup] = useState(false);
+    const navigate = useNavigate();
 
     /*useEffect(() => {
         const fetchCart = async () => {
@@ -34,11 +35,15 @@ const CartItems = () => {
         dispatch(getTotal({token})).unwrap();
     }, [dispatch, id, token])
         
-    const handleProceedToCheckout = () => {
+    const handleProceedToCheckout = (e) => {
         if (cartItems.length === 0) {
+            e.preventDefault();
             setShowPopup(true);
+            setTimeout(() => {
+                setShowPopup(false);
+            }, 2000);
         } else {
-            // Proceed to checkout
+            navigate('/checkout');
         }
     };
 
@@ -164,9 +169,10 @@ const CartItems = () => {
                         </div>
                     </div>
                                     <div>
-                    <Link to='/checkout' onClick={handleProceedToCheckout}>
+                    {/*<Link to='/checkout' onClick={handleProceedToCheckout}>
                         <button>PROCEED TO CHECKOUT</button>
-                    </Link>
+                    </Link>*/}
+                    <button onClick={handleProceedToCheckout}>PROCEED TO CHECKOUT</button>
                 </div>
                 </div>
                 <div className="cartitems-promocode">
@@ -179,12 +185,12 @@ const CartItems = () => {
             {discountCode && (
                 console.log('DISCOUNT CODE', discountCode)
             )}
-                        {showPopup && (
-                <div className="popup">
-                    <p>You can't proceed with an empty cart</p>
-                    <button onClick={() => setShowPopup(false)}>X</button>
-                </div>
-            )}
+                {showPopup && (
+                    <div className="popup">
+                        <p>You can't proceed with an empty cart</p>
+                        <button onClick={() => setShowPopup(false)}>X</button>
+                    </div>
+                )}
             </div>
         </div>
     )
