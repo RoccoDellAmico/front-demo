@@ -1,5 +1,5 @@
 import ProductPanel from "../components/ProductsPanel/ProductPanel"
-import CartPanel from "../components/CartsPanel/CartsPanel"
+import SuggestionPanel from "../components/SuggestionPanel/SuggestionPanel"
 import PaymentPanel from "../components/PaymentPanel/PaymentPanel"
 import UserPanel from '../components/UserPanel/UserPanel'
 import React, {useState, useEffect} from "react"
@@ -39,6 +39,9 @@ const AdminPanel = ()=>{
                 <button className={`tab ${activeTab === "discounts" ? "active" : ""}`} onClick={() => setActiveTab("discounts")}>
                     Discounts
                 </button>
+                <button className={`tab ${activeTab === "suggestions" ? "active" : ""}`} onClick={() => setActiveTab("suggestions")}>
+                    Suggestions
+                </button>
             </div>
 
             <div className="tab-content">
@@ -47,6 +50,7 @@ const AdminPanel = ()=>{
                 {activeTab === "orders" && (<OrderPanel/>)}
                 {activeTab === "payments" && (<PaymentPanel/>)}
                 {activeTab === "discounts" && (<DiscountPanel/>)}
+                {activeTab === "suggestions" && (<SuggestionPanel/>)}
             </div>
         </div>
     )

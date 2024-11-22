@@ -17,9 +17,23 @@ export const createSuggestion = createAsyncThunk(
     }
 );
 
+export const fetchSuggestions = createAsyncThunk(
+    'suggestion/fetchSuggestions',
+    async ({ token }) => {
+        const header = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const { data } = await axios.get(`${BASE_USER_URL}/admin/suggestions`, header);
+        return data;
+    }
+);
+
+
 
 const suggestionSlice = createSlice({
-    name: 'payment',
+    name: 'suggestion',
     initialState: {
         suggestions: [],
         error: null,
@@ -38,8 +52,19 @@ const suggestionSlice = createSlice({
             .addCase(createSuggestion.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
+            })
+            .addCase(fetchSuggestions.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchSuggestions.fulfilled, (state, action) => {
+                state.loading = false;
+                state.suggestions = action.payload;
+            })
+            .addCase(fetchSuggestions.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
             });
-    }   
+    }
 });
 
 export default suggestionSlice.reducer;
