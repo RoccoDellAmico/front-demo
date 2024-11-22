@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import { ShopContext } from '../../Context/ShopContext';
+//import { ShopContext } from '../../Context/ShopContext';
 import visa from '../../assets/tarjetas/visa.svg'
 import amex from '../../assets/tarjetas/amex.svg'
 import maestro from '../../assets/tarjetas/maestro.svg'
@@ -24,40 +24,39 @@ import { clearCart } from "../../redux/CartSlice";
 
 const PaymentItem = () => {
 
-    const [cuotas, setCuotas] = useState('')
+    const [numeroTarjeta, setNumeroTarjeta] = useState('');
+    const [titular, setTitular] = useState('');
+    const [vencimiento, setVencimiento] = useState('');
+    const [cvv, setCvv] = useState('');
+    const [nombre, setNombre] = useState('');
+    const [cuotas, setCuotas] = useState('');
+    const [dni, setDni] = useState('');
+    const [telefono, setTelefono] = useState('');
     const [showPopup, setShowPopup] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    //const { clearCart , placeOrder } = useContext(ShopContext);
     const navigate = useNavigate();
-    const { token } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
+    const { token } = useSelector((state) => state.auth);
     const { cartId } = useSelector((state) => state.cart);
 
-
-    const handlePayClick = () => {
-        const numeroTarjeta = document.getElementById('numero_tarjeta').value;
-        const titular = document.getElementById('titular').value;
-        const vencimiento = document.getElementById('vencimiento').value;
-        const cvv = document.getElementById('CVV').value;
-        const nombre = document.getElementById('nombre').value;
-        const cuotas = document.getElementById('cuotas').value;
-        const DNI = document.getElementById('DNI').value;
-        const telefono = document.getElementById('Telefono').value;
-
-        if (!numeroTarjeta || !titular || !vencimiento || !cvv || !nombre || !cuotas || !DNI || !telefono) {
+    const handlePayClick = (e) => {
+        if (!numeroTarjeta || !titular || !vencimiento || !cvv || !nombre || !cuotas || !dni || !telefono) {
+            e.preventDefault();
             setErrorMessage('Please complete all fields');
-            return;
-        }
-
-        setErrorMessage('');
-        setShowPopup(true);
-        setTimeout(() => {
             setShowPopup(false);
-            dispatch(clearCart({token}));
-            navigate('/');
-        }, 2000);
-
-        dispatch(placeOrder({cartId, token}));
+            setTimeout(() => {
+                setErrorMessage('');
+            }, 2000);
+        } else {
+            setErrorMessage('');
+            setShowPopup(true);
+            setTimeout(() => {
+                setShowPopup(false);
+                dispatch(clearCart({ token }));
+                navigate('/');
+            }, 2000);
+            dispatch(placeOrder({ cartId, token }));
+        }
     };
 
     return (
@@ -72,13 +71,15 @@ const PaymentItem = () => {
                 required 
                 className="no-spinner" 
                 maxLength={16} 
+                value={numeroTarjeta}
+                onChange={(e) => setNumeroTarjeta(e.target.value)}
                 onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')} 
             />
             <label htmlFor="numero_tarjeta">Card number</label>
             </div>
                     <div className="payment-fields-data">
                         <div className="input-container">
-                            <input type="text" id='titular' required maxLength={50} onInput={(e) => e.target.value = e.target.value.replace(/[^a-zA-Z\s]/g, '')}/>
+                            <input type="text" id='titular' required maxLength={50} value={titular} onChange={(e) => setTitular(e.target.value)} onInput={(e) => e.target.value = e.target.value.replace(/[^a-zA-Z\s]/g, '')}/>
                             <label htmlFor="titular">Card owner</label>
                         </div>
                         <div className="input-container">
@@ -88,6 +89,8 @@ const PaymentItem = () => {
                                 required 
                                 className="no-spinner" 
                                 maxLength={5} 
+                                value={vencimiento}
+                                onChange={(e) => setVencimiento(e.target.value)}
                                 onInput={(e) => e.target.value = e.target.value.replace(/[^0-9/]/g, '')} 
                             />
                             <label htmlFor="vencimiento">Expiration date (MM/YY)</label>
@@ -99,13 +102,15 @@ const PaymentItem = () => {
                                 required 
                                 className="no-spinner" 
                                 maxLength={4} 
+                                value={cvv}
+                                onChange={(e) => setCvv(e.target.value)}
                                 onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')} 
                             />
                             <label htmlFor="CVV">Security code</label>
                         </div>
                     </div>
                     <div className="input-container">
-                        <input type="text" id="nombre" required onInput={(e) => e.target.value = e.target.value.replace(/[^a-zA-Z\s]/g, '')}/>
+                        <input type="text" id="nombre" required value={nombre} onChange={(e) => setNombre(e.target.value)} onInput={(e) => e.target.value = e.target.value.replace(/[^a-zA-Z\s]/g, '')}/>
                         <label htmlFor="nombre">Name</label>
                     </div>
                     <div className="cuotas">
@@ -125,6 +130,8 @@ const PaymentItem = () => {
                             required 
                             className="no-spinner" 
                             maxLength={10} 
+                            value={dni}
+                            onChange={(e) => setDni(e.target.value)}
                             onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')} 
                         />
                         <label htmlFor="DNI">ID number</label>
@@ -135,7 +142,9 @@ const PaymentItem = () => {
                                 id="Telefono" 
                                 required 
                                 className="no-spinner" 
-                                maxLength={15} 
+                                maxLength={30} 
+                                value={telefono}
+                                onChange={(e) => setTelefono(e.target.value)}
                                 onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')} 
                             />
                             <label htmlFor="Telefono">Phone number</label>
@@ -162,7 +171,7 @@ const PaymentItem = () => {
                     </div>
                 </div>
                 <div className="payment-pagar">
-                <button onClick={handlePayClick}>Pay</button>
+                    <button onClick={handlePayClick}>Pay</button>
                     {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
                     {showPopup && (
                         <div className="popup">
@@ -172,7 +181,7 @@ const PaymentItem = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default PaymentItem
