@@ -4,6 +4,7 @@ import dropdown_icon from '../assets/dropdown_icon.png';
 import Item from '../components/Item/Item'
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProducts } from '../redux/ProductSlice';
+import SuggestionButton from '../components/SuggestionButton/SuggestionButton';
 
 
 const ShopCategory =(props) => {
@@ -36,6 +37,9 @@ const ShopCategory =(props) => {
                         return null;
                     }
                 })}
+            </div>
+            <div>
+                <SuggestionButton/>
             </div>
             <div className="shopcategory-loadmore">
                 Explore more
