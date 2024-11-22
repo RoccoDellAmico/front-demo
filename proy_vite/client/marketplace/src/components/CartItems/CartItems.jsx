@@ -8,7 +8,7 @@ import arrow_down from '../../assets/arrow_down.svg'
 import arrow_up from '../../assets/arrow_up.svg'
 import { useDispatch, useSelector } from "react-redux";
 import { getCartById, clearCart, removeProductFromCart } from "../../redux/CartSlice";
-import { applyDiscountCode , addOneProductToCart , substractOneProduct } from "../../redux/CartSlice";
+import { applyDiscountCode , addOneProductToCart , substractOneProduct, getTotal } from "../../redux/CartSlice";
 
 const CartItems = () => {
     //const {updateProductQuantity,cart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
@@ -16,7 +16,7 @@ const CartItems = () => {
     const [newQuantity, setNewQuantity] = useState(0);
     const [promo, setPromo] = useState('');
     const dispatch = useDispatch();
-    const { cartItems, discountCode } = useSelector((state) => state.cart);
+    const { cartItems, discountCode, total } = useSelector((state) => state.cart);
     const { id, token } = useSelector((state) => state.auth); 
 
     /*useEffect(() => {
@@ -30,6 +30,7 @@ const CartItems = () => {
 
     useEffect(() => {
         dispatch(getCartById({id, token})).unwrap();
+        dispatch(getTotal({token})).unwrap();
     }, [dispatch, id, token])
         
 
@@ -141,7 +142,7 @@ const CartItems = () => {
                     <div>
                         <div className="cartitems-total-item">
                             <p>Subtotal</p>
-                            <p> ${totalAmount} </p>
+                            <p> ${total} </p>
                         </div>
                         <hr />
                         <div className="cartitems-total-item">
@@ -151,7 +152,7 @@ const CartItems = () => {
                         <hr />
                         <div className="cartitems-total-item">
                             <h3>Total</h3>
-                            <h3> ${totalAmount} </h3>
+                            <h3> ${total} </h3>
                         </div>
                     </div>
                     <Link to='/checkout'> <button>PROCEED TO CHECKOUT</button> </Link>

@@ -17,19 +17,23 @@ const OrderPanel = () => {
     }
 
     return (
-        <div>
-            {orders.length === 0 ? (<p>No orders found</p>) :
-            (<ul>
-                {orders.map((o) => (
-                    <li key={o.orderId}>
-                    Order_Id: {o.orderId} - Total: ${o.total} - {o.orderProducts.map((p) => (
-                                                            <div key={p.id}>
-                                                                {p.product.description} - Talle: {p.size} - Cantidad: {p.quantity} 
-                                                            </div>
-                    )) }
-                    </li>
-                ))}
+        <div className="order-panel">
+            <h1>Orders</h1>
+            <div className="order-container">
+                {orders.length === 0 ? (<p>No orders found</p>) :
+                (<ul>
+                    {orders.map((o) => (
+                        <li key={o.orderId}>
+                        Order_Id: {o.orderId} - Total: ${o.total} - {o.orderProducts.map((p) => (
+                                                                <div key={p.id}>
+                                                                    {p.product.description} - Talle: {p.size} - Cantidad: {p.quantity} 
+                                                                </div>
+                        )) }
+                        <br />
+                        </li>
+                    ))}
                 </ul>)}
+            </div>
         </div>
     )
 }

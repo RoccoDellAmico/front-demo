@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-//import DiscountService from "../../services/DiscountService";
 import { useSelector, useDispatch } from "react-redux";
 import { getDiscounts, createDiscount, deleteDiscount, updateDiscount } from "../../redux/DiscountSlice";
 
@@ -14,15 +13,15 @@ const DiscountPanel = () => {
         description : '',
         percentage : 0,
         fixedAmount : 0,
-        startDate : new Date().toISOString().split("T")[0],
-        endDate : new Date().toISOString().split("T")[0]
+        startDate : new Date().toISOString(),
+        endDate : new Date().toISOString()
     });
 
     const [editingDiscount, setEditingDiscount] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
-        dispatch(getDiscounts({ token}));
+        dispatch(getDiscounts({ token }));
     }, [dispatch, token]);
 
     const handleUpdateDiscount = async (e) => {
@@ -39,8 +38,8 @@ const DiscountPanel = () => {
                     description: editingDiscount.description,
                     percentage: editingDiscount.percentage,
                     fixedAmount: editingDiscount.fixedAmount,
-                    startDate: formatDateToLocalDateTime(editingDiscount.startDate),
-                    endDate: formatDateToLocalDateTime(editingDiscount.endDate),
+                    startDate: formatToLocalDateTime(editingDiscount.startDate.split('T')[0]),
+                    endDate: formatToLocalDateTime(editingDiscount.endDate.split('T')[0]),
                     token
                 })).unwrap();
                 setEditingDiscount(null);
@@ -57,29 +56,24 @@ const DiscountPanel = () => {
             setErrorMessage('The end date must be later than the start date.')
             return;
         }
-        try {
-            await dispatch(createDiscount({
-                code: newDiscount.code,
-                description: newDiscount.description,
-                percentage: newDiscount.percentage,
-                fixedAmount: newDiscount.fixedAmount,
-                startDate: newDiscount.startDate,
-                endDate: newDiscount.endDate,
-                token
-            })).unwrap();
-            
-            setNewDiscount({
-                code : '',
-                description : '',
-                percentage : 0,
-                fixedAmount : 0,
-                startDate : new Date().toISOString().split("T")[0],
-                endDate : new Date().toISOString().split("T")[0]
-            })
-            setErrorMessage('')
-        } catch (error) {
-            console.error('error creating discount ' + error)
-        }
+        dispatch(createDiscount({
+            code: newDiscount.code,
+            description: newDiscount.description,
+            percentage: newDiscount.percentage,
+            fixedAmount: newDiscount.fixedAmount,
+            startDate: formatToLocalDateTime(newDiscount.startDate),
+            endDate: formatToLocalDateTime(newDiscount.endDate),
+            token,
+         }));
+         setNewDiscount({
+            code : '',
+            description : '',
+            percentage : 0,
+            fixedAmount : 0,
+            startDate : new Date().toISOString(),
+            endDate : new Date().toISOString()
+        })
+        setErrorMessage('')
     }
 
     const validateDates = (startDate, endDate) => {
@@ -92,16 +86,15 @@ const DiscountPanel = () => {
 
     const handleDeleteDiscount = async (discountId) => {
         try {
-            await dispatch(deleteDiscount({ id: discountId, token}))
+            dispatch(deleteDiscount({ id: discountId, token}))
         } catch(error) {
             console.error('error deleting discount ' + error)
         }
     };
 
-    const formatDateToLocalDateTime = (dateString) => {
-        const date = new Date(dateString)
-        return date.toISOString().split('.')[0]
-    } 
+    const formatToLocalDateTime = (date) => {
+        return date + 'T00:00:00'
+    }
 
     return(
         <>
@@ -152,7 +145,7 @@ const DiscountPanel = () => {
                     <div>
                         <label>Start date</label>
                         <input type="date" 
-                        value={editingDiscount ? editingDiscount.startDate : newDiscount.startDate}
+                        value={editingDiscount ? editingDiscount.startDate.split('T')[0] : newDiscount.startDate.split('T')[0]}
                         onChange={(e) => editingDiscount ?
                             setEditingDiscount({...editingDiscount, startDate : e.target.value})
                             : setNewDiscount({...newDiscount, startDate : e.target.value})
@@ -162,7 +155,7 @@ const DiscountPanel = () => {
                     <div>
                         <label>End date</label>
                         <input type="date" 
-                        value={editingDiscount ? editingDiscount.endDate : newDiscount.endDate}
+                        value={editingDiscount ? editingDiscount.endDate.split('T')[0] : newDiscount.endDate.split('T')[0]}
                         onChange={(e) => editingDiscount ?
                             setEditingDiscount({...editingDiscount, endDate : e.target.value})
                             : setNewDiscount({...newDiscount, endDate : e.target.value})

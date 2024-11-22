@@ -3,14 +3,14 @@ import { useState , useEffect } from "react"
 import './ProductPanel.css'
 //import ProductService from '../../services/ProductService'
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductsAdmin } from "../../redux/ProductSlice"
+import { fetchProductsAdmin, deleteProduct, createProduct, updateProduct } from "../../redux/ProductSlice"
 
 
 const ProductPanel = ()=>{
 
-    const [products, setProducts] = useState([]);
-    //const [loading, setLoading] = useState(true); // Add loading state
-    //const [error, setError] = useState(null); // Add error state
+    const dispatch = useDispatch();
+    const { token } = useSelector((state) => state.auth);
+    const { adminProducts } = useSelector((state) => state.product);
 
     const [newProduct, setNewProduct] = useState({
         description: '',
@@ -23,42 +23,26 @@ const ProductPanel = ()=>{
         typeOfProduct: '',
         year: 0
     });
+
     const[editingProduct, setEditingProduct] = useState(null);
     const[newSize, setNewSize] = useState({size : '', stock : 0});
     const[newPhoto, setNewPhoto] = useState('');
-    const dispatch = useDispatch();
-    const { token } = useSelector((state) => state.auth);
-    const { adminProducts } = useSelector((state) => state.product);
+    const [shouldFetchProducts, setShouldFetchProducts] = useState(true);
 
-    /*const dispatch = useDispatch();
-    const { token } = useSelector((state) => state.auth);
-    const { adminProducts } = useSelector((state) => state.product)*/
 
     useEffect (() => {
-        dispatch(fetchProductsAdmin({ token }))
-    }, [ dispatch, token])
+        if (shouldFetchProducts) {
+            dispatch(fetchProductsAdmin({ token }));
+            setShouldFetchProducts(false);
+        }
+    }, [ dispatch, token, shouldFetchProducts ]);
 
-    /*
-    useEffect(() => {
-        ProductService.getProductsAdmin()
-        .then(response => {
-            setProducts(response || [])
-            console.log(response)
-        })
-        .catch(error => {
-            console.error('error fetching products ' + error)
-        })
-    }, [])*/
-
-    const addProduct = async (e) => {
+    const handleAddProduct = async (e) => {
         e.preventDefault()
-        let arrayProductStock = newProduct.productStock
+        
         let prod = {...newProduct, productStock : convertProductStockArrayToObject(newProduct.productStock)}
-        ProductService.createProduct(prod)
-        .then(response => {
-            setProducts([...products, {...newProduct, id : response.id, productStock : arrayProductStock}])
-        })
-        .catch(error => {console.error('error creating product ' + error)})
+        await dispatch(createProduct({ newProduct: prod, token }));
+
         setNewProduct({
             description: '',
             price: 0,
@@ -70,17 +54,19 @@ const ProductPanel = ()=>{
             typeOfProduct: '',
             year: 0
         });
+
+        setShouldFetchProducts(true);
     }
 
-    const updateProduct = (e) => {
+    const handleUpdateProduct = async (e) => {
         e.preventDefault()
+
         if (editingProduct) {
-            let arrayProductStock = editingProduct.productStock
             let prod = {...editingProduct, productStock : convertProductStockArrayToObject(editingProduct.productStock)}
-            ProductService.updateProduct(prod)
-            .catch(error => {console.error('error updating product ' + error)})
-            setProducts(products.map((p) => (p.id === editingProduct.id ? editingProduct : p)))
+            await dispatch(updateProduct({ product: prod, token }));
+            
             setEditingProduct(null)
+            setShouldFetchProducts(true);
         }
     }
 
@@ -91,10 +77,10 @@ const ProductPanel = ()=>{
         });
     }
 
-    const deleteProduct = (id) => {
+    const handleDeleteProduct = async (id) => {
+        await dispatch(deleteProduct({ id, token }));
+        setShouldFetchProducts(true);
         console.log('id del product a eliminar ' + id);
-        ProductService.deleteProduct(id);
-        setProducts(products.filter((product) => product.id !== id));
     }
 
     const addSize = () => {
@@ -104,7 +90,6 @@ const ProductPanel = ()=>{
     
         if (editingProduct) {
             const updatedProductStock = [...editingProduct.productStock];
-    
             const existingSizeIndex = updatedProductStock.findIndex(stock => stock.size === sizeKey);
     
             if (existingSizeIndex >= 0) {
@@ -118,7 +103,6 @@ const ProductPanel = ()=>{
             setEditingProduct({ ...editingProduct, productStock: updatedProductStock });
         } else {
             const updatedProductStock = [...newProduct.productStock];
-    
             const existingSizeIndex = updatedProductStock.findIndex(stock => stock.size === sizeKey);
     
             if (existingSizeIndex >= 0) {
@@ -131,7 +115,6 @@ const ProductPanel = ()=>{
     
             setNewProduct({ ...newProduct, productStock: updatedProductStock });
         }
-    
         // Reinicia el campo de nuevo tamaño y stock
         setNewSize({ size: '', stock: 0 });
     };
@@ -197,7 +180,7 @@ const ProductPanel = ()=>{
 
                 <h1>Football Kits admin panel</h1>
                 <h2>{editingProduct ? 'Edit product' : 'Add product'}</h2>
-                <form onSubmit={editingProduct ? updateProduct : addProduct}>
+                <form onSubmit={editingProduct ? handleUpdateProduct : handleAddProduct}>
                     <div className="description">
                         <label htmlFor="description">Description</label>
                         <textarea id="description" 
@@ -327,12 +310,12 @@ const ProductPanel = ()=>{
                             <tr>
                                 <th>Description</th>
                                 <th>Price</th>
-                                <th>productStock and Stock</th>
+                                <th>Stock</th>
                                 <th>Club</th>
                                 <th>League</th>
                                 <th>Photos</th>
-                                <th>Client category</th>
-                                <th>Type of product</th>
+                                <th>Category</th>
+                                <th>Type</th>
                                 <th>Year</th>
                                 <th>Actions</th>
                             </tr>
@@ -357,7 +340,7 @@ const ProductPanel = ()=>{
                                     <td>
                                         {product.photos.map((photo, index)=>(
                                             <div key={index}>
-                                                <a href={photo} target="_blank">{photo}</a>
+                                                <img src={photo} alt="photo" style={{ width: '100px', height: '100px' }}/>
                                             </div>
                                         ))}
                                     </td>
@@ -365,8 +348,8 @@ const ProductPanel = ()=>{
                                     <td>{product.typeOfProduct}</td>
                                     <td>{product.year}</td>
                                     <td>
-                                        <button onClick={()=>startEditing(product)}>Edit</button>
-                                        <button onClick={()=>deleteProduct(product.id)}>Delete</button>
+                                        <button onClick={() => { startEditing(product); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Edit</button>
+                                        <button onClick={()=>handleDeleteProduct(product.id)}>Delete</button>
                                     </td>
                                 </tr>
                             ))}
