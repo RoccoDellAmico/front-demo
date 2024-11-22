@@ -12,13 +12,13 @@ const ProductDisplay = (props) => {
     const dispatch = useDispatch();
     const { isAuthenticated, token } = useSelector((state) => state.auth);
     const { cartId } = useSelector((state) => state.cart);
-
     const {product} = props;
 
     const [selectedSize, setSelectedSize] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const [showError, setShowError] = useState(false);
     const [mainImage, setMainImage] = useState(product.photos[0]);
+    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -30,25 +30,39 @@ const ProductDisplay = (props) => {
         setShowError(false);
     };
 
-    const handleAddToCart = (productId) => {
+    const handleAddToCart = async (productId) => {
         if(!isAuthenticated){
             navigate('/logIn')
             return;
         }
         if (selectedSize) {
-            console.log(cartId) //DELETE CONSOLE.LOG
-            const rta = dispatch(addProductToCart({ size: selectedSize, productId, quantity: 1, token })).unwrap();
-            if (rta){
-                setShowPopup(true);
+            try {
+                const rta = await dispatch(addProductToCart({ size: selectedSize, productId, quantity: 1, token })).unwrap();
+                if (rta) {
+                    setShowPopup(true);
+                    setTimeout(() => {
+                        setShowPopup(false);
+                    }, 1500);
+                } else {
+                    setErrorMessage("No hay stock para el talle solicitado.");
+                    setShowError(true);
+                    setTimeout(() => {
+                        setShowError(false);
+                    }, 2000);
+                }
+            } catch (error) {
+                setErrorMessage("No hay stock para el talle solicitado.");
+                setShowError(true);
                 setTimeout(() => {
-                    setShowPopup(false);
-                }, 1500);
-            }
-            else{
-                alert("No hay stock suficiente para la cantidad solicitada.");
+                    setShowError(false);
+                }, 2000);
             }
         } else {
+            setErrorMessage("Please select a size");
             setShowError(true);
+            setTimeout(() => {
+                setShowError(false);
+            }, 2000);
         }
     };
 
@@ -103,19 +117,16 @@ const ProductDisplay = (props) => {
                     </div>
                 </div>
                 <button onClick={() => handleAddToCart(product.id)}>ADD TO CART</button>
-                {showError && <p className="error-message">Please select a size</p>}
+                {showError && <p className="error-message">{errorMessage}</p>}
                 {showPopup && (
                     <div className="popup">
                         <p>Product added to cart</p>
                         <span className="checkmark">✔</span>
                     </div>
                 )}
-                {/*<p className="productsiplay-right-category"><span>Category: </span> Women, T-shirt, Crop Top </p>*/}
-                {/*<p className="productsiplay-right-category"><span>Tags: </span> Modern, Latest</p>*/}
-
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default ProductDisplay
