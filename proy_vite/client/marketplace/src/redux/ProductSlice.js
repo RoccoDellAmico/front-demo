@@ -118,8 +118,12 @@ const productSlice = createSlice({
             .addCase(updateProduct.fulfilled, (state, action) => {
                 const index = state.adminProducts.findIndex(product => product.id === action.payload.product.id);
                 state.adminProducts[index] = action.payload.product;
-                const index2 = state.products.findIndex(product => product.iid === action.payload.data.id);
+                const index2 = state.products.findIndex(product => product.id === action.payload.data.id);
                 state.products[index2] = action.payload.data;
+            })
+            .addCase(deleteProduct.fulfilled, (state, action) => {
+                state.adminProducts = state.adminProducts.filter(product => product.id !== action.meta.arg.id);
+                state.products = state.products.filter(product => product.id !== action.meta.arg.id);
             });
     }
 });

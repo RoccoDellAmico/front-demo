@@ -1,10 +1,10 @@
 import React from "react";
 import { useState , useEffect } from "react"
 import './ProductPanel.css'
-//import ProductService from '../../services/ProductService'
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductsAdmin, deleteProduct, createProduct, updateProduct } from "../../redux/ProductSlice"
 
+const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
 
 const ProductPanel = ()=>{
 
@@ -12,7 +12,7 @@ const ProductPanel = ()=>{
     const { token } = useSelector((state) => state.auth);
     const { adminProducts } = useSelector((state) => state.product);
 
-    const [newProduct, setNewProduct] = useState({
+    /*const [newProduct, setNewProduct] = useState({
         description: '',
         price: 0,
         productStock: [], // Cambia a un objeto
@@ -22,26 +22,45 @@ const ProductPanel = ()=>{
         clientCategory: '',
         typeOfProduct: '',
         year: 0
-    });
+    });*/
+
+    const [newProduct, setNewProduct] = useState({
+        description: '',
+        price: 0,
+        productStock: SIZES.reduce((acc, size) => ({ ...acc, [size]: 0 }), {}),
+        club: '',
+        league: '',
+        photos: [],
+        clientCategory: '',
+        typeOfProduct: '',
+        year: 0
+    })
+
 
     const[editingProduct, setEditingProduct] = useState(null);
-    const[newSize, setNewSize] = useState({size : '', stock : 0});
+    //const[newSize, setNewSize] = useState({size : '', stock : 0});
+    const [stockUpdate, setStockUpdate] = useState({ size : SIZES[0], quantity : 0 });
     const[newPhoto, setNewPhoto] = useState('');
-    const [shouldFetchProducts, setShouldFetchProducts] = useState(true);
+    //const [shouldFetchProducts, setShouldFetchProducts] = useState(true);
 
-
-    useEffect (() => {
+    // SE QUEDA PERO HAY QUE MODIFICARLO
+    /*useEffect (() => {
         if (shouldFetchProducts) {
             dispatch(fetchProductsAdmin({ token }));
             setShouldFetchProducts(false);
         }
-    }, [ dispatch, token, shouldFetchProducts ]);
+    }, [ dispatch, token, shouldFetchProducts ]);*/
 
-    const handleAddProduct = async (e) => {
+    useEffect(() => {
+        dispatch(fetchProductsAdmin({ token }));
+    }, [dispatch]);
+
+    // SE QUEDA PERO HAY QUE MODIFICARLO
+    /*const handleAddProduct = async (e) => {
         e.preventDefault()
         
         let prod = {...newProduct, productStock : convertProductStockArrayToObject(newProduct.productStock)}
-        await dispatch(createProduct({ newProduct: prod, token }));
+        dispatch(createProduct({ newProduct: prod, token }));
 
         setNewProduct({
             description: '',
@@ -56,33 +75,46 @@ const ProductPanel = ()=>{
         });
 
         setShouldFetchProducts(true);
+    }*/
+
+    const handleAddProduct = async (e) => {
+        e.preventDefault()
+        dispatch(createProduct({ newProduct, token }));
+        resetForm();
     }
 
-    const handleUpdateProduct = async (e) => {
+    // SE QUEDA PERO HAY QUE MODIFICARLO
+    /*const handleUpdateProduct = async (e) => {
         e.preventDefault()
 
         if (editingProduct) {
             let prod = {...editingProduct, productStock : convertProductStockArrayToObject(editingProduct.productStock)}
-            await dispatch(updateProduct({ product: prod, token }));
+            dispatch(updateProduct({ product: prod, token }));
             
             setEditingProduct(null)
             setShouldFetchProducts(true);
         }
+    }*/
+
+    const handleUpdateProduct = async (e) => {
+        e.preventDefault()
+        if (editingProduct) {
+            dispatch(updateProduct({ product: editingProduct, token }));
+            resetForm();
+        }
     }
 
+    // SE QUEDA PERO HAY QUE MODIFICARLO
     const startEditing = (product) => {
-        setEditingProduct({
-            ...product,
-            productStock: Array.isArray(product.productStock) ? product.productStock : [] // Asegúrate de que productStock sea un array
-        });
+        setEditingProduct(product);
     }
 
+    // SE QUEDA PERO HAY QUE MODIFICARLO
     const handleDeleteProduct = async (id) => {
-        await dispatch(deleteProduct({ id, token }));
-        setShouldFetchProducts(true);
-        console.log('id del product a eliminar ' + id);
+        dispatch(deleteProduct({ id, token }));
     }
 
+    /*
     const addSize = () => {
         if (newSize.size === '') return; // Asegúrate de que haya un tamaño seleccionado
         const sizeKey = newSize.size;
@@ -117,8 +149,9 @@ const ProductPanel = ()=>{
         }
         // Reinicia el campo de nuevo tamaño y stock
         setNewSize({ size: '', stock: 0 });
-    };
+    };*/
 
+    //SE QUEDA
     const addPhoto = () => {
         console.log("foto added", newPhoto);
         if(editingProduct){
@@ -134,7 +167,7 @@ const ProductPanel = ()=>{
         }
         setNewPhoto('')
     }
-    
+    /*
     const removeSize = (sizeToRemove) => {
         if (editingProduct) {
             // Filtra los tamaños para eliminar el que coincide con sizeToRemove
@@ -151,8 +184,9 @@ const ProductPanel = ()=>{
                 productStock: updatedStock // Actualiza el productStock sin el tamaño eliminado
             });
         }
-    };
+    };*/
 
+    //SE QUEDA
     const removePhoto = (index) => {
         if(editingProduct){
             setEditingProduct({
@@ -167,12 +201,42 @@ const ProductPanel = ()=>{
         }
     }
 
+    const addStock = () => {
+        if(!editingProduct) return;
+        const updatedSizes = {...editingProduct.productStock}
+        updatedSizes[stockUpdate.size] += stockUpdate.quantity;
+        setEditingProduct({ ...editingProduct, productStock: updatedSizes })
+        setStockUpdate({ size : SIZES[0], quantity : 0 });
+    }
+
+    const resetForm = () => {
+        setNewProduct({
+            description: '',
+            price: 0,
+            productStock: SIZES.reduce((acc, size) => ({ ...acc, [size]: 0 }), {}),
+            club: '',
+            league: '',
+            photos: [],
+            clientCategory: '',
+            typeOfProduct: '',
+            year: 0
+        });
+        setEditingProduct(null);
+        setStockUpdate({ size : SIZES[0], quantity : 0 })
+    }
+
+    const handleProductStockChange = (size, stock) => {
+        setEditingProduct({...editingProduct, 
+            productStock : { ...editingProduct.productStock, [size]: parseInt(stock) }})
+    }
+
+    /*
     const convertProductStockArrayToObject = (productStockArray) => {
         return productStockArray.reduce((acc, item) => {
             acc[item.size] = item.stock;
             return acc;
         }, {});
-    };
+    };*/
 
     return(
         <>
@@ -200,6 +264,7 @@ const ProductPanel = ()=>{
                         required/>
                     </div>
                     <div>
+                        {/*
                         <div className="size-stock">
 
                             <label>productStock and Stock</label>
@@ -225,7 +290,51 @@ const ProductPanel = ()=>{
                                         <button type="button" onClick={() => removeSize(index)} className="remove-size">x</button>
                                     </div>
                             ))}
-                        </div>
+                        </div>*/}
+                        {editingProduct ? 
+                        (
+                            <div className="size-stock">
+                                {SIZES.map(size => (
+                                    <div key={size}>
+                                        <label htmlFor="">{size}</label>
+                                        <p>{`Stock: ${editingProduct.productStock[size]}`}</p>
+                                    </div>
+                                ))}
+                                <label htmlFor="">Select Size</label>
+                                <select 
+                                    value={stockUpdate.size}
+                                    onChange={(e) => setStockUpdate({ ...stockUpdate, size: e.target.value })}
+                                >
+                                    {SIZES.map(size => (
+                                        <option key={size} value={size}>{size}</option>
+                                    ))}
+                                </select>
+                                <input 
+                                    type="number"
+                                    value={stockUpdate.quantity}
+                                    onChange={(e) => setStockUpdate({ ...stockUpdate, quantity: parseInt(e.target.value) || 0})} 
+                                />
+                                <button type="button" onClick={addStock}>Add Stock</button>
+                            </div>
+                        ) : 
+                        
+                        (
+                            <div className="size-stock">
+                                {SIZES.map(size => (
+                                    <div key={size}>
+                                        <label htmlFor="">{size}</label>
+                                        <input 
+                                            type="number"
+                                            value={newProduct.productStock[size]}
+                                            onChange={(e) => handleProductStockChange(size, e.target.value)}
+                                            min='0'
+                                            step='1'
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        )
+                        }
 
                         <div className="club">
                             <label>Club</label>
@@ -302,6 +411,7 @@ const ProductPanel = ()=>{
                         </div>
                     </div>
                     <button type="submit" className= "btn btn-outline-primary btn-sm">{editingProduct ? 'Update product' : 'Add product'}</button>
+                    {editingProduct && <button type="button" onClick={resetForm}>Cancel</button>}
                 </form>
                 <div className="product-list">
                     <h2>Product List</h2>
@@ -322,18 +432,21 @@ const ProductPanel = ()=>{
                         </thead>
                         <tbody>
                             {adminProducts.map((product, index)=>(
+                                <>
                                 <tr key={index}>
                                     <td>{product.description}</td>
                                     <td>${product.price.toFixed(2)}</td>
                                     <td>
-                                        {product.productStock && 
-                                            Object.entries(product.productStock).map(([size, stock], index) => (
-                                                <div key={index}>
-                                                {typeof size === 'object' ? JSON.stringify(size) : size}: 
-                                                {typeof stock === 'object' ? JSON.stringify(stock) : stock}
-                                                </div>
-                                            ))
-                                        }
+                                        {/*product.productStock.map((stock, index)=>(
+                                            <div key={index}>
+                                                <span>{stock.size}: {stock.stock}</span>
+                                            </div>
+                                        ))*/}
+                                        {SIZES.map(size => (
+                                            <div key={size}>
+                                                <span>{size}: {product.productStock[size]}</span>
+                                            </div>
+                                        ))}
                                     </td>
                                     <td>{product.club}</td>
                                     <td>{product.league}</td>
@@ -352,6 +465,9 @@ const ProductPanel = ()=>{
                                         <button onClick={()=>handleDeleteProduct(product.id)}>Delete</button>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td colSpan="10"><hr /></td>
+                                </tr></>
                             ))}
                         </tbody>
                     </table>
