@@ -27,29 +27,35 @@ const Navbar = () => {
             </div>
 
             <ul className={`nav-menu ${clicked ? 'active' : ''}`}>
-                <li > <Link to='/'>Home</Link> </li>
-                <li > <Link to='/men'>Men</Link>  </li>
-                <li > <Link to='/women'>Women</Link> </li>
-                <li > <Link to='/kids'>Kids</Link> </li>
-                <li > <Link to='/aboutUs'>About us</Link> </li>
+                {!isAdmin && ( 
+                <> 
+                    <li > <Link to='/'>Home</Link> </li>
+                    <li > <Link to='/men'>Men</Link>  </li>
+                    <li > <Link to='/women'>Women</Link> </li>
+                    <li > <Link to='/kids'>Kids</Link> </li>
+                    <li > <Link to='/aboutUs'>About us</Link> </li>
+                </>)}
             </ul>
 
             <div className="right1">
-                {/*<div className='search'> <img src= {search} alt="search"/> </div>*/}
-                <div className='cart'> 
-                    {isAuthenticated ? <Link to='/cart'><img src={cart} alt="cart"/></Link> : <Link to='/login'><img src={cart} alt="cart"/></Link>}
-                </div>
-                <div className='nav-cart-count'> {isAuthenticated ? totalQuantity : 0 }</div>
-                <div className="profile"> 
-                    {isAuthenticated ? <Link to='/profile'> <img src={profile} alt="profile" /> </Link> : <></>}
-                </div>
+                {!isAdmin && (
+                    <>
+                        <div className='cart'>
+                            {isAuthenticated ? <Link to='/cart'><img src={cart} alt="cart" /></Link> : <Link to='/login'><img src={cart} alt="cart" /></Link>}
+                        </div>
+                        <div className='nav-cart-count'>{isAuthenticated ? totalQuantity : 0}</div>
+                        <div className="profile">
+                            {isAuthenticated ? <Link to='/profile'><img src={profile} alt="profile" /></Link> : <></>}
+                        </div>
+                    </>
+                )}
                 <div className="boton-login">
-                {isAuthenticated ? <LogoutButton/> : <Link to='/login'> <button>Login</button> </Link>} 
+                    {isAuthenticated ? <LogoutButton/> : <Link to='/login'> <button>Login</button> </Link>} 
                 </div>
             </div>
 
             <div className='burger'>
-            <   BurgerButtom clicked={clicked} handleClick={handleClick} />
+                <BurgerButtom clicked={clicked} handleClick={handleClick} />
             </div>
             <div className={`bg-div ${clicked ? 'active' : ''}`}></div>
         </div>
