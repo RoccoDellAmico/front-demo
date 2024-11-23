@@ -2,7 +2,6 @@ import React , { useContext , useState , useEffect } from "react";
 import './CartItems.css';
 //import { ShopContext } from "../../Context/ShopContext";
 import remove_icon from '../../assets/close.svg'
-import { Link } from 'react-router-dom'
 import update_icon from '../../assets/update.svg'
 import arrow_down from '../../assets/arrow_down.svg'
 import arrow_up from '../../assets/arrow_up.svg'
@@ -34,7 +33,11 @@ const CartItems = () => {
         dispatch(getCartById({id, token})).unwrap();
         dispatch(getTotal({token})).unwrap();
     }, [dispatch, id, token])
-        
+    
+    useEffect(() => {
+        dispatch(getTotal({ token })).unwrap();
+    }, [cartItems, dispatch, token]);
+
     const handleProceedToCheckout = (e) => {
         if (cartItems.length === 0) {
             e.preventDefault();
@@ -168,10 +171,7 @@ const CartItems = () => {
                             <h3> ${total} </h3>
                         </div>
                     </div>
-                                    <div>
-                    {/*<Link to='/checkout' onClick={handleProceedToCheckout}>
-                        <button>PROCEED TO CHECKOUT</button>
-                    </Link>*/}
+                    <div>
                     <button onClick={handleProceedToCheckout}>PROCEED TO CHECKOUT</button>
                 </div>
                 </div>

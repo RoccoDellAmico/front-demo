@@ -25,6 +25,61 @@
 .filters {
     flex: 1;
     padding: 15px;
+    background-color: ghostwhite;
+    height: auto;
+    width: auto;
+}
+
+.filters input {
+    width: 200px;
+    padding: 10px;
+    border-radius: 10px;
+    margin-left: 20px;
+}
+
+.filters .type{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: auto;
+}
+
+.filters .type button {
+    margin-left: 20px;
+    width: 150px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.filters .size .talles{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-left: none;
+    width: 430px;
+}
+
+.filters .size .talles button{
+    margin-left: 20px;
+    gap: 4px;
+    padding: 10px;
+    border-radius: 10px;
+    width: 90px;
+    margin-bottom: 10px;
+    margin-left: none;
+}
+
+.filters .apply-clear {
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.filters .apply-clear button {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    width: 400px;
+    color: white;
+    background-color: darkslategrey;
 }
 
 .filtered-products {
@@ -33,7 +88,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    justify-content: flex-start; 
+    justify-content: center; 
 }
 
 .filtered-products img {
