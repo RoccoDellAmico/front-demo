@@ -14,7 +14,7 @@ const AdminPanel = ()=>{
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("products");
-    const { isAuthenticated, isAdmin } = useSelector(state => state.auth);
+    const {  isAdmin } = useSelector(state => state.auth);
 
     if(!isAdmin){
         return <ErrorPage/>

@@ -209,6 +209,15 @@ const ProductPanel = ()=>{
         setStockUpdate({ size : SIZES[0], quantity : 0 });
     }
 
+    const substractStock = () => {
+        if(!editingProduct) return;
+        const updatedSizes = {...editingProduct.productStock}
+        if(updatedSizes[stockUpdate.size] < stockUpdate.quantity) return;
+        updatedSizes[stockUpdate.size] -= stockUpdate.quantity;
+        setEditingProduct({ ...editingProduct, productStock: updatedSizes })
+        setStockUpdate({ size : SIZES[0], quantity : 0 });
+    }
+
     const resetForm = () => {
         setNewProduct({
             description: '',
@@ -315,6 +324,7 @@ const ProductPanel = ()=>{
                                     onChange={(e) => setStockUpdate({ ...stockUpdate, quantity: parseInt(e.target.value) || 0})} 
                                 />
                                 <button type="button" onClick={addStock}>Add Stock</button>
+                                <button type="button" onClick={substractStock}>Substract Stock</button>
                             </div>
                         ) : 
                         
