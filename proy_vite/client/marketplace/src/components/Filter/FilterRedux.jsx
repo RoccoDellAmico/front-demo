@@ -50,7 +50,7 @@ const FilterRedux = () => {
     return (
         <div className="filter-container">
             <div className="filters">
-            <h2>Look for a kit</h2>
+                <h2>Look for a kit</h2>
                 <div>
                     <h3>Club or country</h3>
                     <input 
@@ -78,20 +78,24 @@ const FilterRedux = () => {
                     value={league}
                     onChange={(e) => setLeague(e.target.value)}/>
                 </div>
-                <div>
+                <div className='type'>
                     <h3>Type of Product</h3>
                     {['HOME', 'AWAY', 'THIRD', 'GOALKEEPER'].map(typeOption => (
                         <button key={typeOption} onClick={() => handleTypeOfProductClick(typeOption)}>{typeOption}</button>
                     ))}
                 </div>
-                <div>
+                <div className='size'>
                     <h3>Size</h3>
-                    {['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].map(sizeOption => (
-                        <button key={sizeOption} onClick={() => handleSizeClick(sizeOption)}>{sizeOption}</button>
-                    ))}
+                    <div className="talles"> 
+                        {['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].map(sizeOption => (
+                            <button key={sizeOption} onClick={() => handleSizeClick(sizeOption)}>{sizeOption}</button>
+                        ))}
+                    </div>
                 </div>
-                <button onClick={handleApplyFilters}>Search</button>
-                <button onClick={handleClearFilters}>Clear</button>
+                <div className="apply-clear">                
+                    <button onClick={handleApplyFilters}>Apply Filters</button>
+                    <button onClick={handleClearFilters}>Clear Filters</button>
+                </div>
             </div>
             <div className="filtered-products">
                 {filteredProducts.map(product => (
