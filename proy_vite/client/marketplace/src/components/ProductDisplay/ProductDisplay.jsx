@@ -105,7 +105,6 @@ const ProductDisplay = (props) => {
                     </div>
                 </div>
                 <button onClick={() => handleAddToCart(product.id)}>ADD TO CART</button>
-                {showError && <p className="error-message">{errorMessage}</p>}
                 {showPopup && (
                     <div className="popup">
                         <p>Product added to cart</p>
