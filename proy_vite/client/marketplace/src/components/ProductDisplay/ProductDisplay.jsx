@@ -16,9 +16,7 @@ const ProductDisplay = (props) => {
 
     const [selectedSize, setSelectedSize] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
-    const [showError, setShowError] = useState(false);
     const [mainImage, setMainImage] = useState(product.photos[0]);
-    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,7 +25,6 @@ const ProductDisplay = (props) => {
 
     const handleSizeSelect = (size) => {
         setSelectedSize(size);
-        setShowError(false);
     };
 
     const handleAddToCart = async (productId) => {
@@ -43,19 +40,9 @@ const ProductDisplay = (props) => {
                     setTimeout(() => {
                         setShowPopup(false);
                     }, 1500);
-                } else {
-                    setErrorMessage("No hay stock para el talle solicitado.");
-                    setShowError(true);
-                    setTimeout(() => {
-                        setShowError(false);
-                    }, 2000);
                 }
             } catch (error) {
-                setErrorMessage("No hay stock para el talle solicitado.");
-                setShowError(true);
-                setTimeout(() => {
-                    setShowError(false);
-                }, 2000);
+                console.error("Error adding product to cart:", error);
             }
         } else {
             setErrorMessage("Please select a size");
@@ -110,6 +97,7 @@ const ProductDisplay = (props) => {
                                 key={size}
                                 onClick={() => handleSizeSelect(size)}
                                 className={selectedSize === size ? 'selected' : ''}
+                                style={{ pointerEvents: product.productStock[size] > 0 ? 'auto' : 'none', opacity: product.productStock[size] > 0 ? 1 : 0.3 }}
                             >
                                 {size}
                             </div>

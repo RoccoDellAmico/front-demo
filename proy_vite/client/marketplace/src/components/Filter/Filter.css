@@ -49,6 +49,7 @@
     width: 150px;
     padding: 10px;
     border-radius: 10px;
+    cursor: pointer;
 }
 
 .filters .size .talles{
@@ -66,11 +67,13 @@
     width: 90px;
     margin-bottom: 10px;
     margin-left: none;
+    cursor: pointer;
 }
 
 .filters .apply-clear {
     display: inline-block;
     margin-top: 20px;
+    cursor: pointer;
 }
 
 .filters .apply-clear button {
@@ -80,6 +83,7 @@
     width: 400px;
     color: white;
     background-color: darkslategrey;
+    cursor: pointer;
 }
 
 .filtered-products {
