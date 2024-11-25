@@ -243,9 +243,18 @@ const ProductPanel = ()=>{
     }
 
     const handleProductStockChange = (size, stock) => {
-        setEditingProduct({...editingProduct, 
-            productStock : { ...editingProduct.productStock, [size]: parseInt(stock) }})
-    }
+        if (editingProduct) {
+            setEditingProduct({
+                ...editingProduct,
+                productStock: { ...editingProduct.productStock, [size]: parseInt(stock) }
+            });
+        } else {
+            setNewProduct({
+                ...newProduct,
+                productStock: { ...newProduct.productStock, [size]: parseInt(stock) }
+            });
+        }
+    };
 
     /*
     const convertProductStockArrayToObject = (productStockArray) => {
