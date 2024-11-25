@@ -70,7 +70,6 @@ const FilterRedux = () => {
                         value={priceRange} 
                         onChange={(e) => setPriceRange(e.target.value)} 
                     />
-                    {/*<span>${priceRange}</span>*/}
                 </div>
                 <div>
                     <h3>League</h3>

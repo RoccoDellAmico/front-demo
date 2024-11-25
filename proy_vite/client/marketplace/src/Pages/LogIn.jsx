@@ -45,7 +45,7 @@ const Login = () => {
                 {errorMessage && <p className="error-message">{errorMessage}</p>}
                 <button type={"submit"} onClick={handleSubmit}>Continue</button>
                 <p className="login-forgot-pw">Forgot your password? <span>Click here</span> </p>
-                <p className="login-forgot-pw">Don't have an account? <Link to='/signup'><span>Sign up</span></Link> </p>
+                <p className="login-forgot-pw">Don't have an account? <Link to='/signUp'><span>Sign up</span></Link> </p>
             </div>
         </div>
     );
