@@ -49,9 +49,9 @@ const PaymentItem = () => {
             setTimeout(() => {
                 setShowPopup(false);
                 dispatch(clearCart({ token }));
-                navigate('/');
             }, 2000);
             dispatch(placeOrder({ cartId, token }));
+            navigate('/finishPurchase');
         }
     };
 

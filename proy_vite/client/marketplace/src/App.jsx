@@ -19,6 +19,7 @@ import AdminPanel from './Pages/AdminPanel';
 import Profile from './Pages/Profile';
 import ErrorPage from './Pages/ErrorPage';
 import Suggestion from './Pages/Suggestion';
+import FinishPurchase from './Pages/finishPurchase';
 
 
 const App = () => {
@@ -40,6 +41,7 @@ const App = () => {
         <Route path='/admin' element={<AdminPanel/>}/>
         <Route path='/profile' element={<Profile/>}/>
         <Route path='/suggestion' element={<Suggestion/>}/>
+        <Route path='/finishPurchase' element={<FinishPurchase/>}/>
         <Route path="*" element={<ErrorPage />} />
       </Routes>
       <Footer/>
