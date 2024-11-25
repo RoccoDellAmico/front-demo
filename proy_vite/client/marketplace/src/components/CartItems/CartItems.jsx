@@ -32,11 +32,12 @@ const CartItems = () => {
     useEffect(() => {
         dispatch(getCartById({id, token})).unwrap();
         dispatch(getTotal({token})).unwrap();
-    }, [dispatch, id, token])
+    }, [dispatch, discountCode])
     
-    useEffect(() => {
+    //, id, token, total, cartItems
+    /*useEffect(() => {
         dispatch(getTotal({ token })).unwrap();
-    }, [cartItems, dispatch, token]);
+    }, [cartItems, dispatch, token]);*/
 
     const handleProceedToCheckout = (e) => {
         if (cartItems.length === 0) {
