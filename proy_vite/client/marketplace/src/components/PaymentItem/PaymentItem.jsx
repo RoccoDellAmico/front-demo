@@ -1,6 +1,5 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-//import { ShopContext } from '../../Context/ShopContext';
 import visa from '../../assets/tarjetas/visa.svg'
 import amex from '../../assets/tarjetas/amex.svg'
 import maestro from '../../assets/tarjetas/maestro.svg'
