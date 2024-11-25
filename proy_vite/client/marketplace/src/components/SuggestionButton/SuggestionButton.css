@@ -1,0 +1,13 @@
+.suggestion-container {
+    text-align: center;
+    margin: 20px;
+}
+
+.suggestion-container p {
+    margin-bottom: 10px;
+}
+
+.suggestion-container button {
+    padding: 10px 20px;
+    cursor: pointer;
+}
