@@ -34,9 +34,9 @@ const LoginSignup =() => {
             <div className="loginsignup-container">
                 <h1>Sign Up</h1>
                 <div className="loginsignup-fields">
-                    <input type="text" placeholder='Your First Name' value={firstName} 
+                    <input type="text" placeholder='Your First Name' value={firstname} 
                         onChange={(e) => setFirstName(e.target.value)}/>
-                    <input type="text" placeholder='Your Last Name' value={lastName}
+                    <input type="text" placeholder='Your Last Name' value={lastname}
                         onChange={(e) => setLastName(e.target.value)}/>
                     <input type="email" placeholder='Email Address' value={email}
                         onChange={(e) => setEmail(e.target.value)}/>

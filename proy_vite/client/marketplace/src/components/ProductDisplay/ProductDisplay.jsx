@@ -16,6 +16,7 @@ const ProductDisplay = (props) => {
 
     const [selectedSize, setSelectedSize] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
+    const [showError, setShowError] = useState(false);
     const [mainImage, setMainImage] = useState(product.photos[0]);
     const navigate = useNavigate();
 
@@ -45,7 +46,6 @@ const ProductDisplay = (props) => {
                 console.error("Error adding product to cart:", error);
             }
         } else {
-            setErrorMessage("Please select a size");
             setShowError(true);
             setTimeout(() => {
                 setShowError(false);
@@ -105,6 +105,7 @@ const ProductDisplay = (props) => {
                     </div>
                 </div>
                 <button onClick={() => handleAddToCart(product.id)}>ADD TO CART</button>
+                {showError && <p className="error-message">Please, select a size</p>}
                 {showPopup && (
                     <div className="popup">
                         <p>Product added to cart</p>

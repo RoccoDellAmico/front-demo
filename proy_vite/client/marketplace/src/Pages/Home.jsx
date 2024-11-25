@@ -5,7 +5,7 @@ import FilterRedux from '../components/Filter/FilterRedux';
 import banner_home from '../assets/BANNER-HOME.png';
 import Filter from '../components/Filter/Filter';
 import './CSS/Home.css';
-
+import SuggestionButton from '../components/SuggestionButton/SuggestionButton';
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -18,8 +18,7 @@ const Home = () => {
         <div>
             <img className='banner' src={banner_home} alt="" />
             <FilterRedux />
-            {/*<Filter />*/}
-            {/*<Popular/>*/}
+            <SuggestionButton />
         </div>
     );
 };
