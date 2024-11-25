@@ -1,6 +1,5 @@
-import React, { useState , useContext, useEffect } from "react";
+import React, { useState , useEffect } from "react";
 import "./CSS/Profile.css";
-import { ShopContext } from "../Context/ShopContext";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrdersByUser } from "../redux/OrderSlice";
@@ -8,39 +7,15 @@ import { getUserById } from "../redux/UserSlice";
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState("personal-info");
-    //const {getOrdersById, getUserById} = useContext(ShopContext);
-    //const [orders, setOrders] = useState([]);
-    //const [user, setUser] = useState({});
     const dispatch = useDispatch();
     const { id, token } = useSelector((state) => state.auth);
     const { user } = useSelector((state) => state.user);
     const { ordersByUser } = useSelector((state) => state.order);
 
-    /*useEffect(() => {
-        const fetchOrdenes = async () => {
-            const ordenes = await getorderByUserById();
-            setOrders(ordenes);
-        };
-        const fetchUser = async () => {
-            const user = await getUserById();
-            setuser(user);
-        }
-
-        fetchUser();
-        fetchOrdenes();
-    },[])*/
-
     useEffect(() => {
         dispatch(getUserById({id, token})).unwrap();
         dispatch(getOrdersByUser({id, token})).unwrap();
     },[dispatch, id, token])
-
-    // Mock data
-    const mockUser = {
-        name: "John Doe",
-        email: "john.doe@example.com",
-        avatar: "/placeholder.svg?height=100&width=100",
-    };
 
     return (
         <div className="container">
@@ -83,19 +58,6 @@ const Profile = () => {
                     </ul>
                 </div>
                 )}
-
-                {/*activeTab === "cart" && (
-                <div>
-                    <h2>My Cart</h2>
-                    <ul>
-                    {cartItems.map((item) => (
-                        <li key={item.id}>
-                        {item.item} - ${item.price.toFixed(2)}
-                        </li>
-                    ))}
-                    </ul>
-                </div>
-                )*/}
             </div>
         </div>
     );

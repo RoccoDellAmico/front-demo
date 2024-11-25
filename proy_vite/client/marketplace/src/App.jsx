@@ -1,6 +1,6 @@
 import Navbar from './components/Navbar/Navbar';
 import React from 'react';
-import {BrowserRouter,Routes, Route} from "react-router-dom";
+import {Routes, Route} from "react-router-dom";
 import Home from './Pages/Home';
 import ShopCategory from './Pages/ShopCategory';
 import AboutUs from './Pages/AboutUs';
@@ -8,9 +8,6 @@ import Cart from './Pages/Cart';
 import LoginSignup from './Pages/LoginSignup';
 import Product from './Pages/Product';
 import Footer from './components/Footer/Footer';
-import men_banner from './assets/banner_mens.png';
-import women_banner from './assets/banner_women.png';
-import kid_banner from './assets/banner_kids.png';
 import new_men_banner from './assets/BANNER-MEN.png';
 import new_women_banner from './assets/BANNER-WOMEN.png';
 import new_kids_banner from './assets/BANNER-KIDS.png';

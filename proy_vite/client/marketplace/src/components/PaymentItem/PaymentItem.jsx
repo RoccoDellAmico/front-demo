@@ -18,9 +18,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { placeOrder } from "../../redux/OrderSlice";
 import { clearCart } from "../../redux/CartSlice";
 
-
-
-
 const PaymentItem = () => {
 
     const [numeroTarjeta, setNumeroTarjeta] = useState('');

@@ -4,7 +4,6 @@ import Item from "../Item/Item";
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProducts } from '../../redux/ProductSlice';
 
-
 const RelatedProducts = (props) => {
 
     const dispatch = useDispatch();
