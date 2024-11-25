@@ -201,9 +201,16 @@ const ProductPanel = ()=>{
         }
     }
 
+    const ensureSizeDefined = (sizes, size) => {
+        if (sizes[size] === undefined) {
+            sizes[size] = 0;
+        }
+    };
+
     const addStock = () => {
         if(!editingProduct) return;
         const updatedSizes = {...editingProduct.productStock}
+        ensureSizeDefined(updatedSizes, stockUpdate.size);
         updatedSizes[stockUpdate.size] += stockUpdate.quantity;
         setEditingProduct({ ...editingProduct, productStock: updatedSizes })
         setStockUpdate({ size : SIZES[0], quantity : 0 });
@@ -212,6 +219,7 @@ const ProductPanel = ()=>{
     const substractStock = () => {
         if(!editingProduct) return;
         const updatedSizes = {...editingProduct.productStock}
+        ensureSizeDefined(updatedSizes, stockUpdate.size);
         if(updatedSizes[stockUpdate.size] < stockUpdate.quantity) return;
         updatedSizes[stockUpdate.size] -= stockUpdate.quantity;
         setEditingProduct({ ...editingProduct, productStock: updatedSizes })
