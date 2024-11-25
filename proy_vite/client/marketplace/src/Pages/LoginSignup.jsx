@@ -1,33 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './CSS/LoginSignup.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signup } from '../redux/AuthSlice';
+import { createCart } from '../redux/CartSlice';
 
 const LoginSignup =() => {
-    const [firstname, setFirstname] = useState('');
-    const [lastname, setLastname] = useState('');
+    const [firstname, setFirstName] = useState('');
+    const [lastname, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const auth = useSelector((state) => state.auth);
+    const { isAuthenticated, id, token } = useSelector((state) => state.auth);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            await dispatch(signup({ firstname, lastname, email, password })).unwrap();
-            if (auth.isAdmin) {
-                navigate('/admin');
-            } else {
-                navigate('/');
-            }
-        } catch (error) {
-            console.error('Failed signup', error);
-            setErrorMessage('There was an error with your signup.');
-        }
+        await dispatch(signup({ firstname, lastname, email, password })).unwrap();
+        navigate('/');
     };
+
+    useEffect(() => {
+        if (isAuthenticated){
+            dispatch(createCart({ id, token }));
+        }
+    }, [dispatch, isAuthenticated])
 
     return (
         <div className='loginsignup'>
