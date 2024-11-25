@@ -1,41 +1,23 @@
-import React, { useState , useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './UserPanel.css';
-import UserService from "../../services/UserService";
 import { useDispatch, useSelector } from 'react-redux';
 import { getUsers } from '../../redux/UserSlice';
 
 const UserPanel = () => {
-
-    //const [users, setUsers] = useState([]);
-    //const [loading, setLoading] = useState(true); // Add loading state
-    //const [error, setError] = useState(null); // Add error state
     const dispatch = useDispatch();
     const { token } = useSelector(state => state.auth);
     const { users, error, loading } = useSelector(state => state.user);
-
-    /*useEffect( () => {
-        UserService.getUsers()
-        .then(response => {
-            setUsers(response.data || []);
-            console.log(response.data);
-            setLoading(false);
-        }).catch(error => {
-            console.log(error);
-            setError('Failed to fetch users');
-            setLoading(false);
-        })
-    },[])*/
 
     useEffect( () => {
         dispatch(getUsers({ token }))
     },[dispatch])
 
     if (loading) {
-        return <p>Loading users...</p>; // Display loading message while fetching
+        return <p>Loading users...</p>; 
     }
 
     if (error) {
-        return <p>{error}</p>; // Display error message if fetching fails
+        return <p>{error}</p>; 
     }
 
 

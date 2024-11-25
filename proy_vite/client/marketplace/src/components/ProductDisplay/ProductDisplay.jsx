@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import star_icon from '../../assets/star_icon.png';
 import star_icon_dull from '../../assets/star_dull_icon.png';
-import ShopCategory from "../../Pages/ShopCategory";
 import './ProductDisplay.css';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";

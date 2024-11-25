@@ -11,19 +11,6 @@ const ProductPanel = ()=>{
     const dispatch = useDispatch();
     const { token } = useSelector((state) => state.auth);
     const { adminProducts } = useSelector((state) => state.product);
-
-    /*const [newProduct, setNewProduct] = useState({
-        description: '',
-        price: 0,
-        productStock: [], // Cambia a un objeto
-        club: '',
-        league: '',
-        photos: [],
-        clientCategory: '',
-        typeOfProduct: '',
-        year: 0
-    });*/
-
     const [newProduct, setNewProduct] = useState({
         description: '',
         price: 0,
@@ -35,66 +22,19 @@ const ProductPanel = ()=>{
         typeOfProduct: '',
         year: 0
     })
-
-
     const[editingProduct, setEditingProduct] = useState(null);
-    //const[newSize, setNewSize] = useState({size : '', stock : 0});
     const [stockUpdate, setStockUpdate] = useState({ size : SIZES[0], quantity : 0 });
     const[newPhoto, setNewPhoto] = useState('');
-    //const [shouldFetchProducts, setShouldFetchProducts] = useState(true);
-
-    // SE QUEDA PERO HAY QUE MODIFICARLO
-    /*useEffect (() => {
-        if (shouldFetchProducts) {
-            dispatch(fetchProductsAdmin({ token }));
-            setShouldFetchProducts(false);
-        }
-    }, [ dispatch, token, shouldFetchProducts ]);*/
 
     useEffect(() => {
         dispatch(fetchProductsAdmin({ token }));
     }, [dispatch]);
-
-    // SE QUEDA PERO HAY QUE MODIFICARLO
-    /*const handleAddProduct = async (e) => {
-        e.preventDefault()
-        
-        let prod = {...newProduct, productStock : convertProductStockArrayToObject(newProduct.productStock)}
-        dispatch(createProduct({ newProduct: prod, token }));
-
-        setNewProduct({
-            description: '',
-            price: 0,
-            productStock: [], // Cambia a un objeto
-            league: '',
-            club: '',
-            photos: [],
-            clientCategory: '',
-            typeOfProduct: '',
-            year: 0
-        });
-
-        setShouldFetchProducts(true);
-    }*/
 
     const handleAddProduct = async (e) => {
         e.preventDefault()
         dispatch(createProduct({ newProduct, token }));
         resetForm();
     }
-
-    // SE QUEDA PERO HAY QUE MODIFICARLO
-    /*const handleUpdateProduct = async (e) => {
-        e.preventDefault()
-
-        if (editingProduct) {
-            let prod = {...editingProduct, productStock : convertProductStockArrayToObject(editingProduct.productStock)}
-            dispatch(updateProduct({ product: prod, token }));
-            
-            setEditingProduct(null)
-            setShouldFetchProducts(true);
-        }
-    }*/
 
     const handleUpdateProduct = async (e) => {
         e.preventDefault()
@@ -104,54 +44,14 @@ const ProductPanel = ()=>{
         }
     }
 
-    // SE QUEDA PERO HAY QUE MODIFICARLO
     const startEditing = (product) => {
         setEditingProduct(product);
     }
 
-    // SE QUEDA PERO HAY QUE MODIFICARLO
     const handleDeleteProduct = async (id) => {
         dispatch(deleteProduct({ id, token }));
     }
 
-    /*
-    const addSize = () => {
-        if (newSize.size === '') return; // Asegúrate de que haya un tamaño seleccionado
-        const sizeKey = newSize.size;
-        const sizeValue = newSize.stock;
-    
-        if (editingProduct) {
-            const updatedProductStock = [...editingProduct.productStock];
-            const existingSizeIndex = updatedProductStock.findIndex(stock => stock.size === sizeKey);
-    
-            if (existingSizeIndex >= 0) {
-                // Actualiza el stock si el tamaño ya existe
-                updatedProductStock[existingSizeIndex].stock = sizeValue;
-            } else {
-                // Agrega un nuevo par size: stock si no existe
-                updatedProductStock.push({ size: sizeKey, stock: sizeValue });
-            }
-    
-            setEditingProduct({ ...editingProduct, productStock: updatedProductStock });
-        } else {
-            const updatedProductStock = [...newProduct.productStock];
-            const existingSizeIndex = updatedProductStock.findIndex(stock => stock.size === sizeKey);
-    
-            if (existingSizeIndex >= 0) {
-                // Actualiza el stock si el tamaño ya existe
-                updatedProductStock[existingSizeIndex].stock = sizeValue;
-            } else {
-                // Agrega un nuevo par size: stock si no existe
-                updatedProductStock.push({ size: sizeKey, stock: sizeValue });
-            }
-    
-            setNewProduct({ ...newProduct, productStock: updatedProductStock });
-        }
-        // Reinicia el campo de nuevo tamaño y stock
-        setNewSize({ size: '', stock: 0 });
-    };*/
-
-    //SE QUEDA
     const addPhoto = () => {
         console.log("foto added", newPhoto);
         if(editingProduct){
@@ -167,26 +67,7 @@ const ProductPanel = ()=>{
         }
         setNewPhoto('')
     }
-    /*
-    const removeSize = (sizeToRemove) => {
-        if (editingProduct) {
-            // Filtra los tamaños para eliminar el que coincide con sizeToRemove
-            const updatedStock = editingProduct.productStock.filter((stock) => stock.size !== sizeToRemove);
-            setEditingProduct({
-                ...editingProduct,
-                productStock: updatedStock // Actualiza el productStock sin el tamaño eliminado
-            });
-        } else {
-            // Filtra los tamaños para eliminar el que coincide con sizeToRemove
-            const updatedStock = newProduct.productStock.filter((stock) => stock.size !== sizeToRemove);
-            setNewProduct({
-                ...newProduct,
-                productStock: updatedStock // Actualiza el productStock sin el tamaño eliminado
-            });
-        }
-    };*/
-
-    //SE QUEDA
+    
     const removePhoto = (index) => {
         if(editingProduct){
             setEditingProduct({
@@ -256,14 +137,6 @@ const ProductPanel = ()=>{
         }
     };
 
-    /*
-    const convertProductStockArrayToObject = (productStockArray) => {
-        return productStockArray.reduce((acc, item) => {
-            acc[item.size] = item.stock;
-            return acc;
-        }, {});
-    };*/
-
     return(
         <>
             <div className="product-panel">
@@ -290,33 +163,6 @@ const ProductPanel = ()=>{
                         required/>
                     </div>
                     <div>
-                        {/*
-                        <div className="size-stock">
-
-                            <label>productStock and Stock</label>
-                            <select value={newSize.size} onChange={(e)=>setNewSize({...newSize, size : e.target.value})}>
-                                <option value="">Size</option>
-                                <option value="XS">XS</option>
-                                <option value="S">S</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                                <option value="XXL">XXL</option>
-                                <option value="XXXL">XXXL</option>
-                            </select>
-                            <input type="number" step="1" placeholder="Stock"  min='0'
-                                value={newSize.stock}
-                                onChange={(e) => setNewSize({ ...newSize, stock: parseInt(e.target.value) })}
-                            />
-                            <button type="button" onClick={addSize}>+</button>
-                            {(Array.isArray(editingProduct ? editingProduct.productStock : newProduct.productStock) ? 
-                                (editingProduct ? editingProduct.productStock : newProduct.productStock) : []).map((size, index) => (
-                                    <div key={index} className="size-item">
-                                        <span>{size.size}: {size.stock}</span>
-                                        <button type="button" onClick={() => removeSize(index)} className="remove-size">x</button>
-                                    </div>
-                            ))}
-                        </div>*/}
                         {editingProduct ? 
                         (
                             <div className="size-stock">
@@ -464,11 +310,6 @@ const ProductPanel = ()=>{
                                     <td>{product.description}</td>
                                     <td>${product.price.toFixed(2)}</td>
                                     <td>
-                                        {/*product.productStock.map((stock, index)=>(
-                                            <div key={index}>
-                                                <span>{stock.size}: {stock.stock}</span>
-                                            </div>
-                                        ))*/}
                                         {SIZES.map(size => (
                                             <div key={size}>
                                                 <span>{size}: {product.productStock[size]}</span>
