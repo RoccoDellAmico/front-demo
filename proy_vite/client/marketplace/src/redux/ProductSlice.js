@@ -112,7 +112,7 @@ const productSlice = createSlice({
                 state.loading = false;
             })
             .addCase(createProduct.fulfilled, (state, action) => {
-                state.adminProducts.push(action.payload.newProduct);
+                state.adminProducts.push({ ...action.payload.newProduct, id: action.payload.data.id });
                 state.products.push(action.payload.data);
             })
             .addCase(updateProduct.fulfilled, (state, action) => {
