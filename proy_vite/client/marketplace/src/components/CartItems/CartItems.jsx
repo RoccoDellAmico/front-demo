@@ -1,8 +1,6 @@
 import React , { useContext , useState , useEffect } from "react";
 import './CartItems.css';
-//import { ShopContext } from "../../Context/ShopContext";
 import remove_icon from '../../assets/close.svg'
-import update_icon from '../../assets/update.svg'
 import arrow_down from '../../assets/arrow_down.svg'
 import arrow_up from '../../assets/arrow_up.svg'
 import { useDispatch, useSelector } from "react-redux";
@@ -10,9 +8,7 @@ import { getCartById, clearCart, removeProductFromCart } from "../../redux/CartS
 import { applyDiscountCode , addOneProductToCart , substractOneProduct, getTotal } from "../../redux/CartSlice";
 import { useNavigate } from "react-router-dom";
 const CartItems = () => {
-    //const {updateProductQuantity,cart,getTotalCartAmount,setLoading, getCartByID} = useContext(ShopContext);
-    const [totalAmount, setTotalAmount] = useState(0);
-    const [newQuantity, setNewQuantity] = useState(0);
+    
     const [promo, setPromo] = useState('');
     const dispatch = useDispatch();
     const { cartItems, discountCode, total } = useSelector((state) => state.cart);
@@ -20,24 +16,11 @@ const CartItems = () => {
     const [showPopup, setShowPopup] = useState(false);
     const navigate = useNavigate();
 
-    /*useEffect(() => {
-        const fetchCart = async () => {
-            const carrito = await CartService.getCartById(localStorage.getItem('userId'));
-            console.log('BOCA ',carrito.cartProducts);
-            setCarts(carrito.cartProducts);
-        }
-        fetchCart();
-    },[cart])*/
-
     useEffect(() => {
         dispatch(getCartById({id, token})).unwrap();
         dispatch(getTotal({token})).unwrap();
     }, [dispatch, discountCode])
     
-    //, id, token, total, cartItems
-    /*useEffect(() => {
-        dispatch(getTotal({ token })).unwrap();
-    }, [cartItems, dispatch, token]);*/
 
     const handleProceedToCheckout = (e) => {
         if (cartItems.length === 0) {
@@ -51,52 +34,14 @@ const CartItems = () => {
         }
     };
 
-    /*useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await ProductService.getAllProducts();
-                setProducts(response.data);
-                console.log(response.data);
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        const fetchTotalAmount = async () => {
-            const amount = await getTotalCartAmount();
-            console.log('TOTAL AMOUNT',amount);
-            setTotalAmount(amount);
-        };
-
-        fetchProducts();
-        fetchTotalAmount();
-    }, [getTotalCartAmount]);
-
-    useEffect(() => {
-        const fetchCart = async () => {
-            const carrito = await CartService.getCartById(localStorage.getItem('userId'));
-            console.log('BOCA ',carrito.cartProducts);
-            setCarts(carrito.cartProducts);
-        }
-
-        const fetchTotalAmount = async () => {
-            const amount = await getTotalCartAmount();
-            console.log('TOTAL AMOUNT',amount);
-            setTotalAmount(amount);
-        };
-
-        fetchTotalAmount();
-        fetchCart();
-    },[])*/
-
-    const handleSubstractOneProduct = (size, id) => {
-        dispatch(substractOneProduct({size, productId: id, token}));
+    const handleSubstractOneProduct = async (size, id) => {
+        await dispatch(substractOneProduct({size, productId: id, token}));
+        await dispatch(getTotal({token})).unwrap();
     }
 
-    const handleAddOneProduct = (size, id) => {
-        dispatch(addOneProductToCart({size, productId: id, token}));
+    const handleAddOneProduct = async (size, id) => {
+        await dispatch(addOneProductToCart({size, productId: id, token}));
+        await dispatch(getTotal({token})).unwrap();
     }
 
     const handleRemoveFromCart = (id) => {
@@ -111,7 +56,6 @@ const CartItems = () => {
         dispatch(applyDiscountCode({code: promo, token}));
     };
 
-
     return (
         <div className="cartitems">
             <div className="cartitems-format-main">
@@ -121,7 +65,6 @@ const CartItems = () => {
                 <p>Size</p>
                 <p>Quantity</p>
                 <p>Total</p>
-                <p>Update</p>
                 <p>Remove</p>
             </div>
             <hr/>
@@ -135,13 +78,12 @@ const CartItems = () => {
                             <p>${e.product.price}</p>
                             <p>{e.size}</p>
                             <div className="quantity">
-                                <img className="arrow_down" src={arrow_down} onClick={() => { dispatch(substractOneProduct({ size: e.size, productId: e.product.id, token })) }} alt="" />
+                                <img className="arrow_down" src={arrow_down} onClick={() => { handleSubstractOneProduct(e.size, e.product.id) }} alt="" />
                                 <p>{e.quantity}</p>
-                                <img className="arrow_up" src={arrow_up} onClick={() => { dispatch(addOneProductToCart({ size: e.size, productId: e.product.id, token })) }} alt="" />
+                                <img className="arrow_up" src={arrow_up} onClick={() => { handleAddOneProduct(e.size, e.product.id) }} alt="" />
 
                             </div>
                             <p> ${ e.product.price * e.quantity } </p>
-                            <img className="cartitems-update-icon" src={update_icon} onClick={ () => {updateProductQuantity(e.prod.id, newQuantity)} } alt="" />
                             <img className="cartitems-remove-icon" src={remove_icon} onClick={ () => {handleRemoveFromCart(e.id)} } alt="" />
                         </div>
                         <hr />
