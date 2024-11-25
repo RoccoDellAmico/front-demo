@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createSuggestion } from "../redux/SuggestionSlice";
 import { useNavigate } from "react-router-dom";
+import './CSS/Suggestion.css';
 
 const Suggestion = () => {
     const { id, token } = useSelector((state) => state.auth);
@@ -18,12 +19,13 @@ const Suggestion = () => {
     };
 
     return (
-        <div>
+        <div className="suggestion-container">
             <h1>Suggest a Kit</h1>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="suggestion-form">
                 <div>
                     <label htmlFor="description">Kit Description:</label>
-                    <textarea
+                    <input
+                        type="text" 
                         id="description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}

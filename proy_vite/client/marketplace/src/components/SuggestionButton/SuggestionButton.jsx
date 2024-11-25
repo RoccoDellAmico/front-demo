@@ -1,6 +1,7 @@
 import React from "react"
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import './SuggestionButton.css'
 
 const SuggestionButton = () => {
 
@@ -17,10 +18,10 @@ const SuggestionButton = () => {
     }
 
     return(
-        <>
+        <div className="suggestion-container">
             <p>Didn't find the product you were looking for?</p>
             <button onClick={ handleClick }>Share your suggestion with us!</button>
-        </>
+        </div>
     )
 
 }
