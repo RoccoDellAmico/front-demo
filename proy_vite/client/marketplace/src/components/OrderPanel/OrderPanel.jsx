@@ -25,9 +25,9 @@ const OrderPanel = () => {
                     {orders.map((o) => (
                         <li key={o.orderId}>
                         Order_Id: {o.orderId} - Total: ${o.total} - {o.orderProducts.map((p) => (
-                                                                <div key={p.id}>
-                                                                    {p.product.description} - Talle: {p.size} - Cantidad: {p.quantity} 
-                                                                </div>
+                            <div key={p.id}>
+                                {p.product.description} - Talle: {p.size} - Cantidad: {p.quantity} 
+                            </div>
                         )) }
                         <br />
                         </li>

@@ -64,8 +64,8 @@ const DiscountPanel = () => {
             startDate: formatToLocalDateTime(newDiscount.startDate),
             endDate: formatToLocalDateTime(newDiscount.endDate),
             token,
-         }));
-         setNewDiscount({
+        }));
+        setNewDiscount({
             code : '',
             description : '',
             percentage : 0,

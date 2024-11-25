@@ -1,7 +1,6 @@
 import React from 'react';
 import './Footer.css';
 import { Link } from 'react-router-dom';
-import AboutUs from '../../Pages/AboutUs';
 import Instagram from '../../assets/instagram.svg';
 import WhatsApp from '../../assets/whatsapp.svg';
 import Pinterest from '../../assets/pinterest.svg';

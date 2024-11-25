@@ -1,6 +1,5 @@
 import React , { useContext , useState , useEffect } from "react";
 import './CartItems.css';
-//import { ShopContext } from "../../Context/ShopContext";
 import remove_icon from '../../assets/close.svg'
 import update_icon from '../../assets/update.svg'
 import arrow_down from '../../assets/arrow_down.svg'

@@ -1,71 +1,115 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './Filter.css';
-import { ShopContext } from "../../Context/ShopContext";
-import Item from '../Item/Item';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFilter, clearFilters } from '../../redux/ProductSlice';
+import { Link } from 'react-router-dom';
 
-const Filter = (props) => {
-    const { products } = useContext(ShopContext);
+const FilterRedux = () => {
+    const dispatch = useDispatch();
+    const products = useSelector(state => state.product.products);
+    const filteredProducts = useSelector(state => state.product.filteredProducts);
     const [priceRange, setPriceRange] = useState(0);
     const [searchTerm, setSearchTerm] = useState("");
-    const [filteredProducts, setFilteredProductsState] = useState(products);
+    const [league, setLeague] = useState("");
+    const [typeOfProduct, setTypeOfProduct] = useState("");
+    const [size, setSize] = useState("");
 
     useEffect(() => {
-        setFilteredProductsState(products);
-    }, [products]);
+        dispatch(setFilter({ searchTerm: "", priceRange: 0, league: "", typeOfProduct: "", size: "" }));
+    }, [dispatch]);
 
-    const clearFilters = () => {
+    const handleClearFilters = () => {
         setPriceRange(0);
         setSearchTerm("");
-        setFilteredProductsState(products);
+        setLeague("");
+        setTypeOfProduct("");
+        setSize("");
+        dispatch(clearFilters());
     };
 
-    const applyFilters = () => {
-        if (searchTerm.trim() === "" && priceRange === 0) {
-            setFilteredProductsState(products);
-            return;
-        }
+    const handleApplyFilters = () => {
+        dispatch(setFilter({ searchTerm, priceRange, league, typeOfProduct, size }));
+        setPriceRange(0);
+        setSearchTerm("");
+        setLeague("");
+        setTypeOfProduct("");
+        setSize("");
+    };
 
-        const filtered = products.filter(product => {
-            const matchesDescription = searchTerm.trim() === "" || product.description.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesPrice = priceRange === 0 || product.price <= priceRange;
-            return matchesDescription && matchesPrice;
-        });
-        setFilteredProductsState(filtered);
+    const handleTypeOfProductClick = (type) => {
+        setTypeOfProduct(type);
+    };
+
+    const handleSizeClick = (selectedSize) => {
+        setSize(selectedSize);
     };
 
     return (
         <div className="filter-container">
             <div className="filters">
+                <h2>Look for a kit</h2>
                 <div>
-                    <h3>Look for a kit</h3>
+                    <h3>Club or country</h3>
                     <input 
                         type="text" 
                         value={searchTerm} 
                         onChange={(e) => setSearchTerm(e.target.value)} 
-                        placeholder="Club or country" 
                     />
                 </div>
                 <div>
                     <h3>Price</h3>
-                    <input type="range" min="0" max="300000" onChange={(e) => setPriceRange(e.target.value)} />
-                    <span>${priceRange}</span>
+                    <input 
+                        className="no-spinner" 
+                        type="number" 
+                        min="0" 
+                        max="300000" 
+                        placeholder='Max Price'
+                        value={priceRange} 
+                        onChange={(e) => setPriceRange(e.target.value)} 
+                    />
                 </div>
-                <button onClick={applyFilters}>Search</button>
-                <button onClick={clearFilters}>Clear</button>
+                <div>
+                    <h3>League</h3>
+                    <input type="text" 
+                    value={league}
+                    onChange={(e) => setLeague(e.target.value)}/>
+                </div>
+                <div className='type'>
+                    <h3>Type of Product</h3>
+                    {['HOME', 'AWAY', 'THIRD', 'GOALKEEPER'].map(typeOption => (
+                        <button key={typeOption} onClick={() => handleTypeOfProductClick(typeOption)}>{typeOption}</button>
+                    ))}
+                </div>
+                <div className='size'>
+                    <h3>Size</h3>
+                    <div className="talles"> 
+                        {['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].map(sizeOption => (
+                            <button key={sizeOption} onClick={() => handleSizeClick(sizeOption)}>{sizeOption}</button>
+                        ))}
+                    </div>
+                </div>
+                <div className="apply-clear">                
+                    <button onClick={handleApplyFilters}>Apply Filters</button>
+                    <button onClick={handleClearFilters}>Clear Filters</button>
+                </div>
             </div>
             <div className="filtered-products">
                 {filteredProducts.map(product => (
-                    <Item 
-                        key={product.id} 
-                        id={product.id} 
-                        photos={product.photos[0]} 
-                        description={product.description} 
-                        price={product.price} 
-                    />
+                    <div key={product.id} className="product-item">
+                        <Link to={`/product/${product.id}`}>
+                            <img 
+                                src={product.photos[0]} 
+                                alt={product.description} 
+                                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
+                            />
+                        </Link>
+                        <p>{product.description}</p>
+                        <p>${product.price}</p>
+                    </div>
                 ))}
             </div>
         </div>
     );
 };
 
-export default Filter;
+export default FilterRedux;
