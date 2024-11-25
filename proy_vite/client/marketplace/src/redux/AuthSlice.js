@@ -15,11 +15,12 @@ export const login = createAsyncThunk('auth/login', async ({ email, password }) 
 export const signup = createAsyncThunk('auth/signup', async ({ firstname, lastname, email, password }) => {
     const header = {
         headers: {
-            Authorization: `Bearer ${token}`
+            'Content-Type': 'application/json',
         }
     };
     const body = JSON.stringify({ firstname, lastname, email, password });
     const { data } = await axios.post('http://localhost:4002/api/v1/auth/register', body, header);
+    console.log('USUARIO REGISTRADO', data)
     return data;
 });
 
@@ -53,6 +54,21 @@ const authSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(signup.pending, (state) => {
+                state.status = 'loading';
+                state.error = null;
+            })
+            .addCase(signup.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.id = action.payload.id;
+                state.isAuthenticated = true;
+                state.isAdmin = action.payload.role === 'ADMIN';
+                state.token = action.payload.access_token;
+            })
+            .addCase(signup.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
             .addCase(login.pending, (state) => {
                 state.status = 'loading';
                 state.error = null;

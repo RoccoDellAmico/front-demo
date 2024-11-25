@@ -41,7 +41,6 @@ export const addOneProductToCart = createAsyncThunk('cart/addOneProductToCart',
     };
     const cartId = getState().cart.cartId;
     const { data } = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/addOne`,{}, header);
-    console.log('addOneSlice',data)
     return data;
 })
 
@@ -52,7 +51,6 @@ export const substractOneProduct = createAsyncThunk('cart/substractOneProduct',
     };
     const cartId = getState().cart.cartId;
     const { data } = await axios.put(`${CART_BASE_URL}/user/carts/${cartId}/products/${productId}/${size}/substractOne`,{}, header);
-    console.log('SubtractOneSlice',data)
     return data;
 })
 
