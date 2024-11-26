@@ -46,7 +46,7 @@
 
 .navbar {
     padding: 16px;
-    background-color: #333;
+    background-color: darkslategrey;
     display: flex;
     align-items: center;
     justify-content: space-between; /* Cambiado para mejorar el espaciado */

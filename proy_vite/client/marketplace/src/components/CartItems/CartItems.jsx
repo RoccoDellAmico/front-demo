@@ -91,8 +91,8 @@ const CartItems = () => {
                 )
             })}
 
-            <div className="botones">
-                <button onClick={handleClearCart}>Clear Cart</button>
+            <div className="boton">
+                <button onClick={handleClearCart}>CLEAR CART</button>
             </div>
 
             <div className="cartitems-down">
