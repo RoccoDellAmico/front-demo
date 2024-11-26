@@ -89,6 +89,13 @@ const authSlice = createSlice({
                 state.isAuthenticated = false;
                 state.isAdmin = false;
                 state.token = null;
+            })
+            .addCase(logout.rejected, (state, action) => {
+                state.error = action.error.message;
+            })
+            .addCase(logout.pending, (state) => {
+                state.status = 'loading';
+                state.error = null;
             });
     }
 });

@@ -47,6 +47,15 @@ const userSlice = createSlice({
         })
         .addCase(getUserById.fulfilled, (state, action) => {
             state.user = action.payload;
+            state.loading = false;
+        })
+        .addCase(getUserById.rejected, (state, action) => {
+            state.error = action.error.message;
+            state.loading = false;
+        })
+        .addCase(getUserById.pending, (state, action) => {
+            state.loading = true;
+            state.error = null;
         })
     }
 });

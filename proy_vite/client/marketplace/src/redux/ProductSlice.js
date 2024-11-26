@@ -100,6 +100,7 @@ const productSlice = createSlice({
                 state.error = action.error.message;
                 state.loading = false;
             })
+
             .addCase(fetchProductsAdmin.pending, (state) => {
                 state.loading = true;
             })
@@ -111,20 +112,47 @@ const productSlice = createSlice({
                 state.error = action.error.message;
                 state.loading = false;
             })
+
             .addCase(createProduct.fulfilled, (state, action) => {
                 state.adminProducts.push({ ...action.payload.newProduct, id: action.payload.data.id });
                 state.products.push(action.payload.data);
             })
+            .addCase(createProduct.rejected, (state, action) => {
+                state.error = action.error.message;
+                state.loading = false;
+            })
+            .addCase(createProduct.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+
             .addCase(updateProduct.fulfilled, (state, action) => {
                 const index = state.adminProducts.findIndex(product => product.id === action.payload.product.id);
                 state.adminProducts[index] = action.payload.product;
                 const index2 = state.products.findIndex(product => product.id === action.payload.data.id);
                 state.products[index2] = action.payload.data;
             })
+            .addCase(updateProduct.rejected, (state, action) => {
+                state.error = action.error.message;
+                state.loading = false;
+            })
+            .addCase(updateProduct.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+
             .addCase(deleteProduct.fulfilled, (state, action) => {
                 state.adminProducts = state.adminProducts.filter(product => product.id !== action.meta.arg.id);
                 state.products = state.products.filter(product => product.id !== action.meta.arg.id);
-            });
+            })
+            .addCase(deleteProduct.rejected, (state, action) => {
+                state.error = action.error.message;
+                state.loading = false;
+            })
+            .addCase(deleteProduct.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
     }
 });
 
