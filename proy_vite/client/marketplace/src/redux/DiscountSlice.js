@@ -85,6 +85,10 @@ const discountSlice = createSlice({
             .addCase(getDiscounts.rejected, (state, action) => {
                 state.error = action.error.message;
             })
+            .addCase(getDiscounts.pending, (state) => {
+                state.error = null;
+            })
+
             .addCase(createDiscount.fulfilled, (state, action) => {
                 state.discounts.push({
                     ...action.payload, 
@@ -95,6 +99,10 @@ const discountSlice = createSlice({
             .addCase(createDiscount.rejected, (state, action) => {
                 state.error = action.error.message;
             })
+            .addCase(createDiscount.pending, (state) => {
+                state.error = null;
+            })
+
             .addCase(updateDiscount.fulfilled, (state, action) => {
                 const index = state.discounts.findIndex(discount => discount.id === action.payload.id);
                 state.discounts[index] = {
@@ -106,8 +114,18 @@ const discountSlice = createSlice({
             .addCase(updateDiscount.rejected, (state, action) => {
                 state.error = action.error.message;
             })
+            .addCase(updateDiscount.pending, (state) => {
+                state.error = null;
+            })
+
             .addCase(deleteDiscount.fulfilled, (state, action) => {
                 state.discounts = state.discounts.filter(discount => discount.id !== action.payload);
+            })
+            .addCase(deleteDiscount.rejected, (state, action) => {
+                state.error = action.error.message;
+            })
+            .addCase(deleteDiscount.pending, (state) => {
+                state.error = null;
             })
     }
 });

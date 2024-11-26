@@ -53,7 +53,6 @@ const ProductPanel = ()=>{
     }
 
     const addPhoto = () => {
-        console.log("foto added", newPhoto);
         if(editingProduct){
             setEditingProduct({
                 ...editingProduct, 

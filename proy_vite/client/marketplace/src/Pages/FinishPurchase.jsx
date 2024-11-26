@@ -22,9 +22,6 @@ const FinishPurchase = () => {
     // Corrige el índice para acceder al último pedido
     const order = ordersByUser[ordersByUser.length - 1];
 
-    console.log("order",order);
-
-
     return (
         <div className="cartitems-container">
 

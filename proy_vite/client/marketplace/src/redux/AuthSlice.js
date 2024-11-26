@@ -20,7 +20,6 @@ export const signup = createAsyncThunk('auth/signup', async ({ firstname, lastna
     };
     const body = JSON.stringify({ firstname, lastname, email, password });
     const { data } = await axios.post('http://localhost:4002/api/v1/auth/register', body, header);
-    console.log('USUARIO REGISTRADO', data)
     return data;
 });
 
@@ -89,6 +88,14 @@ const authSlice = createSlice({
                 state.isAuthenticated = false;
                 state.isAdmin = false;
                 state.token = null;
+            })
+            .addCase(logout.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(logout.pending, (state) => {
+                state.status = 'loading';
+                state.error = null;
             });
     }
 });

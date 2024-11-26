@@ -17,7 +17,6 @@ export const getCartById = createAsyncThunk('cart/getCartById', async ({ id, tok
         headers: {  Authorization: `Bearer ${token}` } 
     };
     const { data } = await axios.get(`${CART_BASE_URL}/user/carts/${id}`, header);
-    console.log(data)
     return data;
 })
 
@@ -27,7 +26,6 @@ export const addProductToCart = createAsyncThunk('cart/addProductToCart',
         headers: {  Authorization: `Bearer ${token}` } 
     };
     const cartId = getState().cart.cartId;
-    console.log(cartId) // DELETE CONSOLE.LOG
     const { data } = await axios.put(`${CART_BASE_URL}/user/carts`, 
         { cartId, size, productId, quantity }, header);
     return data;
@@ -35,7 +33,6 @@ export const addProductToCart = createAsyncThunk('cart/addProductToCart',
 
 export const addOneProductToCart = createAsyncThunk('cart/addOneProductToCart',
     async ({ size, productId, token }, { getState }) => {
-    console.log('addOneProductToCart size ',size, ' product id ', productId, ' token del usuario',token)
     const header = {
         headers: {  Authorization: `Bearer ${token}` } 
     };
@@ -88,7 +85,6 @@ export const getTotal = createAsyncThunk('cart/getTotal', async ({ token }, { ge
         headers: {  Authorization: `Bearer ${token}` } 
     };
     const { data } = await axios.get(`${CART_BASE_URL}/user/carts/${cartId}/getTotal`,header);
-    console.log('TOTAL',data)
     return data;
 })
 
@@ -118,6 +114,13 @@ const cartSlice = createSlice({
                 state.cartId = action.payload.cartId;
                 state.userEmail = action.payload.userEmail;
             })
+            .addCase(createCart.rejected, (state, action) => {
+                state.error = action.error.message;
+            })
+            .addCase(createCart.pending, (state) => {
+                state.error = null;
+            })
+
             .addCase(getCartById.fulfilled, (state, action) => {
                 state.cartId = action.payload.cartId;
                 state.cartItems = action.payload.cartProducts;
@@ -126,6 +129,13 @@ const cartSlice = createSlice({
                 }
                 state.totalQuantity = getTotalQuantity(state.cartItems);
             })
+            .addCase(getCartById.rejected, (state, action) => {
+                state.error = action.error.message;
+            })
+            .addCase(getCartById.pending, (state) => {
+                state.error = null;
+            })
+
             .addCase(addProductToCart.fulfilled, (state, action) => {
                 state.cartItems = action.payload.cartProducts;
                 state.totalQuantity = getTotalQuantity(state.cartItems);
@@ -133,6 +143,10 @@ const cartSlice = createSlice({
             .addCase(addProductToCart.rejected, (state, action) => {
                 state.error = action.error.message;
             })
+            .addCase(addProductToCart.pending, (state) => {
+                state.error = null;
+            })
+
             .addCase(addOneProductToCart.fulfilled, (state, action) => {
                 state.cartItems = action.payload.cartProducts;
                 state.totalQuantity = getTotalQuantity(state.cartItems);
@@ -140,6 +154,10 @@ const cartSlice = createSlice({
             .addCase(addOneProductToCart.rejected, (state, action) => {
                 state.error = action.error.message;
             })
+            .addCase(addOneProductToCart.pending, (state) => {
+                state.error = null;
+            })
+
             .addCase(substractOneProduct.fulfilled, (state, action) => {
                 state.cartItems = action.payload.cartProducts;
                 state.totalQuantity = getTotalQuantity(state.cartItems);
@@ -147,20 +165,51 @@ const cartSlice = createSlice({
             .addCase(substractOneProduct.rejected, (state, action) => {
                 state.error = action.error.message;
             })
+            .addCase(substractOneProduct.pending, (state) => {
+                state.error = null;
+            })
+
             .addCase(removeProductFromCart.fulfilled, (state, action) => {
                 state.cartItems = action.payload.cartProducts;
                 state.totalQuantity = getTotalQuantity(state.cartItems);
             })
+            .addCase(removeProductFromCart.rejected, (state, action) => {
+                state.error = action.error.message;
+            })
+            .addCase(removeProductFromCart.pending, (state) => {
+                state.error = null;
+            })
+
             .addCase(clearCart.fulfilled, (state) => {
                 state.cartItems = [];
                 state.totalQuantity = 0;
                 state.discountCode = null;
             })
+            .addCase(clearCart.rejected, (state, action) => {
+                state.error = action.error.message;
+            })
+            .addCase(clearCart.pending, (state) => {
+                state.error = null;
+            })
+
             .addCase(applyDiscountCode.fulfilled, (state, action) => {
                 state.discountCode = action.payload.discountCode;
             })
+            .addCase(applyDiscountCode.rejected, (state, action) => {
+                state.error = action.error.message;
+            })
+            .addCase(applyDiscountCode.pending, (state) => {
+                state.error = null;
+            })
+
             .addCase(getTotal.fulfilled, (state, action) => {
                 state.total = action.payload;
+            })
+            .addCase(getTotal.rejected, (state, action) => {
+                state.error = action.error.message;
+            })
+            .addCase(getTotal.pending, (state) => {
+                state.error = null;
             })
     }
 });

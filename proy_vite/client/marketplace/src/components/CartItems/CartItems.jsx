@@ -125,9 +125,6 @@ const CartItems = () => {
                         <button onClick={handleAddDiscountCode} >Apply discount</button>
                     </div>
                 </div>
-            {discountCode && (
-                console.log('DISCOUNT CODE', discountCode)
-            )}
                 {showPopup && (
                     <div className="popup">
                         <p>You can't proceed with an empty cart</p>
