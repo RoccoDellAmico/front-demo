@@ -22,7 +22,7 @@ const Suggestion = () => {
         <div className="suggestion-container">
             <h1>Suggest a Kit</h1>
             <form onSubmit={handleSubmit} className="suggestion-form">
-                <div>
+                <div className="description">
                     <label htmlFor="description">Kit Description:</label>
                     <input
                         type="text" 

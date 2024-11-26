@@ -64,13 +64,20 @@
     margin: 100px 0px;
 }
 
-.botones button {
+.botones {
+    background: darkslategrey;
+}
+
+.boton button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-top: 40px;
     width: 262px;
     height: 58px;
     outline: none;
     border: none;
-    background: #ff5a5a;
+    background: darkslategrey;
     color: #fff;
     font-size: 16px;
     font-weight: 600;
@@ -96,7 +103,7 @@
     height: 58px;
     outline: none;
     border: none;
-    background: #ff5a5a;
+    background: darkslategrey;
     color: #fff;
     font-size: 16px;
     font-weight: 600;
@@ -121,6 +128,7 @@
     background: #eaeaea ;
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .cartitems-promobox input{
@@ -129,12 +137,12 @@
     background: transparent;
     font-size: 16px;
     width: 330px;
-    height: 50px;
+    height: 100%;
 }
 
 .cartitems-promobox button{
     width: 170px;
-    height: 58px;
+    height: 100%;
     font-size: 16px;
     background: black;
     color: white;

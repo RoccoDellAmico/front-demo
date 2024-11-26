@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import './Filter.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilter, clearFilters } from '../../redux/ProductSlice';
-import { Link } from 'react-router-dom';
+import Item from '../Item/Item';
 
 const FilterRedux = () => {
     const dispatch = useDispatch();
@@ -95,17 +95,13 @@ const FilterRedux = () => {
             </div>
             <div className="filtered-products">
                 {filteredProducts.map(product => (
-                    <div key={product.id} className="product-item">
-                        <Link to={`/product/${product.id}`}>
-                            <img 
-                                src={product.photos[0]} 
-                                alt={product.description} 
-                                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
-                            />
-                        </Link>
-                        <p>{product.description}</p>
-                        <p>${product.price}</p>
-                    </div>
+                    <Item 
+                        key={product.id} 
+                        id={product.id} 
+                        photos={product.photos[0]} 
+                        description={product.description} 
+                        price={product.price} 
+                    />
                 ))}
             </div>
         </div>

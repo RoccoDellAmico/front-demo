@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSuggestions } from "../../redux/SuggestionSlice";
+import './SuggestionPanel.css';
 
 const SuggestionPanel = () => {
     const dispatch = useDispatch();

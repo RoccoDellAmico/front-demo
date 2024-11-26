@@ -1,6 +1,16 @@
 .suggestion-container {
     text-align: center;
+    margin-top: 100px;
     margin: 20px;
+    padding-top: 30px;
+}
+
+.suggestion-container hr{
+    width: 80%;
+    border: none;
+    border-radius: 10px;
+    height: 3px;
+    background: #c7c7c7;
 }
 
 .suggestion-container p {
@@ -13,7 +23,7 @@
     height: 58px;
     outline: none;
     border: none;
-    background: #ff5a5a;
+    background: darkslategrey;
     color: #fff;
     font-size: 16px;
     font-weight: 600;

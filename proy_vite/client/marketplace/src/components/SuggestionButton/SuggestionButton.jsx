@@ -19,7 +19,9 @@ const SuggestionButton = () => {
 
     return(
         <div className="suggestion-container">
-            <p>Didn't find the product you were looking for?</p>
+            <br />
+            <hr />
+            <h3>Didn't find the product you were looking for?</h3>
             <button onClick={ handleClick }>Share your suggestion with us!</button>
         </div>
     )

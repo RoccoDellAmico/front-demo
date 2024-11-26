@@ -1,9 +1,19 @@
 label{
     display: block;
     margin-top: 10px;
+    font-size: 18px;
 }
 
 button{
     margin-top: 10px;
 }
 
+input {
+    height: 30px;
+    width: 300px;
+    border-radius: 5px;
+}
+
+.description {
+    margin-bottom: 10px;
+}

@@ -33,9 +33,6 @@ const AdminPanel = ()=>{
                 <button className={`tab ${activeTab === "orders" ? "active" : ""}`} onClick={() => setActiveTab("orders")}>
                     Orders
                 </button>
-                <button className={`tab ${activeTab === "payments" ? "active" : ""}`} onClick={() => setActiveTab("payments")}>
-                    Payments
-                </button>
                 <button className={`tab ${activeTab === "discounts" ? "active" : ""}`} onClick={() => setActiveTab("discounts")}>
                     Discounts
                 </button>
@@ -48,7 +45,6 @@ const AdminPanel = ()=>{
                 {activeTab === "products" && (<ProductPanel/>)}
                 {activeTab === "users" && (<UserPanel/>)}
                 {activeTab === "orders" && (<OrderPanel/>)}
-                {activeTab === "payments" && (<PaymentPanel/>)}
                 {activeTab === "discounts" && (<DiscountPanel/>)}
                 {activeTab === "suggestions" && (<SuggestionPanel/>)}
             </div>

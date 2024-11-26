@@ -20,7 +20,6 @@ export const getOrdersByUser = createAsyncThunk( 'order/getOrdersByUser', async 
         }
     };
     const { data } = await axios.get(`${BASE_ORDER_URL}/user/orders/${id}`, config);
-    console.log("slice",data);
     return data;
 });
 
@@ -50,19 +49,29 @@ const orderSlice = createSlice({
             .addCase(getOrders.rejected, (state, action) => {
                 state.error = action.error.message;
             })
+            .addCase(getOrders.pending, (state) => {
+                state.error = null;
+            })
+
             .addCase(getOrdersByUser.rejected, (state, action) => {
                 state.error = action.error.message;
             })
             .addCase(getOrdersByUser.fulfilled, (state, action) => {
                 state.ordersByUser = action.payload;
-                console.log("addcase",action.payload);
             })
+            .addCase(getOrdersByUser.pending, (state) => {
+                state.error = null;
+            })
+
             .addCase(placeOrder.rejected, (state, action) => {
                 state.error = action.error.message;
             })
             .addCase(placeOrder.fulfilled, (state, action) => {
                 state.orders.push(action.payload);
             })
+            .addCase(placeOrder.pending, (state) => {
+                state.error = null;
+            });
     }
 });
 
